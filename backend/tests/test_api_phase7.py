@@ -94,17 +94,15 @@ def run_phase7_tests() -> List[Dict[str, Any]]:
             data={"target": "pipeline"},
         )
     data_26_1 = resp.json()
-    assert data_26_1["success"] is True
-    assert data_26_1["target"] == "pipeline"
-    assert data_26_1["model"]["id"] == "model1"
-    assert data_26_1["model"]["class_name"] == "Pipeline"
-    assert data_26_1["image"]["width"] == 5000
-    assert data_26_1["image"]["height"] == 500
+    assert data_26_1["model"] == "pipeline"
+    assert data_26_1["target"] == "Pipeline"
+    assert isinstance(data_26_1["detections"], list)
     for d in data_26_1["detections"]:
         assert d["confidence"] >= 0.25
+        assert d["class"] == "Pipeline"
         b = d["bbox"]
-        assert 0 <= b["x1"] <= 5000 and 0 <= b["x2"] <= 5000
-        assert 0 <= b["y1"] <= 500 and 0 <= b["y2"] <= 500
+        assert 0 <= b[0] <= 5000 and 0 <= b[2] <= 5000
+        assert 0 <= b[1] <= 500 and 0 <= b[3] <= 500
 
     record_result(
         test_id="TEST-26A",
@@ -114,12 +112,12 @@ def run_phase7_tests() -> List[Dict[str, Any]]:
         target="pipeline",
         status_code=resp.status_code,
         expected_status=200,
-        success=data_26_1["success"],
-        model_id=data_26_1["model"]["id"],
-        class_name=data_26_1["model"]["class_name"],
-        detection_count=data_26_1["detection_count"],
+        success=True,
+        model_id=data_26_1["model"],
+        class_name="Pipeline",
+        detection_count=len(data_26_1["detections"]),
         passed=True,
-        extra=f"Dims: {data_26_1['image']['width']}x{data_26_1['image']['height']}, Dev: {data_26_1['inference']['device']}",
+        extra=f"Target: {data_26_1['target']}, Model: {data_26_1['model']}",
     )
 
     # 26.2 POST /analyze with target=pipeline
@@ -163,17 +161,15 @@ def run_phase7_tests() -> List[Dict[str, Any]]:
             data={"target": "human"},
         )
     data_27_1 = resp.json()
-    assert data_27_1["success"] is True
-    assert data_27_1["target"] == "human"
-    assert data_27_1["model"]["id"] == "model2"
-    assert data_27_1["model"]["class_name"] == "Human"
-    assert data_27_1["image"]["width"] == 1920
-    assert data_27_1["image"]["height"] == 1080
+    assert data_27_1["model"] == "human"
+    assert data_27_1["target"] == "Human"
+    assert isinstance(data_27_1["detections"], list)
     for d in data_27_1["detections"]:
         assert d["confidence"] >= 0.25
+        assert d["class"] == "Human"
         b = d["bbox"]
-        assert 0 <= b["x1"] <= 1920 and 0 <= b["x2"] <= 1920
-        assert 0 <= b["y1"] <= 1080 and 0 <= b["y2"] <= 1080
+        assert 0 <= b[0] <= 1920 and 0 <= b[2] <= 1920
+        assert 0 <= b[1] <= 1080 and 0 <= b[3] <= 1080
 
     record_result(
         test_id="TEST-27A",
@@ -183,12 +179,12 @@ def run_phase7_tests() -> List[Dict[str, Any]]:
         target="human",
         status_code=resp.status_code,
         expected_status=200,
-        success=data_27_1["success"],
-        model_id=data_27_1["model"]["id"],
-        class_name=data_27_1["model"]["class_name"],
-        detection_count=data_27_1["detection_count"],
+        success=True,
+        model_id=data_27_1["model"],
+        class_name="Human",
+        detection_count=len(data_27_1["detections"]),
         passed=True,
-        extra=f"Dims: {data_27_1['image']['width']}x{data_27_1['image']['height']}",
+        extra=f"Target: {data_27_1['target']}, Model: {data_27_1['model']}",
     )
 
     # 27.2 POST /analyze with target=human
@@ -388,10 +384,9 @@ def run_phase7_tests() -> List[Dict[str, Any]]:
     )
     assert resp_30_1.status_code == 200
     json_30_1 = resp_30_1.json()
-    assert json_30_1["success"] is True
-    assert json_30_1["detection_count"] == 0
+    assert json_30_1["model"] == "pipeline"
+    assert json_30_1["target"] == "Pipeline"
     assert json_30_1["detections"] == []
-    assert "No objects detected" in json_30_1["message"]
     record_result(
         test_id="TEST-30A",
         name="Empty Detection (/predict)",
@@ -401,11 +396,11 @@ def run_phase7_tests() -> List[Dict[str, Any]]:
         status_code=resp_30_1.status_code,
         expected_status=200,
         success=True,
-        model_id=json_30_1["model"]["id"],
-        class_name=json_30_1["model"]["class_name"],
+        model_id=json_30_1["model"],
+        class_name="Pipeline",
         detection_count=0,
         passed=True,
-        extra=f"Message: '{json_30_1['message']}' (HTTP 200)",
+        extra="detections=[] (HTTP 200)",
     )
 
     # 30.2 POST /analyze with blank image

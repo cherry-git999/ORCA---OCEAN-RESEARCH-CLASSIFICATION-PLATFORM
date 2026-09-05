@@ -78,7 +78,7 @@ def execute_sonar_inference(
     """Execute target-aware sonar detection inference.
 
     Args:
-        target: Semantic detection target ('pipeline' or 'human').
+        target: Semantic detection target ('pipeline', 'human', 'hardware').
         filename: Original uploaded image filename.
         image_bytes: In-memory raw bytes of uploaded image.
         conf_thresh: Confidence threshold (default: 0.25).
@@ -126,8 +126,11 @@ def execute_sonar_inference(
                 x2 = max(0.0, min(float(width), float(coords[2])))
                 y2 = max(0.0, min(float(height), float(coords[3])))
 
-                # Semantic class name from specialist router
-                semantic_name = route_info["class_name"]
+                # Semantic class name from specialist router or model's semantic class map
+                classes_map = route_info.get("classes", {})
+                semantic_name = classes_map.get(
+                    cls_id, route_info.get("class_name", str(cls_id))
+                )
 
                 detections.append(
                     {

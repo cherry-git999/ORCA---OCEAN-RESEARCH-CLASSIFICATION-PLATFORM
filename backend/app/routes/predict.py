@@ -1,35 +1,49 @@
-"""Object Detection Predict Route for SIH 2026 Sonar ML Dashboard.
+"""Target-Aware Object Detection Predict Route for SIH 2026 Sonar ML Dashboard (Step 4).
 
-Performs specialist YOLOv8 inference for requested semantic targets ('pipeline' or 'human').
-Supports standard web formats (.jpg, .jpeg, .png, .webp, .bmp, .tif, .tiff) as well as
-SubPipeMiniSSS sonar formats (.pbm, .bpm with underlying Netpbm P6/PPM streams).
+Exposes the centralized TargetRouter through POST /predict for specialist frozen models:
+- Model 1: 'pipeline' (Target: Pipeline, Class: Pipeline)
+- Model 2: 'human' (Target: Human, Class: Human)
+- Model 3: 'hardware' (Target: Hardware, Classes: cap, clip, key, niddle, scissor)
+
+Standardized Response Contract:
+{
+  "model": "hardware",
+  "target": "Hardware",
+  "detections": [
+    {
+      "class": "scissor",
+      "confidence": 0.91,
+      "bbox": [120.0, 80.0, 310.0, 220.0]
+    }
+  ]
+}
 """
 
+import io
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
 from fastapi.responses import JSONResponse
 
-from backend.app.router import UnsupportedTargetError
-from backend.app.services.inference import (
-    ALLOWED_EXTENSIONS,
-    execute_sonar_inference,
-)
+from backend.app.router import TargetRouter, UnsupportedTargetError, normalize_target
+from backend.app.services.inference import ALLOWED_EXTENSIONS, decode_image_bytes
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["Inference"])
 
+MAX_FILE_SIZE: int = 50 * 1024 * 1024  # 50 MB upload safety guard
+
 
 @router.post(
     "/predict",
-    summary="Run Object Detection on Sonar Image",
+    summary="Run Target-Aware Specialist Object Detection on Sonar Image",
     description=(
-        "Performs object detection using the appropriate specialist model "
-        "('pipeline' -> Model 1, 'human' -> Model 2). "
-        "Supported formats: .jpg, .jpeg, .png, .webp, .bmp, .tif, .tiff, .pbm, .bpm. "
-        "Returns detected bounding boxes and confidences in JSON format."
+        "Executes target-aware specialist object detection using frozen YOLO models. "
+        "Supported targets: 'pipeline' (Model 1), 'human' (Model 2), 'hardware' (Model 3). "
+        "Accepts images via 'image' or 'file' form field (.jpg, .jpeg, .png, .webp, .bmp, .tif, .tiff, .pbm, .bpm). "
+        "Returns standardized JSON response with model, target, and detections."
     ),
     responses={
         200: {
@@ -37,90 +51,114 @@ router = APIRouter(tags=["Inference"])
             "content": {
                 "application/json": {
                     "example": {
-                        "success": True,
-                        "target": "pipeline",
-                        "model": {
-                            "id": "model1",
-                            "name": "YOLOv8n Pipeline Detection Model",
-                            "class_name": "Pipeline",
-                        },
-                        "image": {
-                            "filename": "sonar_example.pbm",
-                            "width": 5000,
-                            "height": 500,
-                        },
-                        "inference": {
-                            "device": "cuda:0",
-                            "imgsz": 640,
-                            "confidence_threshold": 0.25,
-                            "nms_iou": 0.45,
-                        },
+                        "model": "hardware",
+                        "target": "Hardware",
                         "detections": [
                             {
-                                "class_id": 0,
-                                "class_name": "Pipeline",
-                                "confidence": 0.9123,
-                                "bbox": {"x1": 120.0, "y1": 85.0, "x2": 520.0, "y2": 410.0},
+                                "class": "scissor",
+                                "confidence": 0.91,
+                                "bbox": [120.0, 80.0, 310.0, 220.0],
                             }
                         ],
-                        "detection_count": 1,
-                        "message": "Detections found.",
                     }
                 }
             },
         },
-        400: {"description": "Invalid target, empty file, or unreadable/corrupt image."},
+        400: {"description": "Invalid target, empty file, unsupported format, or corrupt image."},
     },
 )
 async def predict_endpoint(
-    target: str = Form(..., description="Semantic detection target: 'pipeline' or 'human'"),
-    file: UploadFile = File(
-        ...,
-        description="Sonar image file (.jpg, .jpeg, .png, .webp, .bmp, .tif, .tiff, .pbm, .bpm)",
-    ),
+    target: Optional[str] = Form(None, description="Semantic detection target: 'pipeline', 'human', or 'hardware'"),
+    file: Optional[UploadFile] = File(None, description="Image file to upload"),
+    image: Optional[UploadFile] = File(None, description="Image file to upload (alias for file)"),
 ) -> Dict[str, Any]:
-    """Execute target-aware sonar object detection."""
-    # 1. Validate uploaded file presence and extension
-    if not file or not file.filename:
-        raise HTTPException(
+    """Execute target-aware specialist sonar object detection via TargetRouter."""
+    # 1. Target presence and validation
+    if target is None or not str(target).strip():
+        return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"error": "No file uploaded or missing filename."},
+            content={
+                "error": "Missing target parameter",
+                "message": "The 'target' form field is required.",
+                "supported_targets": TargetRouter.get_supported_targets(),
+            },
         )
 
-    filename_lower = file.filename.lower()
+    try:
+        canonical_target = normalize_target(target)
+    except UnsupportedTargetError as e:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content=e.to_dict(),
+        )
+
+    # 2. File presence validation (accept 'image' or 'file' field)
+    upload = image or file
+    if not upload or not upload.filename:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={
+                "error": "Missing image file",
+                "message": "Please provide an image file under 'image' or 'file' form field.",
+            },
+        )
+
+    filename_lower = upload.filename.lower()
     has_valid_ext = any(filename_lower.endswith(ext) for ext in ALLOWED_EXTENSIONS)
     if not has_valid_ext:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={
                 "error": "Unsupported image format",
-                "filename": file.filename,
+                "filename": upload.filename,
                 "supported_formats": sorted(list(ALLOWED_EXTENSIONS)),
             },
         )
 
-    # 2. Read image bytes into memory
+    # 3. Read image bytes and validate size
     try:
-        image_bytes = await file.read()
+        image_bytes = await upload.read()
     except Exception as e:
-        logger.error(f"Error reading uploaded file: {e}")
-        raise HTTPException(
+        logger.error(f"Error reading uploaded file {upload.filename}: {e}")
+        return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"error": "Failed to read uploaded file.", "details": str(e)},
+            content={"error": "Failed to read uploaded file", "details": str(e)},
         )
 
     if not image_bytes or len(image_bytes) == 0:
-        raise HTTPException(
+        return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"error": "Uploaded image file is empty (0 bytes)."},
+            content={"error": "Uploaded image file is empty (0 bytes)."},
         )
 
-    # 3. Execute inference via shared service
+    if len(image_bytes) > MAX_FILE_SIZE:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"error": "Image file too large (exceeds 50MB limit)."},
+        )
+
+    # 4. Decode image bytes in memory (supports standard formats and Netpbm .pbm/.bpm PPM P6)
     try:
-        result = execute_sonar_inference(
-            target=target,
-            filename=file.filename,
-            image_bytes=image_bytes,
+        img_pil, width, height = decode_image_bytes(image_bytes)
+    except Exception as e:
+        logger.error(f"Image decode error for {upload.filename}: {e}")
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={
+                "error": "Corrupt or unreadable image file",
+                "details": str(e),
+                "filename": upload.filename,
+            },
+        )
+
+    # 5. Route to specialist model and execute inference via TargetRouter
+    try:
+        result = TargetRouter.predict(
+            target=canonical_target,
+            image=img_pil,
+            imgsz=640,
+            conf=0.25,
+            iou=0.45,
         )
     except UnsupportedTargetError as e:
         return JSONResponse(
@@ -128,45 +166,40 @@ async def predict_endpoint(
             content=e.to_dict(),
         )
     except Exception as e:
-        logger.error(f"Inference processing error for {file.filename}: {e}")
+        logger.error(f"Inference execution failed for {upload.filename}: {e}")
         return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content={
-                "error": "Corrupt or unreadable image file",
-                "details": str(e),
-                "filename": file.filename,
-            },
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"error": "Inference execution failed", "details": str(e)},
         )
 
-    # 4. Construct response payload
-    route_info = result["route_info"]
-    detection_count = result["detection_count"]
-    message = (
-        "Detections found."
-        if detection_count > 0
-        else "No objects detected above the confidence threshold."
-    )
+    # 6. Format standardized JSON response contract
+    detections: List[Dict[str, Any]] = []
+    for d in result.get("detections", []):
+        raw_bbox = d["bbox"]
+        if isinstance(raw_bbox, dict):
+            bbox_list = [
+                float(raw_bbox["x1"]),
+                float(raw_bbox["y1"]),
+                float(raw_bbox["x2"]),
+                float(raw_bbox["y2"]),
+            ]
+        elif isinstance(raw_bbox, (list, tuple)):
+            bbox_list = [float(coord) for coord in raw_bbox]
+        else:
+            bbox_list = list(raw_bbox)
+
+        class_name = d.get("class", d.get("class_name", str(d.get("class_id", ""))))
+
+        detections.append(
+            {
+                "class": class_name,
+                "confidence": float(d["confidence"]),
+                "bbox": bbox_list,
+            }
+        )
 
     return {
-        "success": True,
-        "target": route_info["target"],
-        "model": {
-            "id": route_info["model"],
-            "name": route_info["model_name"],
-            "class_name": route_info["class_name"],
-        },
-        "image": {
-            "filename": result["filename"],
-            "width": result["width"],
-            "height": result["height"],
-        },
-        "inference": {
-            "device": result["device"],
-            "imgsz": result["imgsz"],
-            "confidence_threshold": result["conf_thresh"],
-            "nms_iou": result["nms_iou"],
-        },
-        "detections": result["detections"],
-        "detection_count": detection_count,
-        "message": message,
+        "model": result.get("model", result.get("model_key")),
+        "target": result["target"],
+        "detections": detections,
     }

@@ -150,7 +150,8 @@ def run_tests():
         data = {"target": "pipeline"}
         resp_pred = requests.post(f"{BASE_URL}/predict", files=files, data=data)
     assert resp_pred.status_code == 200
-    assert resp_pred.json()["success"] is True
+    assert resp_pred.json()["model"] == "pipeline"
+    assert resp_pred.json()["target"] == "Pipeline"
     print("  PASS: /predict functions identically without regression.")
 
     # 11. Verify /analyze still works (Regression Check)

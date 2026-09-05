@@ -219,8 +219,8 @@ def run_tests():
         resp_pred = requests.post(f"{BASE_URL}/predict", files=files, data=data)
     assert resp_pred.status_code == 200
     json_pred = resp_pred.json()
-    assert json_pred["success"] is True
-    assert json_pred["model"]["id"] == "model1"
+    assert json_pred["model"] == "pipeline"
+    assert json_pred["target"] == "Pipeline"
     assert "detections" in json_pred
     print("  PASS: /predict functions identically without regression.")
 

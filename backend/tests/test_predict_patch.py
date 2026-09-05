@@ -1,4 +1,4 @@
-"""Comprehensive test suite for Phase 4 Patch (.pbm / .bpm format support)."""
+"""Comprehensive test suite for Phase 4 Patch (.pbm / .bpm format support with Step 4 /predict API)."""
 
 import io
 import json
@@ -42,13 +42,11 @@ def run_tests():
     assert resp.status_code == 200, f"Expected 200, got {resp.status_code}: {resp.text}"
     json_a = resp.json()
     print("  Response:", json.dumps(json_a, indent=2))
-    assert json_a["success"] is True
-    assert json_a["target"] == "pipeline"
-    assert json_a["model"]["id"] == "model1"
-    assert json_a["model"]["class_name"] == "Pipeline"
-    assert json_a["image"]["width"] == 5000
-    assert json_a["image"]["height"] == 500
-    print(f"  PASS: TEST A succeeded. Image dimensions: {json_a['image']['width']}x{json_a['image']['height']}, Detections: {json_a['detection_count']}")
+    assert json_a["model"] == "pipeline"
+    assert json_a["target"] == "Pipeline"
+    assert len(json_a["detections"]) >= 1
+    assert json_a["detections"][0]["class"] == "Pipeline"
+    print(f"  PASS: TEST A succeeded. Detections count: {len(json_a['detections'])}")
 
     # B. Valid .bpm SubPipe image -> HTTP 200
     print("\n[TEST B] Valid .bpm SubPipe image (target=pipeline)...")
@@ -62,12 +60,10 @@ def run_tests():
     assert resp.status_code == 200, f"Expected 200, got {resp.status_code}: {resp.text}"
     json_b = resp.json()
     print("  Response:", json.dumps(json_b, indent=2))
-    assert json_b["success"] is True
-    assert json_b["target"] == "pipeline"
-    assert json_b["model"]["id"] == "model1"
-    assert json_b["image"]["width"] == 5000
-    assert json_b["image"]["height"] == 500
-    print(f"  PASS: TEST B succeeded. Image dimensions: {json_b['image']['width']}x{json_b['image']['height']}, Detections: {json_b['detection_count']}")
+    assert json_b["model"] == "pipeline"
+    assert json_b["target"] == "Pipeline"
+    assert json_b["detections"] == []
+    print("  PASS: TEST B succeeded. Zero detections correctly returned as []")
 
     # C. Existing .png -> HTTP 200
     print("\n[TEST C] Existing .png image (target=human)...")
@@ -80,10 +76,9 @@ def run_tests():
     print(f"  HTTP Status: {resp.status_code}")
     assert resp.status_code == 200
     json_c = resp.json()
-    assert json_c["success"] is True
-    assert json_c["target"] == "human"
-    assert json_c["model"]["id"] == "model2"
-    print(f"  PASS: TEST C succeeded. Detections: {json_c['detection_count']}")
+    assert json_c["model"] == "human"
+    assert json_c["target"] == "Human"
+    print(f"  PASS: TEST C succeeded. Detections: {len(json_c['detections'])}")
 
     # D. Existing .jpg -> HTTP 200
     print("\n[TEST D] Existing .jpg image (target=pipeline)...")
@@ -96,8 +91,9 @@ def run_tests():
     print(f"  HTTP Status: {resp.status_code}")
     assert resp.status_code == 200
     json_d = resp.json()
-    assert json_d["success"] is True
-    print(f"  PASS: TEST D succeeded. Detections: {json_d['detection_count']}")
+    assert json_d["model"] == "pipeline"
+    assert json_d["target"] == "Pipeline"
+    print(f"  PASS: TEST D succeeded. Detections: {len(json_d['detections'])}")
 
     # E. Corrupt .pbm -> HTTP 400
     print("\n[TEST E] Corrupt .pbm image...")
@@ -138,8 +134,9 @@ def run_tests():
         data = {"target": "pipeline"}
         resp = requests.post(f"{BASE_URL}/predict", files=files, data=data)
     assert resp.status_code == 200
-    assert resp.json()["model"]["id"] == "model1"
-    assert resp.json()["model"]["class_name"] == "Pipeline"
+    assert resp.json()["model"] == "pipeline"
+    assert resp.json()["target"] == "Pipeline"
+    assert resp.json()["detections"][0]["class"] == "Pipeline"
     print("  PASS: TEST H confirmed routing to Model 1 (Pipeline).")
 
     # I. Valid .pbm with target=human routes to Model 2
@@ -149,18 +146,21 @@ def run_tests():
         data = {"target": "human"}
         resp = requests.post(f"{BASE_URL}/predict", files=files, data=data)
     assert resp.status_code == 200
-    assert resp.json()["model"]["id"] == "model2"
-    assert resp.json()["model"]["class_name"] == "Human"
+    assert resp.json()["model"] == "human"
+    assert resp.json()["target"] == "Human"
     print("  PASS: TEST I confirmed routing to Model 2 (Human).")
 
     # J. Frozen Checkpoint Hashes Check
     print("\n[TEST J] Verifying Model Checkpoint Hashes...")
     h1 = compute_sha256(settings.MODEL_1_PATH)
     h2 = compute_sha256(settings.MODEL_2_PATH)
+    h3 = compute_sha256(settings.MODEL_3_PATH)
     assert h1 == settings.MODEL_1_EXPECTED_SHA256, f"Model 1 hash mismatch: {h1}"
     assert h2 == settings.MODEL_2_EXPECTED_SHA256, f"Model 2 hash mismatch: {h2}"
+    assert h3 == settings.MODEL_3_EXPECTED_SHA256, f"Model 3 hash mismatch: {h3}"
     print(f"  Model 1 SHA256: {h1} (MATCH)")
     print(f"  Model 2 SHA256: {h2} (MATCH)")
+    print(f"  Model 3 SHA256: {h3} (MATCH)")
     print("  PASS: Frozen checkpoint hashes verified.")
 
     print("\n==================================================")

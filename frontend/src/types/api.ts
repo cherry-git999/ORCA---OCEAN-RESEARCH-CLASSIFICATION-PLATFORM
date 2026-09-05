@@ -63,3 +63,17 @@ export interface BackendErrorResponse {
   supported_formats?: string[];
   [key: string]: unknown;
 }
+
+export type PredictTarget = 'pipeline' | 'human' | 'hardware';
+
+export interface PredictDetectionItem {
+  class: string;
+  confidence: number;
+  bbox: [number, number, number, number]; // [x1, y1, x2, y2]
+}
+
+export interface PredictResponse {
+  model: string; // 'pipeline' | 'human' | 'hardware'
+  target: string; // 'Pipeline' | 'Human' | 'Hardware'
+  detections: PredictDetectionItem[];
+}
