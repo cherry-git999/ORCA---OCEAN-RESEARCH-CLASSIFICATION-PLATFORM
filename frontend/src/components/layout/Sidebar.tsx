@@ -11,9 +11,10 @@ import {
   ChevronRight,
   Compass,
   CheckCircle2,
+  HardDrive,
 } from 'lucide-react';
 
-export type NavRoute = 'dashboard' | 'analyze' | 'detections' | 'geospatial' | 'reports' | 'history';
+export type NavRoute = 'dashboard' | 'analyze' | 'detections' | 'geospatial' | 'reports' | 'history' | 'hardware';
 
 interface SidebarProps {
   currentRoute: NavRoute;
@@ -59,6 +60,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Scan History',
       icon: History,
       badge: scans.length > 0 ? `${scans.length}` : undefined,
+    },
+    {
+      id: 'hardware' as NavRoute,
+      label: 'Hardware',
+      icon: HardDrive,
     },
   ];
 

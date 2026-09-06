@@ -13,6 +13,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
+      '/hardware-api': {
+        target: 'http://10.169.191.69:5000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/hardware-api/, ''),
+      },
     },
   },
 })

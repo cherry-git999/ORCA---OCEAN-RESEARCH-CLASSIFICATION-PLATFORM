@@ -47,6 +47,11 @@ export const Topbar: React.FC<TopbarProps> = ({ currentRoute, onOpenStatusModal 
           title: 'SCAN HISTORY',
           subtitle: 'Persistent browser inventory of completed scans, model selections, and detections.',
         };
+      case 'hardware':
+        return {
+          title: 'HARDWARE',
+          subtitle: 'Physical Hardware Capture & Sonar Intake transmitted from the connected underwater system.',
+        };
     }
   };
 
