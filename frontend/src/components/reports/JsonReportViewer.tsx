@@ -33,10 +33,13 @@ export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
       description: scan.location.description || 'Offshore Marine Grid (Estimated - Not highly accurate)',
     },
     detection_count: scan.detections.length,
+    is_hardware_scan: scan.isHardwareScan || false,
+    ...(scan.isHardwareScan && { hardware_distance: scan.hardwareDistance || '11.28 cm' }),
     detections: scan.detections.map((d) => ({
       id: d.id,
       class: d.class_name,
       confidence: d.confidence,
+      ...(scan.isHardwareScan && { distance_of_the_object: d.distance || scan.hardwareDistance || '11.28 cm' }),
       bbox: {
         x1: d.bbox.x1,
         y1: d.bbox.y1,

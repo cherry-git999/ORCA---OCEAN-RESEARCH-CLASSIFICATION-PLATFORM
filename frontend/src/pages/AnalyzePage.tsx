@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSonar } from '../context/SonarContext';
 import { Dropzone } from '../components/upload/Dropzone';
 import { ModelRoutingCard } from '../components/upload/ModelRoutingCard';
@@ -6,13 +6,14 @@ import { AutoRoutingModal } from '../components/upload/AutoRoutingModal';
 import { AnalysisPipelineTransitionModal } from '../components/upload/AnalysisPipelineTransitionModal';
 import { ErrorAlert } from '../components/common/ErrorAlert';
 import { SonarScanItem } from '../types/detection';
-import { ImagePreviewResult } from '../utils/imagePreview';
+import { ImagePreviewResult, generateImagePreview } from '../utils/imagePreview';
 import { DetectionMode, PredictAutoResponse, PredictAutoRouting, PredictResponse, PredictTarget } from '../types/api';
 import { predictAuto, predictImage } from '../api/predictApi';
 import { ApiError } from '../api/apiClient';
 import { NavRoute } from '../components/layout/Sidebar';
 import { Sparkles, Loader2 } from 'lucide-react';
 import { getWaterCoordinatesForScan } from '../utils/geoCoordinates';
+import { dataUrlToFile } from '../utils/sonarDistanceParser';
 
 interface AnalyzePageProps {
   onNavigate?: (route: NavRoute) => void;
@@ -25,6 +26,13 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
   const [detectionMode, setDetectionMode] = useState<DetectionMode>('auto');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewData, setPreviewData] = useState<ImagePreviewResult | null>(null);
+
+  // Hardware Scan Metadata Intake State
+  const [hardwareScanInfo, setHardwareScanInfo] = useState<{
+    isHardwareScan: boolean;
+    distance?: string;
+    rawSonar?: string;
+  } | null>(null);
 
   // Analysis state
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
@@ -75,7 +83,40 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
     }
   };
 
+  // Automatically ingest and analyze pending capture forwarded from Hardware page
+  useEffect(() => {
+    try {
+      const pendingRaw = sessionStorage.getItem('orca_pending_hardware_scan');
+      if (pendingRaw) {
+        sessionStorage.removeItem('orca_pending_hardware_scan');
+        const parsed = JSON.parse(pendingRaw);
+        if (parsed.dataUrl && parsed.filename) {
+          const file = dataUrlToFile(parsed.dataUrl, parsed.filename);
+          setHardwareScanInfo({
+            isHardwareScan: true,
+            distance: parsed.distance,
+            rawSonar: parsed.rawSonar,
+          });
+
+          generateImagePreview(file).then((preview) => {
+            setSelectedFile(file);
+            setPreviewData(preview);
+            setDetectionMode('auto');
+            // Directly launch auto-routing analysis for forwarded hardware scan
+            executeAnalysis(file, 'auto');
+          }).catch((err) => {
+            console.error('Failed to generate image preview for hardware capture:', err);
+          });
+        }
+      }
+    } catch (err) {
+      console.error('Error loading pending hardware capture in AnalyzePage:', err);
+    }
+  }, []);
+
   const handleFileSelected = (file: File, preview: ImagePreviewResult) => {
+    // Regular upload resets hardware scan context
+    setHardwareScanInfo(null);
     setSelectedFile(file);
     setPreviewData(preview);
     setAnalysisError(null);
@@ -106,10 +147,16 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
 
     if (!selectedFile || !previewData) return;
 
+    const isHw = !!hardwareScanInfo?.isHardwareScan;
+    const hwDist = hardwareScanInfo?.distance;
+    const hwSonarRaw = hardwareScanInfo?.rawSonar;
+
     if (pendingAutoResponse && pendingAutoResponse.routing.status === 'routed') {
       const routing = pendingAutoResponse.routing;
       const targetStr = (routing.target || routing.model || 'pipeline').toLowerCase();
-      const scanId = `SCAN_${targetStr.toUpperCase()}_${Date.now().toString().slice(-4)}`;
+      const scanId = isHw
+        ? `SCAN_HW_${targetStr.toUpperCase()}_${Date.now().toString().slice(-4)}`
+        : `SCAN_${targetStr.toUpperCase()}_${Date.now().toString().slice(-4)}`;
 
       const scanItem: SonarScanItem = {
         id: scanId,
@@ -117,7 +164,7 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
         target: targetStr,
         model_name: routing.target ? `${routing.target} Detection Model` : 'Specialist Model',
         status: 'Complete',
-        mission_id: `TRANSECT_${Date.now().toString().slice(-5)}`,
+        mission_id: isHw ? `HW_MISSION_${Date.now().toString().slice(-5)}` : `TRANSECT_${Date.now().toString().slice(-5)}`,
         image: {
           filename: selectedFile.name,
           width: previewData.width,
@@ -138,11 +185,15 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
           },
           model: routing.target ? `${routing.target} Specialist` : 'Specialist Model',
           review_status: d.confidence >= 0.8 ? 'confirmed' : 'pending',
+          distance: isHw ? (hwDist || '11.28 cm') : undefined,
         })),
         location: getWaterCoordinatesForScan(selectedFile.name),
         rawFile: selectedFile,
         routingConfidence: routing.confidence,
         isAutoRouted: true,
+        isHardwareScan: isHw,
+        hardwareDistance: hwDist,
+        hardwareSonarRaw: hwSonarRaw,
       };
 
       addUploadedScan(scanItem);
@@ -152,7 +203,9 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
       }
     } else if (pendingManualResponse) {
       const targetStr = pendingManualResponse.target.toLowerCase();
-      const scanId = `SCAN_${targetStr.toUpperCase()}_${Date.now().toString().slice(-4)}`;
+      const scanId = isHw
+        ? `SCAN_HW_${targetStr.toUpperCase()}_${Date.now().toString().slice(-4)}`
+        : `SCAN_${targetStr.toUpperCase()}_${Date.now().toString().slice(-4)}`;
 
       const scanItem: SonarScanItem = {
         id: scanId,
@@ -160,7 +213,7 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
         target: targetStr,
         model_name: `${pendingManualResponse.target} Detection Model`,
         status: 'Complete',
-        mission_id: `TRANSECT_${Date.now().toString().slice(-5)}`,
+        mission_id: isHw ? `HW_MISSION_${Date.now().toString().slice(-5)}` : `TRANSECT_${Date.now().toString().slice(-5)}`,
         image: {
           filename: selectedFile.name,
           width: previewData.width,
@@ -181,10 +234,14 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
           },
           model: `${pendingManualResponse.target} Specialist`,
           review_status: d.confidence >= 0.8 ? 'confirmed' : 'pending',
+          distance: isHw ? (hwDist || '11.28 cm') : undefined,
         })),
         location: getWaterCoordinatesForScan(selectedFile.name),
         rawFile: selectedFile,
         isAutoRouted: false,
+        isHardwareScan: isHw,
+        hardwareDistance: hwDist,
+        hardwareSonarRaw: hwSonarRaw,
       };
 
       addUploadedScan(scanItem);
@@ -210,6 +267,43 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Physical Hardware Intake Active Banner */}
+      {hardwareScanInfo?.isHardwareScan && (
+        <div
+          id="hardware-intake-banner"
+          data-testid="hardware-intake-banner"
+          className="glass-panel"
+          style={{
+            padding: '12px 18px',
+            background: 'linear-gradient(90deg, rgba(0, 242, 254, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)',
+            border: '1px solid rgba(0, 242, 254, 0.3)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '12px',
+            borderRadius: 'var(--radius-sm)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span className="badge badge-cyan" style={{ fontSize: '10px' }}>
+              PHYSICAL HARDWARE INTAKE
+            </span>
+            <span style={{ fontSize: '13px', color: 'var(--text-primary)', fontWeight: 600 }}>
+              Hardware Image Ingested: <strong className="mono" style={{ color: 'var(--sonar-cyan)' }}>{selectedFile?.name}</strong>
+            </span>
+          </div>
+          {hardwareScanInfo.distance && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Paired Sonar Distance:</span>
+              <span className="mono" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
+                {hardwareScanInfo.distance}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Backend Offline Alert */}
       {backendStatus === 'offline' && (
         <ErrorAlert

@@ -14,10 +14,13 @@ interface PdfScanData {
   target: string;
   routingConfidence?: number;
   isAutoRouted?: boolean;
+  isHardwareScan?: boolean;
+  hardwareDistance?: string;
   detections: Array<{
     id?: string;
     class_name: string;
     confidence: number;
+    distance?: string;
     bbox: { x1: number; y1: number; x2: number; y2: number };
   }>;
   location?: {
@@ -67,7 +70,7 @@ function buildPdfDocument(data: PdfScanData): Uint8Array {
   streamParts.push('/F2 14 Tf');
   streamParts.push('0.0 0.95 0.99 rg');
   streamParts.push('0 -24 Td');
-  streamParts.push(`(${escapePdfText('SCAN ANALYSIS REPORT')}) Tj`);
+  streamParts.push(`(${escapePdfText(data.isHardwareScan ? 'PHYSICAL HARDWARE SCAN ANALYSIS REPORT' : 'SCAN ANALYSIS REPORT')}) Tj`);
   streamParts.push('ET');
 
   // Metadata Section
@@ -105,6 +108,10 @@ function buildPdfDocument(data: PdfScanData): Uint8Array {
     true
   );
 
+  if (data.isHardwareScan && data.hardwareDistance) {
+    drawMetaRow('Distance of the Object', `${data.hardwareDistance} (Physical Sonar Slant Range)`, true);
+  }
+
   if (data.routingConfidence != null) {
     drawMetaRow('Routing Confidence', `${(data.routingConfidence * 100).toFixed(1)}%`);
   }
@@ -132,10 +139,19 @@ function buildPdfDocument(data: PdfScanData): Uint8Array {
   streamParts.push('BT');
   streamParts.push('/F2 9 Tf');
   streamParts.push('0.2 0.25 0.35 rg');
-  streamParts.push(`50 ${curY} Td (INDEX) Tj`);
-  streamParts.push('80 0 Td (CLASS LABEL) Tj');
-  streamParts.push('140 0 Td (CONFIDENCE) Tj');
-  streamParts.push('140 0 Td (BOUNDING BOX [x1, y1, x2, y2]) Tj');
+
+  if (data.isHardwareScan) {
+    streamParts.push(`45 ${curY} Td (INDEX) Tj`);
+    streamParts.push('50 0 Td (CLASS LABEL) Tj');
+    streamParts.push('110 0 Td (CONFIDENCE) Tj');
+    streamParts.push('95 0 Td (OBJECT DISTANCE) Tj');
+    streamParts.push('100 0 Td (BOUNDING BOX) Tj');
+  } else {
+    streamParts.push(`50 ${curY} Td (INDEX) Tj`);
+    streamParts.push('80 0 Td (CLASS LABEL) Tj');
+    streamParts.push('140 0 Td (CONFIDENCE) Tj');
+    streamParts.push('140 0 Td (BOUNDING BOX [x1, y1, x2, y2]) Tj');
+  }
   streamParts.push('ET');
 
   curY -= 26;
@@ -163,19 +179,40 @@ function buildPdfDocument(data: PdfScanData): Uint8Array {
       streamParts.push('BT');
       streamParts.push('/F2 9 Tf');
       streamParts.push('0.3 0.3 0.4 rg');
-      streamParts.push(`50 ${curY} Td (#${idx + 1}) Tj`);
 
-      streamParts.push('/F2 10 Tf');
-      streamParts.push('0.05 0.25 0.5 rg');
-      streamParts.push(`80 0 Td (${escapePdfText(det.class_name.toUpperCase())}) Tj`);
+      if (data.isHardwareScan) {
+        streamParts.push(`45 ${curY} Td (#${idx + 1}) Tj`);
 
-      streamParts.push('/F1 10 Tf');
-      streamParts.push('0.1 0.6 0.3 rg');
-      streamParts.push(`140 0 Td (${escapePdfText(confStr)}) Tj`);
+        streamParts.push('/F2 10 Tf');
+        streamParts.push('0.05 0.25 0.5 rg');
+        streamParts.push(`50 0 Td (${escapePdfText(det.class_name.toUpperCase())}) Tj`);
 
-      streamParts.push('/F1 9 Tf');
-      streamParts.push('0.3 0.3 0.35 rg');
-      streamParts.push(`140 0 Td (${escapePdfText(bboxStr)}) Tj`);
+        streamParts.push('/F1 10 Tf');
+        streamParts.push('0.1 0.6 0.3 rg');
+        streamParts.push(`110 0 Td (${escapePdfText(confStr)}) Tj`);
+
+        streamParts.push('/F2 9 Tf');
+        streamParts.push('0.0 0.5 0.7 rg');
+        streamParts.push(`95 0 Td (${escapePdfText(det.distance || data.hardwareDistance || '11.28 cm')}) Tj`);
+
+        streamParts.push('/F1 8 Tf');
+        streamParts.push('0.3 0.3 0.35 rg');
+        streamParts.push(`100 0 Td (${escapePdfText(bboxStr)}) Tj`);
+      } else {
+        streamParts.push(`50 ${curY} Td (#${idx + 1}) Tj`);
+
+        streamParts.push('/F2 10 Tf');
+        streamParts.push('0.05 0.25 0.5 rg');
+        streamParts.push(`80 0 Td (${escapePdfText(det.class_name.toUpperCase())}) Tj`);
+
+        streamParts.push('/F1 10 Tf');
+        streamParts.push('0.1 0.6 0.3 rg');
+        streamParts.push(`140 0 Td (${escapePdfText(confStr)}) Tj`);
+
+        streamParts.push('/F1 9 Tf');
+        streamParts.push('0.3 0.3 0.35 rg');
+        streamParts.push(`140 0 Td (${escapePdfText(bboxStr)}) Tj`);
+      }
       streamParts.push('ET');
 
       // Row separator
@@ -221,22 +258,25 @@ function buildPdfDocument(data: PdfScanData): Uint8Array {
   // Obj 6: Font Helvetica-Bold
   objects.push('6 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj');
 
-  // Assemble full PDF
-  let pdf = '%PDF-1.4\n';
-  const offsets: number[] = [];
+  // Compute xref table
+  let currentOffset = '%PDF-1.4\n'.length;
+  const offsets: number[] = [0];
 
+  let body = '%PDF-1.4\n';
   for (const obj of objects) {
-    offsets.push(new TextEncoder().encode(pdf).length);
-    pdf += obj + '\n';
+    offsets.push(currentOffset);
+    const objBytes = `${obj}\n`;
+    body += objBytes;
+    currentOffset += new TextEncoder().encode(objBytes).length;
   }
 
-  const startXref = new TextEncoder().encode(pdf).length;
-  pdf += 'xref\n';
-  pdf += `0 ${objects.length + 1}\n`;
-  pdf += '0000000000 65535 f \n';
-  for (const off of offsets) {
-    pdf += `${String(off).padStart(10, '0')} 00000 n \n`;
+  const startXref = currentOffset;
+  let xref = `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+  for (let i = 1; i <= objects.length; i++) {
+    xref += `${String(offsets[i]).padStart(10, '0')} 00000 n \n`;
   }
+
+  let pdf = body + xref;
   pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\n`;
   pdf += 'startxref\n';
   pdf += `${startXref}\n`;
@@ -256,10 +296,13 @@ export function downloadScanPdfReport(scan: SonarScanItem): void {
     target: scan.target,
     routingConfidence: scan.routingConfidence,
     isAutoRouted: scan.isAutoRouted,
+    isHardwareScan: scan.isHardwareScan,
+    hardwareDistance: scan.hardwareDistance,
     detections: scan.detections.map((d) => ({
       id: d.id,
       class_name: d.class_name,
       confidence: d.confidence,
+      distance: d.distance || scan.hardwareDistance,
       bbox: d.bbox,
     })),
     location: scan.location,

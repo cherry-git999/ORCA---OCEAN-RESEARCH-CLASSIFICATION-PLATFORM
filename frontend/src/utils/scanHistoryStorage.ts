@@ -20,6 +20,7 @@ export interface StoredDetectionItem {
     y2: number;
   };
   review_status?: ReviewStatus;
+  distance?: string;
 }
 
 export interface StoredScanRecord {
@@ -30,6 +31,9 @@ export interface StoredScanRecord {
   target: string;
   routingConfidence?: number;
   isAutoRouted?: boolean;
+  isHardwareScan?: boolean;
+  hardwareDistance?: string;
+  hardwareSonarRaw?: string;
   detections: StoredDetectionItem[];
   location?: LocationMeta;
   imageData?: string;

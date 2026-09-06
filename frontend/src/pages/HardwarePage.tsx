@@ -3,7 +3,6 @@ import {
   HardDrive,
   UploadCloud,
   CheckCircle2,
-  Clock,
   FileText,
   Image as ImageIcon,
   AlertCircle,
@@ -26,12 +25,13 @@ import {
   clearStoredHardwareCapture,
 } from '../utils/hardwareStorage';
 import { checkHardwareConnectivity, fetchLatestHardwareCapture, HARDWARE_BASE_URL } from '../api/hardwareApi';
+import { extractSonarDistance } from '../utils/sonarDistanceParser';
 
 interface HardwarePageProps {
   onNavigate?: (route: 'dashboard' | 'analyze' | 'detections' | 'geospatial' | 'reports' | 'history' | 'hardware') => void;
 }
 
-export const HardwarePage: React.FC<HardwarePageProps> = () => {
+export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
   // 1. Persistent Hardware Capture State
   const [capture, setCapture] = useState<HardwareCapture | null>(() => getStoredHardwareCapture());
 
@@ -206,27 +206,29 @@ export const HardwarePage: React.FC<HardwarePageProps> = () => {
     setIntakeError(null);
   };
 
+  const handleAnalyzeHardwareCapture = () => {
+    if (!capture || !capture.image) return;
+    const extractedDistance = extractSonarDistance(capture.sonar?.rawText);
+    const pendingPayload = {
+      filename: capture.image.filename,
+      dataUrl: capture.image.dataUrl,
+      distance: extractedDistance,
+      rawSonar: capture.sonar?.rawText || '',
+      source: 'hardware',
+    };
+    sessionStorage.setItem('orca_pending_hardware_scan', JSON.stringify(pendingPayload));
+    if (onNavigate) {
+      onNavigate('analyze');
+    } else {
+      window.location.hash = '#/analyze';
+    }
+  };
+
   // Helper to load sample hardware capture for local verification
   const handleLoadSampleHardwareCapture = () => {
-    const sampleJpgName = 'clip_009.jpg';
-    const sampleTxtName = 'capture_009.txt';
-    const sampleRawSonar = `[HARDWARE TELEMETRY LOG - ORCA USBL TRANSCEIVER]
-TRANSDUCER_ID: USBL-TX-409
-TIMESTAMP_UTC: ${new Date().toISOString()}
-ACOUSTIC_FREQUENCY_KHZ: 675.0
-TRANSMIT_POWER_DB: 192.4
-GAIN_CALIBRATION_CURVE: LOGARITHMIC_12DB
-
--- RAW TRANSDUCER ECHO PROFILE --
-BEAM_INDEX: 042
-PING_SEQUENCE_NUM: 008921
-SLANT_RANGE_METERS_RAW: 2.348
-TIME_OF_FLIGHT_MS: 3.131
-SIGNAL_TO_NOISE_SNR: 24.8
-BACKSCATTER_AMPLITUDE_RAW: 0x4F9B
-RETURN_PHASE_ANGLE_DEG: +14.22
-PRESSURE_BAR: 1.042
-HYDROPHONE_TEMP_C: 22.4`;
+    const sampleJpgName = 'capture_1788727989.jpg';
+    const sampleTxtName = 'capture_1788727989.txt';
+    const sampleRawSonar = `Image: capture_1788727989.jpg\nDistance: 11.28 cm`;
 
     // Create a 1x1 base64 transparent pixel or SVG placeholder for sample image
     const sampleCanvas = document.createElement('canvas');
@@ -241,7 +243,7 @@ HYDROPHONE_TEMP_C: 22.4`;
       ctx.strokeRect(20, 20, 600, 600);
       ctx.fillStyle = '#38bdf8';
       ctx.font = 'bold 20px monospace';
-      ctx.fillText('ORCA HARDWARE LIVE FEED — [clip_009.jpg]', 40, 60);
+      ctx.fillText('ORCA HARDWARE LIVE FEED — [capture_1788727989.jpg]', 40, 60);
       ctx.fillStyle = '#64748b';
       ctx.font = '14px monospace';
       ctx.fillText(`Acoustic Optical Sensor • 640x640px • ${new Date().toLocaleTimeString()}`, 40, 90);
@@ -335,6 +337,23 @@ HYDROPHONE_TEMP_C: 22.4`;
 
         {/* Quick Action Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          {capture?.image && (
+            <button
+              id="analyze-hardware-capture-btn-top"
+              data-testid="analyze-hardware-capture-btn-top"
+              onClick={handleAnalyzeHardwareCapture}
+              className="btn btn-primary btn-sm"
+              style={{
+                background: 'linear-gradient(135deg, #00f2fe 0%, #0284c7 100%)',
+                color: '#030712',
+                fontWeight: 700,
+                boxShadow: '0 0 16px rgba(0, 242, 254, 0.4)',
+              }}
+            >
+              <Sparkles size={14} />
+              <span>Analyze with ORCA AI →</span>
+            </button>
+          )}
           {capture && (
             <button onClick={handleClearCapture} className="btn btn-ghost btn-sm" style={{ color: 'var(--status-rose)' }}>
               <Trash2 size={14} />
@@ -643,10 +662,27 @@ HYDROPHONE_TEMP_C: 22.4`;
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
               <span className="badge badge-emerald" style={{ fontSize: '11px' }}>
                 CAPTURE RECEIVED
               </span>
+              {capture.image && (
+                <button
+                  id="analyze-hardware-capture-btn"
+                  data-testid="analyze-hardware-capture-btn"
+                  onClick={handleAnalyzeHardwareCapture}
+                  className="btn btn-primary btn-sm"
+                  style={{
+                    background: 'linear-gradient(135deg, #00f2fe 0%, #0284c7 100%)',
+                    color: '#030712',
+                    fontWeight: 700,
+                    boxShadow: '0 0 14px rgba(0, 242, 254, 0.35)',
+                  }}
+                >
+                  <Sparkles size={14} />
+                  <span>Analyze Hardware Capture with ORCA AI →</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -837,27 +873,58 @@ HYDROPHONE_TEMP_C: 22.4`;
                         onClick={handleCopyRawSonar}
                         className="btn btn-ghost btn-xs"
                         style={{ fontSize: '10px' }}
-                        title="Copy Raw Sonar Data"
                       >
-                        {copiedText ? <Check size={12} color="#10b981" /> : <Copy size={12} />}
+                        {copiedText ? <Check size={12} color="var(--status-emerald)" /> : <Copy size={12} />}
                         <span>{copiedText ? 'Copied' : 'Copy'}</span>
                       </button>
-
                       <button
-                        id="toggle-raw-sonar-btn"
-                        data-testid="toggle-raw-sonar-btn"
                         onClick={() => setIsRawSonarExpanded(!isRawSonarExpanded)}
                         className="btn btn-secondary btn-xs"
                         style={{ fontSize: '10px' }}
                       >
                         {isRawSonarExpanded ? <EyeOff size={12} /> : <Eye size={12} />}
-                        <span>{isRawSonarExpanded ? 'Hide Raw Data' : 'View Raw Sonar Data'}</span>
+                        <span>{isRawSonarExpanded ? 'Collapse' : 'Expand'}</span>
                       </button>
                     </div>
                   </div>
 
+                  {/* Sonar Distance Extraction Telemetry */}
+                  {capture.sonar && (
+                    <div
+                      id="hardware-extracted-distance-badge"
+                      style={{
+                        background: 'rgba(0, 242, 254, 0.08)',
+                        border: '1px solid rgba(0, 242, 254, 0.28)',
+                        borderRadius: 'var(--radius-xs)',
+                        padding: '10px 14px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: '10px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Sparkles size={14} color="var(--sonar-cyan)" />
+                        <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                          Extracted Sonar Object Distance:
+                        </span>
+                      </div>
+                      <span
+                        className="mono"
+                        style={{
+                          fontSize: '14px',
+                          fontWeight: 800,
+                          color: 'var(--sonar-cyan)',
+                          letterSpacing: '0.04em',
+                        }}
+                      >
+                        {extractSonarDistance(capture.sonar.rawText) || 'No distance metric detected'}
+                      </span>
+                    </div>
+                  )}
+
                   {/* Raw TXT Viewer */}
-                  {isRawSonarExpanded && (
+                  {isRawSonarExpanded && capture.sonar && (
                     <div
                       id="raw-sonar-data-viewer"
                       data-testid="raw-sonar-data-viewer"
@@ -880,11 +947,11 @@ HYDROPHONE_TEMP_C: 22.4`;
                     </div>
                   )}
 
-                  {/* Strict Notice banner */}
+                  {/* Hardware Telemetry Link Banner */}
                   <div
                     style={{
-                      background: 'rgba(56, 189, 248, 0.05)',
-                      border: '1px solid rgba(56, 189, 248, 0.2)',
+                      background: 'rgba(0, 242, 254, 0.04)',
+                      border: '1px solid rgba(0, 242, 254, 0.18)',
                       borderRadius: 'var(--radius-xs)',
                       padding: '10px 12px',
                       display: 'flex',
@@ -896,8 +963,8 @@ HYDROPHONE_TEMP_C: 22.4`;
                   >
                     <Info size={15} style={{ flexShrink: 0, marginTop: '2px' }} />
                     <div>
-                      <strong>Source of Truth:</strong> Raw sonar measurement data preserved without modification.
-                      No distance calculation or metric extraction applied (Model 3 & sonar distance extraction will be connected in next step).
+                      <strong>Hardware Telemetry Linked:</strong> Raw acoustic slant range extracted directly from physical hardware.
+                      Forwarding this capture will include the <strong>Distance of the Object</strong> in the mission report.
                     </div>
                   </div>
                 </div>
@@ -954,16 +1021,16 @@ HYDROPHONE_TEMP_C: 22.4`;
 
             {/* Analysis Status */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Clock size={22} color="var(--status-amber)" />
+              <Sparkles size={22} color={capture.image ? 'var(--sonar-cyan)' : 'var(--status-amber)'} />
               <div>
                 <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                  ANALYSIS STATUS
+                  ANALYSIS PIPELINE
                 </div>
-                <div style={{ fontSize: '13px', fontWeight: 700, color: '#fbbf24' }}>
-                  NOT STARTED
+                <div style={{ fontSize: '13px', fontWeight: 700, color: capture.image ? 'var(--sonar-cyan)' : '#fbbf24' }}>
+                  {capture.image ? 'READY TO ANALYZE' : 'WAITING FOR IMAGE'}
                 </div>
                 <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-                  (Model 3 integration will be added later)
+                  {capture.image ? 'Ready to forward image + distance' : 'Requires .jpg image file'}
                 </div>
               </div>
             </div>

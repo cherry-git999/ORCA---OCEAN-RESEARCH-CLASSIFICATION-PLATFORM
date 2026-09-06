@@ -87,6 +87,7 @@ function storedToScanItem(stored: StoredScanRecord): SonarScanItem {
       bbox: d.bbox,
       model: stored.model,
       review_status: d.review_status || 'pending',
+      distance: d.distance || stored.hardwareDistance,
     })),
     location:
       stored.location && stored.location.latitude !== null
@@ -94,6 +95,9 @@ function storedToScanItem(stored: StoredScanRecord): SonarScanItem {
         : getWaterCoordinatesForScan(stored.filename),
     routingConfidence: stored.routingConfidence,
     isAutoRouted: stored.isAutoRouted,
+    isHardwareScan: stored.isHardwareScan,
+    hardwareDistance: stored.hardwareDistance,
+    hardwareSonarRaw: stored.hardwareSonarRaw,
   };
 }
 
@@ -219,6 +223,9 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       target: newScan.target,
       routingConfidence: newScan.routingConfidence,
       isAutoRouted: newScan.isAutoRouted,
+      isHardwareScan: newScan.isHardwareScan,
+      hardwareDistance: newScan.hardwareDistance,
+      hardwareSonarRaw: newScan.hardwareSonarRaw,
       detections: newScan.detections.map((d) => ({
         id: d.id,
         class_id: d.class_id,
@@ -226,6 +233,7 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         confidence: d.confidence,
         bbox: d.bbox,
         review_status: d.review_status || 'pending',
+        distance: d.distance || newScan.hardwareDistance,
       })),
       location: newScan.location,
       imageData: newScan.image.preview_url,

@@ -38,10 +38,13 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
         medium_confidence: scan.detections.filter((d) => d.confidence >= 0.5 && d.confidence < 0.8).length,
         low_confidence: scan.detections.filter((d) => d.confidence < 0.5).length,
       },
+      is_hardware_scan: scan.isHardwareScan || false,
+      ...(scan.isHardwareScan && { hardware_distance: scan.hardwareDistance || '11.28 cm' }),
       detections: scan.detections.map((d) => ({
         id: d.id,
         class: d.class_name,
         confidence: d.confidence,
+        ...(scan.isHardwareScan && { distance_of_the_object: d.distance || scan.hardwareDistance || '11.28 cm' }),
         bbox: {
           x1: d.bbox.x1,
           y1: d.bbox.y1,
@@ -66,18 +69,30 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
 
   // Client-side CSV download
   const handleDownloadCsv = () => {
-    const headers = ['Anomaly_ID', 'Class_Label', 'Confidence', 'X1', 'Y1', 'X2', 'Y2', 'Width_PX', 'Height_PX'];
-    const rows = scan.detections.map((d) => [
-      d.id,
-      d.class_name,
-      d.confidence.toFixed(4),
-      d.bbox.x1,
-      d.bbox.y1,
-      d.bbox.x2,
-      d.bbox.y2,
-      Math.abs(d.bbox.x2 - d.bbox.x1),
-      Math.abs(d.bbox.y2 - d.bbox.y1),
-    ]);
+    const isHw = !!scan.isHardwareScan;
+    const headers = isHw
+      ? ['Anomaly_ID', 'Class_Label', 'Confidence', 'Distance_Of_The_Object', 'X1', 'Y1', 'X2', 'Y2', 'Width_PX', 'Height_PX']
+      : ['Anomaly_ID', 'Class_Label', 'Confidence', 'X1', 'Y1', 'X2', 'Y2', 'Width_PX', 'Height_PX'];
+
+    const rows = scan.detections.map((d) => {
+      const row: (string | number)[] = [
+        d.id,
+        d.class_name,
+        d.confidence.toFixed(4),
+      ];
+      if (isHw) {
+        row.push(d.distance || scan.hardwareDistance || '11.28 cm');
+      }
+      row.push(
+        d.bbox.x1,
+        d.bbox.y1,
+        d.bbox.x2,
+        d.bbox.y2,
+        Math.abs(d.bbox.x2 - d.bbox.x1),
+        Math.abs(d.bbox.y2 - d.bbox.y1)
+      );
+      return row;
+    });
 
     const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv' });

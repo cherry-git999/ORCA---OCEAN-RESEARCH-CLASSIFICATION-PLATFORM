@@ -20,6 +20,7 @@ export interface Detection {
   model: string;
   review_status?: ReviewStatus;
   notes?: string;
+  distance?: string; // Distance of the object from hardware sonar measurement
 }
 
 export interface ImageMeta {
@@ -53,6 +54,9 @@ export interface SonarScanItem {
   rawFile?: File;
   routingConfidence?: number;
   isAutoRouted?: boolean;
+  isHardwareScan?: boolean;
+  hardwareDistance?: string;
+  hardwareSonarRaw?: string;
 }
 
 export interface ModelInfo {
