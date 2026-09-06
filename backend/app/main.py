@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.app.routes import analyze, health, predict, segment
+from backend.app.routes import analyze, health, predict, predict_auto, segment
 
 app = FastAPI(
     title="SIH 2026 Sonar ML Backend",
@@ -20,6 +20,7 @@ app.add_middleware(
 # Core routes
 app.include_router(health.router)
 app.include_router(predict.router)
+app.include_router(predict_auto.router)
 app.include_router(analyze.router)
 app.include_router(segment.router)
 

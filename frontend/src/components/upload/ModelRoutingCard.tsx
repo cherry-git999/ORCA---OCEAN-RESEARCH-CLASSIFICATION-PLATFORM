@@ -1,48 +1,73 @@
 import React from 'react';
-import { GitBranch, ArrowDown, Cpu, AlertCircle, Layers } from 'lucide-react';
-import { PredictTarget } from '../../types/api';
+import { GitBranch, ArrowDown, Cpu, Sparkles, Layers, ShieldCheck } from 'lucide-react';
+import { DetectionMode, PredictTarget } from '../../types/api';
 
 interface ModelRoutingCardProps {
-  selectedTarget: PredictTarget;
-  onSelectTarget: (target: PredictTarget) => void;
+  detectionMode: DetectionMode;
+  onSelectMode: (mode: DetectionMode) => void;
+  selectedTarget?: PredictTarget;
+  onSelectTarget?: (target: PredictTarget) => void;
   isAnalyzing?: boolean;
 }
 
 export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
+  detectionMode,
+  onSelectMode,
   selectedTarget,
   onSelectTarget,
   isAnalyzing = false,
 }) => {
-  const getModelDetails = (target: PredictTarget) => {
-    switch (target) {
+  const currentMode = detectionMode || (selectedTarget as DetectionMode) || 'auto';
+
+  const handleModeChange = (mode: DetectionMode) => {
+    onSelectMode(mode);
+    if (onSelectTarget && mode !== 'auto') {
+      onSelectTarget(mode as PredictTarget);
+    }
+  };
+
+  const getModeDetails = (mode: DetectionMode) => {
+    switch (mode) {
+      case 'auto':
+        return {
+          title: 'Automatic Model Selection (Router V1)',
+          subtitle: 'Lightweight Multinomial Logistic Regression Router (τ = 0.85)',
+          desc: 'Automatically classifies input visual invariants (color variance, saturation, acoustic texture, dynamic range) and selects the appropriate specialist model before inference.',
+          badge: 'AUTOMATIC ROUTING',
+          badgeColor: 'badge-purple',
+          accentColor: 'var(--sonar-cyan, #00f2fe)',
+        };
       case 'pipeline':
         return {
-          name: 'YOLOv8n Pipeline Specialist (Model 1)',
-          target: 'Pipeline',
-          dataset: 'SubPipeMiniSSS (1,240 acoustic sonograms)',
-          desc: 'Trained specifically on Netpbm / high-contrast underwater pipeline sonograms (0: Pipeline).',
+          title: 'YOLOv8n Pipeline Specialist (Model 1)',
+          subtitle: 'Target: Pipeline (Class 0: Pipeline)',
+          desc: 'Specialist trained specifically on Netpbm / high-contrast underwater pipeline sonograms from SubPipeMiniSSS.',
+          badge: 'MANUAL TARGET',
           badgeColor: 'badge-cyan',
+          accentColor: 'var(--sonar-cyan, #00f2fe)',
         };
       case 'human':
         return {
-          name: 'YOLOv8n Human Specialist (Model 2)',
-          target: 'Human',
-          dataset: 'AquaScan-1K (1,050 sonar frames)',
-          desc: 'Trained on diver acoustic returns and subsurface human silhouettes (0: Human).',
+          title: 'YOLOv8n Human Specialist (Model 2)',
+          subtitle: 'Target: Human (Class 0: Human)',
+          desc: 'Specialist trained on diver acoustic returns and subsurface human silhouettes from AquaScan-1K.',
+          badge: 'MANUAL TARGET',
           badgeColor: 'badge-rose',
+          accentColor: '#f43f5e',
         };
       case 'hardware':
         return {
-          name: 'YOLOv8n Hardware Specialist (Model 3)',
-          target: 'Hardware',
-          dataset: 'ESP Hardware (5-class object dataset)',
-          desc: 'Trained on underwater marine hardware artifacts (0: cap, 1: clip, 2: key, 3: niddle, 4: scissor).',
+          title: 'YOLOv8n Hardware Specialist (Model 3)',
+          subtitle: 'Target: Hardware (5 Classes: cap, clip, key, niddle, scissor)',
+          desc: 'Specialist trained on underwater marine hardware artifacts from the ESP Hardware dataset.',
+          badge: 'MANUAL TARGET',
           badgeColor: 'badge-emerald',
+          accentColor: '#10b981',
         };
     }
   };
 
-  const modelDetails = getModelDetails(selectedTarget);
+  const details = getModeDetails(currentMode);
 
   return (
     <div className="glass-panel" style={{ padding: '20px' }}>
@@ -54,23 +79,27 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
               padding: '8px',
               borderRadius: 'var(--radius-sm)',
               background: 'rgba(0, 242, 254, 0.12)',
-              color: 'var(--sonar-cyan)',
+              color: details.accentColor,
             }}
           >
-            <GitBranch size={18} />
+            {currentMode === 'auto' ? <Sparkles size={18} /> : <GitBranch size={18} />}
           </div>
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 600 }}>SPECIALIST MODEL ROUTING</h3>
-            <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Target-Aware Dispatch to Frozen Specialist Models</p>
+            <h3 style={{ fontSize: '15px', fontWeight: 600, margin: 0 }}>DETECTION & ROUTING MODE</h3>
+            <p style={{ fontSize: '11px', color: 'var(--text-secondary)', margin: 0 }}>
+              {currentMode === 'auto'
+                ? 'Automatic Image-Level Model Selection (No Manual Target Needed)'
+                : 'Manual Specialist Model Override'}
+            </p>
           </div>
         </div>
 
-        <span className="badge badge-cyan">
-          MANUAL TARGET SELECTION
+        <span className={`badge ${details.badgeColor}`}>
+          {details.badge}
         </span>
       </div>
 
-      {/* Target Selector Buttons (All 3 Specialist Models) */}
+      {/* Detection Mode Selector Buttons */}
       <div style={{ marginBottom: '16px' }}>
         <div
           style={{
@@ -79,51 +108,82 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
             marginBottom: '8px',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
+            display: 'flex',
+            justifyContent: 'space-between',
           }}
         >
-          Select Detection Target Specialist:
+          <span>Select Detection Mode:</span>
+          {currentMode === 'auto' && (
+            <span style={{ color: 'var(--sonar-cyan)', fontWeight: 600 }}>Default / Recommended</span>
+          )}
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-          {/* 1. Pipeline */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 1fr', gap: '8px' }}>
+          {/* 1. Automatic */}
+          <button
+            type="button"
+            id="mode-auto-btn"
+            data-testid="mode-auto-btn"
+            onClick={() => handleModeChange('auto')}
+            disabled={isAnalyzing}
+            className={`btn ${currentMode === 'auto' ? 'btn-primary' : 'btn-secondary'}`}
+            style={{
+              padding: '10px 8px',
+              textAlign: 'center',
+              height: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              position: 'relative',
+              borderColor: currentMode === 'auto' ? 'var(--sonar-cyan)' : undefined,
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700, fontSize: '12px' }}>
+              <Sparkles size={12} />
+              <span>Automatic</span>
+            </div>
+            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Auto Selector</div>
+          </button>
+
+          {/* 2. Pipeline */}
           <button
             type="button"
             id="target-pipeline-btn"
             data-testid="target-pipeline-btn"
-            onClick={() => onSelectTarget('pipeline')}
+            onClick={() => handleModeChange('pipeline')}
             disabled={isAnalyzing}
-            className={`btn ${selectedTarget === 'pipeline' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`btn ${currentMode === 'pipeline' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ padding: '10px 8px', textAlign: 'center', height: 'auto', display: 'flex', flexDirection: 'column' }}
           >
             <div style={{ fontWeight: 700, fontSize: '12px' }}>Pipeline</div>
-            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Model 1 (SubPipe)</div>
+            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Model 1</div>
           </button>
 
-          {/* 2. Human */}
+          {/* 3. Human */}
           <button
             type="button"
             id="target-human-btn"
             data-testid="target-human-btn"
-            onClick={() => onSelectTarget('human')}
+            onClick={() => handleModeChange('human')}
             disabled={isAnalyzing}
-            className={`btn ${selectedTarget === 'human' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`btn ${currentMode === 'human' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ padding: '10px 8px', textAlign: 'center', height: 'auto', display: 'flex', flexDirection: 'column' }}
           >
             <div style={{ fontWeight: 700, fontSize: '12px' }}>Human</div>
-            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Model 2 (AquaScan)</div>
+            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Model 2</div>
           </button>
 
-          {/* 3. Hardware */}
+          {/* 4. Hardware */}
           <button
             type="button"
             id="target-hardware-btn"
             data-testid="target-hardware-btn"
-            onClick={() => onSelectTarget('hardware')}
+            onClick={() => handleModeChange('hardware')}
             disabled={isAnalyzing}
-            className={`btn ${selectedTarget === 'hardware' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`btn ${currentMode === 'hardware' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ padding: '10px 8px', textAlign: 'center', height: 'auto', display: 'flex', flexDirection: 'column' }}
           >
             <div style={{ fontWeight: 700, fontSize: '12px' }}>Hardware</div>
-            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Model 3 (5-Class)</div>
+            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Model 3</div>
           </button>
         </div>
       </div>
@@ -141,7 +201,7 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
           gap: '8px',
         }}
       >
-        {/* Step 1: Input target */}
+        {/* Step 1: Input target or Auto Router */}
         <div
           style={{
             width: '100%',
@@ -149,98 +209,84 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
             background: 'var(--bg-surface-elevated)',
             border: '1px solid var(--border-medium)',
             borderRadius: 'var(--radius-xs)',
-            padding: '8px 12px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <div>
-            <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-              STEP 1: TARGET SELECTION
-            </div>
-            <div style={{ fontSize: '12px', fontWeight: 600 }}>
-              Target: <span style={{ color: 'var(--sonar-cyan)' }}>"{selectedTarget.toUpperCase()}"</span>
-            </div>
-          </div>
-          <span className="badge badge-cyan" style={{ fontSize: '9px' }}>Assigned</span>
-        </div>
-
-        <ArrowDown size={14} color="var(--sonar-cyan)" />
-
-        {/* Step 2: TargetRouter */}
-        <div
-          style={{
-            width: '100%',
-            maxWidth: '440px',
-            background: 'var(--bg-surface-elevated)',
-            border: '1px solid var(--border-active)',
-            borderRadius: 'var(--radius-xs)',
-            padding: '8px 12px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            boxShadow: 'var(--sonar-cyan-glow)',
-          }}
-        >
-          <div>
-            <div style={{ fontSize: '9px', color: 'var(--sonar-cyan)', textTransform: 'uppercase', fontWeight: 600 }}>
-              STEP 2: FASTAPI TARGETROUTER (POST /predict)
-            </div>
-            <div style={{ fontSize: '12px', fontWeight: 600, marginTop: '2px' }}>
-              ModelRegistry & ModelLoader Dispatch
-            </div>
-          </div>
-          <Cpu size={16} color="var(--sonar-cyan)" />
-        </div>
-
-        <ArrowDown size={14} color="var(--sonar-cyan)" />
-
-        {/* Step 3: Assigned Model */}
-        <div
-          style={{
-            width: '100%',
-            maxWidth: '440px',
-            background: 'rgba(16, 185, 129, 0.08)',
-            border: '1px solid rgba(16, 185, 129, 0.4)',
-            borderRadius: 'var(--radius-xs)',
             padding: '10px 12px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Layers size={14} color={details.accentColor} />
+            <span style={{ fontSize: '12px', fontWeight: 600 }}>
+              {currentMode === 'auto' ? 'Automatic Selector Mode' : `Selected Target: ${details.title}`}
+            </span>
+          </div>
+          <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            {currentMode === 'auto' ? 'POST /predict-auto' : `POST /predict (target=${currentMode})`}
+          </span>
+        </div>
+
+        {/* Step 2: Downward Arrow */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
+          <ArrowDown size={14} />
+          <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            {currentMode === 'auto' ? 'Feature Extraction & Confidence Gating (τ = 0.85)' : 'TargetRouter Direct Dispatch'}
+          </span>
+        </div>
+
+        {/* Step 3: Target Model Display */}
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '440px',
+            background: 'rgba(0, 242, 254, 0.04)',
+            border: `1px solid ${details.accentColor}40`,
+            borderRadius: 'var(--radius-xs)',
+            padding: '12px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px',
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '9px', color: '#34d399', fontWeight: 600, textTransform: 'uppercase' }}>
-              STEP 3: ACTIVE SPECIALIST MODEL
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Cpu size={14} color={details.accentColor} />
+              <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                {details.title}
+              </span>
+            </div>
+            <span className="badge badge-outline" style={{ fontSize: '10px' }}>
+              FROZEN
             </span>
-            <span className="badge badge-emerald" style={{ fontSize: '9px' }}>Ready</span>
           </div>
-
-          <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '4px' }}>
-            {modelDetails.name}
+          <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+            {details.subtitle}
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-            {modelDetails.desc}
+          <div style={{ fontSize: '10px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+            {details.desc}
           </div>
         </div>
       </div>
 
-      {/* Notice */}
+      {/* Safety Note Footer */}
       <div
         style={{
           marginTop: '12px',
-          padding: '8px 12px',
-          borderRadius: 'var(--radius-xs)',
-          background: 'rgba(56, 189, 248, 0.06)',
-          border: '1px dashed var(--border-subtle)',
-          fontSize: '11px',
-          color: 'var(--text-secondary)',
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
+          padding: '8px 12px',
+          background: 'rgba(255, 255, 255, 0.02)',
+          borderRadius: 'var(--radius-xs)',
+          fontSize: '11px',
+          color: 'var(--text-secondary)',
         }}
       >
-        <AlertCircle size={14} color="var(--sonar-cyan)" style={{ flexShrink: 0 }} />
+        <ShieldCheck size={14} color="var(--sonar-cyan)" />
         <span>
-          <strong>Target-Aware Routing:</strong> Exactly one specialist model is loaded and invoked per request.
+          {currentMode === 'auto'
+            ? 'Automatic mode executes specialist inference only when routing confidence ≥ 85%.'
+            : 'Manual mode strictly directs inference to the selected specialist model.'}
         </span>
       </div>
     </div>

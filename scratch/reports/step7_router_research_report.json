@@ -1,0 +1,223 @@
+{
+  "timestamp": "2026-09-06 12:43:25",
+  "total_runtime_seconds": 101.5,
+  "visual_features_used": [
+    "color_var",
+    "sat_mean",
+    "sat_std",
+    "hue_mean",
+    "mean_intensity",
+    "std_intensity",
+    "dyn_range",
+    "lap_var",
+    "edge_mean",
+    "edge_std",
+    "entropy",
+    "mean_r",
+    "mean_g",
+    "mean_b",
+    "rg_diff",
+    "rb_diff",
+    "gb_diff"
+  ],
+  "dataset_partition": {
+    "train_total": 342,
+    "train_per_domain": {
+      "pipeline": 150,
+      "human": 150,
+      "hardware": 42
+    },
+    "test_total": 239,
+    "test_per_domain": {
+      "pipeline": 151,
+      "human": 80,
+      "hardware": 8
+    }
+  },
+  "candidate_accuracies": {
+    "candidate_a_rule_based": 88.28,
+    "candidate_b_nearest_centroid": 98.74,
+    "candidate_c_logistic_regression": 100.0,
+    "candidate_d_random_forest": 100.0,
+    "candidate_c_with_aspect_ratio": 100.0,
+    "candidate_d_with_aspect_ratio": 100.0
+  },
+  "abstention_sweep": [
+    {
+      "threshold": 0.5,
+      "coverage_pct": 100.0,
+      "accuracy_pct": 100.0,
+      "abstained_count": 0,
+      "dangerous_mistakes": 0
+    },
+    {
+      "threshold": 0.55,
+      "coverage_pct": 100.0,
+      "accuracy_pct": 100.0,
+      "abstained_count": 0,
+      "dangerous_mistakes": 0
+    },
+    {
+      "threshold": 0.6,
+      "coverage_pct": 100.0,
+      "accuracy_pct": 100.0,
+      "abstained_count": 0,
+      "dangerous_mistakes": 0
+    },
+    {
+      "threshold": 0.65,
+      "coverage_pct": 100.0,
+      "accuracy_pct": 100.0,
+      "abstained_count": 0,
+      "dangerous_mistakes": 0
+    },
+    {
+      "threshold": 0.7,
+      "coverage_pct": 100.0,
+      "accuracy_pct": 100.0,
+      "abstained_count": 0,
+      "dangerous_mistakes": 0
+    },
+    {
+      "threshold": 0.75,
+      "coverage_pct": 100.0,
+      "accuracy_pct": 100.0,
+      "abstained_count": 0,
+      "dangerous_mistakes": 0
+    },
+    {
+      "threshold": 0.8,
+      "coverage_pct": 100.0,
+      "accuracy_pct": 100.0,
+      "abstained_count": 0,
+      "dangerous_mistakes": 0
+    },
+    {
+      "threshold": 0.85,
+      "coverage_pct": 100.0,
+      "accuracy_pct": 100.0,
+      "abstained_count": 0,
+      "dangerous_mistakes": 0
+    },
+    {
+      "threshold": 0.9,
+      "coverage_pct": 100.0,
+      "accuracy_pct": 100.0,
+      "abstained_count": 0,
+      "dangerous_mistakes": 0
+    },
+    {
+      "threshold": 0.95,
+      "coverage_pct": 98.33,
+      "accuracy_pct": 100.0,
+      "abstained_count": 4,
+      "dangerous_mistakes": 0
+    }
+  ],
+  "held_out_metrics_optimal_tau": {
+    "threshold": 0.75,
+    "total_test": 239,
+    "routed": 239,
+    "coverage_pct": 100.0,
+    "accuracy_on_routed_pct": 100.0,
+    "per_domain": {
+      "pipeline": {
+        "precision_pct": 100.0,
+        "recall_pct": 100.0,
+        "f1_pct": 100.0,
+        "count": 151
+      },
+      "human": {
+        "precision_pct": 100.0,
+        "recall_pct": 100.0,
+        "f1_pct": 100.0,
+        "count": 80
+      },
+      "hardware": {
+        "precision_pct": 100.0,
+        "recall_pct": 100.0,
+        "f1_pct": 100.0,
+        "count": 8
+      }
+    },
+    "confusion_matrix": [
+      [
+        151,
+        0,
+        0
+      ],
+      [
+        0,
+        80,
+        0
+      ],
+      [
+        0,
+        0,
+        8
+      ]
+    ],
+    "cross_domain_mistakes": {
+      "Pipeline routed as Human": 0,
+      "Pipeline routed as Hardware": 0,
+      "Human routed as Pipeline": 0,
+      "Human routed as Hardware": 0,
+      "Hardware routed as Pipeline": 0,
+      "Hardware routed as Human": 0
+    }
+  },
+  "canonical_samples": [
+    {
+      "label": "Pipeline Canonical",
+      "path": "/media/cherry/External Hardisk/ps 57/datasets/SubPipeMiniSSS/DATA/SSS_HF_images/Image/1693569383.780.pbm",
+      "filename": "1693569383.780.pbm",
+      "true_domain": "pipeline",
+      "predicted_domain": "pipeline",
+      "raw_prediction": "pipeline",
+      "confidence": 0.97,
+      "probabilities": {
+        "pipeline": 0.97,
+        "human": 0.0297,
+        "hardware": 0.0003
+      },
+      "is_uncertain": false,
+      "latency_ms": 134.35,
+      "is_correct": true
+    },
+    {
+      "label": "Human Canonical",
+      "path": "/media/cherry/External Hardisk/ps 57/SIH26057/model2_experiments/datasets/aquascan_1k_clean/images/0002b00e-Screenshot_2025-08-10_23.00.36.png",
+      "filename": "0002b00e-Screenshot_2025-08-10_23.00.36.png",
+      "true_domain": "human",
+      "predicted_domain": "human",
+      "raw_prediction": "human",
+      "confidence": 0.999,
+      "probabilities": {
+        "pipeline": 0.0009,
+        "human": 0.999,
+        "hardware": 0.0001
+      },
+      "is_uncertain": false,
+      "latency_ms": 160.55,
+      "is_correct": true
+    },
+    {
+      "label": "Hardware Canonical",
+      "path": "/media/cherry/External Hardisk/ps 57/SIH26057/model3_experiments/datasets/esp_hardware_clean/images/clip_009.jpg",
+      "filename": "clip_009.jpg",
+      "true_domain": "hardware",
+      "predicted_domain": "hardware",
+      "raw_prediction": "hardware",
+      "confidence": 1.0,
+      "probabilities": {
+        "pipeline": 0.0,
+        "human": 0.0,
+        "hardware": 1.0
+      },
+      "is_uncertain": false,
+      "latency_ms": 17.94,
+      "is_correct": true
+    }
+  ],
+  "final_status": "ROUTER_RESEARCH_PASS \u2014 AUTOMATIC ROUTING READY"
+}

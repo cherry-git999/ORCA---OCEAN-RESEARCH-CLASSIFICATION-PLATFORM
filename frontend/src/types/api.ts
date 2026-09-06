@@ -65,6 +65,7 @@ export interface BackendErrorResponse {
 }
 
 export type PredictTarget = 'pipeline' | 'human' | 'hardware';
+export type DetectionMode = 'auto' | PredictTarget;
 
 export interface PredictDetectionItem {
   class: string;
@@ -77,3 +78,18 @@ export interface PredictResponse {
   target: string; // 'Pipeline' | 'Human' | 'Hardware'
   detections: PredictDetectionItem[];
 }
+
+export interface PredictAutoRouting {
+  status: 'routed' | 'uncertain';
+  model: string | null;
+  target: string | null;
+  confidence: number;
+  reason?: string;
+  probabilities?: Record<string, number>;
+}
+
+export interface PredictAutoResponse {
+  routing: PredictAutoRouting;
+  detections: PredictDetectionItem[];
+}
+

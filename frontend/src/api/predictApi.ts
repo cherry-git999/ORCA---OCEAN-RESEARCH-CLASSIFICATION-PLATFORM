@@ -9,7 +9,7 @@
  */
 
 import { request } from './apiClient';
-import { PredictResponse, PredictTarget } from '../types/api';
+import { PredictAutoResponse, PredictResponse, PredictTarget } from '../types/api';
 
 /**
  * Executes target-aware object detection inference on a sonar image file.
@@ -31,3 +31,20 @@ export async function predictImage(
     body: formData,
   });
 }
+
+/**
+ * Executes automatic model selection and specialist object detection.
+ *
+ * @param file Uploaded image file
+ * @returns Standardized PredictAutoResponse ({ routing, detections })
+ */
+export async function predictAuto(file: File): Promise<PredictAutoResponse> {
+  const formData = new FormData();
+  formData.append('file', file, file.name);
+
+  return request<PredictAutoResponse>('/predict-auto', {
+    method: 'POST',
+    body: formData,
+  });
+}
+

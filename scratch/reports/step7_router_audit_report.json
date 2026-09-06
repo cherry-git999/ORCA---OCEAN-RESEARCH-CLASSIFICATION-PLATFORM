@@ -1,0 +1,523 @@
+{
+  "timestamp": "2026-09-06 12:47:19",
+  "hash_audit": {
+    "train_image_count": 342,
+    "test_image_count": 239,
+    "train_unique_hashes": 342,
+    "test_unique_hashes": 239,
+    "hash_overlap_count": 0,
+    "path_overlap_count": 0,
+    "hash_overlap_samples": [],
+    "is_zero_overlap": true
+  },
+  "subpipe_audit": {
+    "subpipe_train_count": 150,
+    "subpipe_test_count": 151,
+    "train_acq_count": 150,
+    "test_acq_count": 151,
+    "train_acq_min_max": [
+      158,
+      1033
+    ],
+    "test_acq_min_max": [
+      857,
+      1006
+    ],
+    "acq_overlap_count": 0,
+    "acq_overlap_samples": [],
+    "is_disjoint": true
+  },
+  "per_domain_counts": {
+    "pipeline": {
+      "train": 150,
+      "test": 151
+    },
+    "human": {
+      "train": 150,
+      "test": 80
+    },
+    "hardware": {
+      "train": 42,
+      "test": 8
+    }
+  },
+  "confidence_distribution": {
+    "overall": {
+      "min": 0.9157,
+      "median": 0.9958,
+      "mean": 0.9934,
+      "max": 1.0
+    },
+    "per_domain": {
+      "pipeline": {
+        "min": 0.97,
+        "median": 0.9957,
+        "max": 0.9976
+      },
+      "human": {
+        "min": 0.9157,
+        "median": 0.9996,
+        "max": 0.9999
+      },
+      "hardware": {
+        "min": 0.9964,
+        "median": 0.9983,
+        "max": 1.0
+      }
+    }
+  },
+  "direct_tau_verification": {
+    "tau": 0.85,
+    "routed_count": 239,
+    "abstained_count": 0,
+    "accuracy_on_routed": 100.0,
+    "dangerous_errors": 0
+  },
+  "feature_ablations": [
+    {
+      "label": "A. Visual-Only (All Invariants)",
+      "feature_count": 17,
+      "features": [
+        "color_var",
+        "sat_mean",
+        "sat_std",
+        "hue_mean",
+        "mean_intensity",
+        "std_intensity",
+        "dyn_range",
+        "lap_var",
+        "edge_mean",
+        "edge_std",
+        "entropy",
+        "mean_r",
+        "mean_g",
+        "mean_b",
+        "rg_diff",
+        "rb_diff",
+        "gb_diff"
+      ],
+      "test_accuracy_pct": 100.0,
+      "confusion_matrix": [
+        [
+          151,
+          0,
+          0
+        ],
+        [
+          0,
+          80,
+          0
+        ],
+        [
+          0,
+          0,
+          8
+        ]
+      ],
+      "mean_confidence": 0.9934,
+      "min_confidence": 0.9157
+    },
+    {
+      "label": "B. Visual-Only (Excluding Color)",
+      "feature_count": 7,
+      "features": [
+        "mean_intensity",
+        "std_intensity",
+        "dyn_range",
+        "lap_var",
+        "edge_mean",
+        "edge_std",
+        "entropy"
+      ],
+      "test_accuracy_pct": 100.0,
+      "confusion_matrix": [
+        [
+          151,
+          0,
+          0
+        ],
+        [
+          0,
+          80,
+          0
+        ],
+        [
+          0,
+          0,
+          8
+        ]
+      ],
+      "mean_confidence": 0.9781,
+      "min_confidence": 0.9067
+    },
+    {
+      "label": "C. Visual-Only (Excluding Texture/Edges)",
+      "feature_count": 13,
+      "features": [
+        "color_var",
+        "sat_mean",
+        "sat_std",
+        "hue_mean",
+        "mean_intensity",
+        "std_intensity",
+        "dyn_range",
+        "mean_r",
+        "mean_g",
+        "mean_b",
+        "rg_diff",
+        "rb_diff",
+        "gb_diff"
+      ],
+      "test_accuracy_pct": 100.0,
+      "confusion_matrix": [
+        [
+          151,
+          0,
+          0
+        ],
+        [
+          0,
+          80,
+          0
+        ],
+        [
+          0,
+          0,
+          8
+        ]
+      ],
+      "mean_confidence": 0.9773,
+      "min_confidence": 0.7717
+    },
+    {
+      "label": "D. Geometry-Only (Aspect Ratio & Dimensions)",
+      "feature_count": 3,
+      "features": [
+        "aspect_ratio",
+        "width",
+        "height"
+      ],
+      "test_accuracy_pct": 100.0,
+      "confusion_matrix": [
+        [
+          151,
+          0,
+          0
+        ],
+        [
+          0,
+          80,
+          0
+        ],
+        [
+          0,
+          0,
+          8
+        ]
+      ],
+      "mean_confidence": 0.7807,
+      "min_confidence": 0.6553
+    }
+  ],
+  "robustness": {
+    "total_perturbations": 48,
+    "stable_perturbations": 42,
+    "stability_pct": 87.5,
+    "samples": [
+      {
+        "filename": "ACQ_000857_HF.bpm",
+        "true_domain": "pipeline",
+        "baseline_route": "pipeline",
+        "baseline_confidence": 0.9976,
+        "perturbations": {
+          "converted_to_JPEG": {
+            "route": "human",
+            "confidence": 0.5475,
+            "stable": false
+          },
+          "downscaled_50pct": {
+            "route": "pipeline",
+            "confidence": 0.6742,
+            "stable": true
+          },
+          "resized_640x640": {
+            "route": "pipeline",
+            "confidence": 0.6377,
+            "stable": true
+          },
+          "grayscale_rgb_duplicate": {
+            "route": "hardware",
+            "confidence": 0.8889,
+            "stable": false
+          },
+          "mild_gaussian_blur_r2": {
+            "route": "pipeline",
+            "confidence": 0.9353,
+            "stable": true
+          },
+          "brightness_plus_25pct": {
+            "route": "pipeline",
+            "confidence": 0.9973,
+            "stable": true
+          },
+          "brightness_minus_25pct": {
+            "route": "pipeline",
+            "confidence": 0.9979,
+            "stable": true
+          },
+          "contrast_plus_30pct": {
+            "route": "pipeline",
+            "confidence": 0.9984,
+            "stable": true
+          }
+        }
+      },
+      {
+        "filename": "ACQ_000858_LF.pbm",
+        "true_domain": "pipeline",
+        "baseline_route": "pipeline",
+        "baseline_confidence": 0.9927,
+        "perturbations": {
+          "converted_to_JPEG": {
+            "route": "human",
+            "confidence": 0.6958,
+            "stable": false
+          },
+          "downscaled_50pct": {
+            "route": "human",
+            "confidence": 0.7859,
+            "stable": false
+          },
+          "resized_640x640": {
+            "route": "human",
+            "confidence": 0.8382,
+            "stable": false
+          },
+          "grayscale_rgb_duplicate": {
+            "route": "hardware",
+            "confidence": 0.9494,
+            "stable": false
+          },
+          "mild_gaussian_blur_r2": {
+            "route": "pipeline",
+            "confidence": 0.8963,
+            "stable": true
+          },
+          "brightness_plus_25pct": {
+            "route": "pipeline",
+            "confidence": 0.9917,
+            "stable": true
+          },
+          "brightness_minus_25pct": {
+            "route": "pipeline",
+            "confidence": 0.9956,
+            "stable": true
+          },
+          "contrast_plus_30pct": {
+            "route": "pipeline",
+            "confidence": 0.9951,
+            "stable": true
+          }
+        }
+      },
+      {
+        "filename": "0b636c64-Screenshot_2025-08-03_15.34.23.png",
+        "true_domain": "human",
+        "baseline_route": "human",
+        "baseline_confidence": 0.9994,
+        "perturbations": {
+          "converted_to_JPEG": {
+            "route": "human",
+            "confidence": 0.9997,
+            "stable": true
+          },
+          "downscaled_50pct": {
+            "route": "human",
+            "confidence": 0.9982,
+            "stable": true
+          },
+          "resized_640x640": {
+            "route": "human",
+            "confidence": 0.9985,
+            "stable": true
+          },
+          "grayscale_rgb_duplicate": {
+            "route": "human",
+            "confidence": 0.9384,
+            "stable": true
+          },
+          "mild_gaussian_blur_r2": {
+            "route": "human",
+            "confidence": 0.8571,
+            "stable": true
+          },
+          "brightness_plus_25pct": {
+            "route": "human",
+            "confidence": 0.9999,
+            "stable": true
+          },
+          "brightness_minus_25pct": {
+            "route": "human",
+            "confidence": 0.986,
+            "stable": true
+          },
+          "contrast_plus_30pct": {
+            "route": "human",
+            "confidence": 0.9999,
+            "stable": true
+          }
+        }
+      },
+      {
+        "filename": "0c21076d-Screenshot_2025-08-03_14.57.18.png",
+        "true_domain": "human",
+        "baseline_route": "human",
+        "baseline_confidence": 0.9967,
+        "perturbations": {
+          "converted_to_JPEG": {
+            "route": "human",
+            "confidence": 0.9991,
+            "stable": true
+          },
+          "downscaled_50pct": {
+            "route": "human",
+            "confidence": 0.9961,
+            "stable": true
+          },
+          "resized_640x640": {
+            "route": "human",
+            "confidence": 0.9964,
+            "stable": true
+          },
+          "grayscale_rgb_duplicate": {
+            "route": "human",
+            "confidence": 0.83,
+            "stable": true
+          },
+          "mild_gaussian_blur_r2": {
+            "route": "human",
+            "confidence": 0.8223,
+            "stable": true
+          },
+          "brightness_plus_25pct": {
+            "route": "human",
+            "confidence": 0.9995,
+            "stable": true
+          },
+          "brightness_minus_25pct": {
+            "route": "human",
+            "confidence": 0.9448,
+            "stable": true
+          },
+          "contrast_plus_30pct": {
+            "route": "human",
+            "confidence": 0.9987,
+            "stable": true
+          }
+        }
+      },
+      {
+        "filename": "cap_001.jpg",
+        "true_domain": "hardware",
+        "baseline_route": "hardware",
+        "baseline_confidence": 0.9979,
+        "perturbations": {
+          "converted_to_JPEG": {
+            "route": "hardware",
+            "confidence": 0.9979,
+            "stable": true
+          },
+          "downscaled_50pct": {
+            "route": "hardware",
+            "confidence": 0.9978,
+            "stable": true
+          },
+          "resized_640x640": {
+            "route": "hardware",
+            "confidence": 0.9979,
+            "stable": true
+          },
+          "grayscale_rgb_duplicate": {
+            "route": "hardware",
+            "confidence": 0.9997,
+            "stable": true
+          },
+          "mild_gaussian_blur_r2": {
+            "route": "hardware",
+            "confidence": 0.998,
+            "stable": true
+          },
+          "brightness_plus_25pct": {
+            "route": "hardware",
+            "confidence": 0.9987,
+            "stable": true
+          },
+          "brightness_minus_25pct": {
+            "route": "hardware",
+            "confidence": 0.9948,
+            "stable": true
+          },
+          "contrast_plus_30pct": {
+            "route": "hardware",
+            "confidence": 0.9915,
+            "stable": true
+          }
+        }
+      },
+      {
+        "filename": "clip_008.jpg",
+        "true_domain": "hardware",
+        "baseline_route": "hardware",
+        "baseline_confidence": 1.0,
+        "perturbations": {
+          "converted_to_JPEG": {
+            "route": "hardware",
+            "confidence": 1.0,
+            "stable": true
+          },
+          "downscaled_50pct": {
+            "route": "hardware",
+            "confidence": 1.0,
+            "stable": true
+          },
+          "resized_640x640": {
+            "route": "hardware",
+            "confidence": 1.0,
+            "stable": true
+          },
+          "grayscale_rgb_duplicate": {
+            "route": "hardware",
+            "confidence": 1.0,
+            "stable": true
+          },
+          "mild_gaussian_blur_r2": {
+            "route": "hardware",
+            "confidence": 1.0,
+            "stable": true
+          },
+          "brightness_plus_25pct": {
+            "route": "hardware",
+            "confidence": 1.0,
+            "stable": true
+          },
+          "brightness_minus_25pct": {
+            "route": "hardware",
+            "confidence": 1.0,
+            "stable": true
+          },
+          "contrast_plus_30pct": {
+            "route": "hardware",
+            "confidence": 1.0,
+            "stable": true
+          }
+        }
+      }
+    ]
+  },
+  "model_integrity": {
+    "Model 1 (Pipeline)": "PASSED",
+    "Model 2 (Human)": "PASSED",
+    "Model 3 (Hardware)": "PASSED"
+  },
+  "final_recommendation": "PASS_FOR_AUTO_ROUTER"
+}

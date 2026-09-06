@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "model_type": "Multinomial Logistic Regression",
+  "confidence_threshold": 0.85,
+  "degeneracy_thresholds": {
+    "std_intensity_min": 5.0,
+    "dyn_range_min": 10.0
+  },
+  "feature_names": [
+    "color_var",
+    "sat_mean",
+    "sat_std",
+    "hue_mean",
+    "mean_intensity",
+    "std_intensity",
+    "dyn_range",
+    "lap_var",
+    "edge_mean",
+    "edge_std",
+    "entropy",
+    "mean_r",
+    "mean_g",
+    "mean_b",
+    "rg_diff",
+    "rb_diff",
+    "gb_diff"
+  ],
+  "domain_mapping": {
+    "0": "pipeline",
+    "1": "human",
+    "2": "hardware"
+  },
+  "domain_target_mapping": {
+    "pipeline": "Pipeline",
+    "human": "Human",
+    "hardware": "Hardware"
+  },
+  "scaler_artifact": "scaler.joblib",
+  "model_artifact": "logistic_router.joblib"
+}
