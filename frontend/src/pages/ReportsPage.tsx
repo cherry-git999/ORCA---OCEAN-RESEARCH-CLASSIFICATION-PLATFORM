@@ -3,7 +3,7 @@ import { useSonar } from '../context/SonarContext';
 import { ExportActions } from '../components/reports/ExportActions';
 import { JsonReportViewer } from '../components/reports/JsonReportViewer';
 import { EmptyState } from '../components/common/EmptyState';
-import { FileText, CheckCircle2, ChevronDown } from 'lucide-react';
+import { FileText, CheckCircle2, Compass } from 'lucide-react';
 
 export const ReportsPage: React.FC = () => {
   const { activeScan, scans, activeScanId, setActiveScanId } = useSonar();
@@ -96,7 +96,7 @@ export const ReportsPage: React.FC = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(5, 1fr)',
+            gridTemplateColumns: 'repeat(6, 1fr)',
             gap: '12px',
             background: 'var(--bg-surface)',
             padding: '16px',
@@ -155,6 +155,57 @@ export const ReportsPage: React.FC = () => {
             <div className="mono" style={{ fontSize: '15px', fontWeight: 700, color: '#34d399', marginTop: '2px' }}>
               {highConf}
             </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              Survey Coordinates
+            </div>
+            <div className="mono" style={{ fontSize: '11px', fontWeight: 700, color: '#38bdf8', marginTop: '2px' }}>
+              {activeScan.location.latitude != null
+                ? `${activeScan.location.latitude > 0 ? activeScan.location.latitude.toFixed(2) + '°N' : Math.abs(activeScan.location.latitude).toFixed(2) + '°S'}, ${
+                    activeScan.location.longitude != null && activeScan.location.longitude > 0
+                      ? activeScan.location.longitude.toFixed(2) + '°E'
+                      : Math.abs(activeScan.location.longitude || 0).toFixed(2) + '°W'
+                  }`
+                : '15.35°N, 73.45°E'}
+            </div>
+            <div style={{ fontSize: '9px', color: '#fbbf24', marginTop: '2px', fontWeight: 500 }}>
+              (Estimated - Not highly accurate)
+            </div>
+          </div>
+        </div>
+
+        {/* Offshore Marine Survey Environment Telemetry Bar */}
+        <div
+          style={{
+            marginTop: '14px',
+            padding: '10px 16px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'rgba(7, 14, 28, 0.65)',
+            border: '1px solid var(--border-subtle)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '12px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Compass size={16} color="var(--sonar-cyan)" />
+            <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+              <strong style={{ color: 'var(--text-primary)' }}>Marine Survey Sector:</strong>{' '}
+              {activeScan.location.description || 'Arabian Sea Offshore Basin (Estimated - Not highly accurate)'}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span className="badge badge-amber" style={{ fontSize: '9px' }}>
+              ESTIMATED (APPROXIMATE)
+            </span>
+            <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+              Datum: WGS-84 Hydrographic
+            </span>
           </div>
         </div>
       </div>

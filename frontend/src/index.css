@@ -539,3 +539,30 @@ h1, h2, h3, h4, h5, h6 {
     grid-template-columns: 1fr;
   }
 }
+
+/* Leaflet Dark Maritime Customization */
+.leaflet-container {
+  background: #040812 !important;
+  font-family: var(--font-body, sans-serif) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(7, 14, 28, 0.94) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: var(--radius-sm) !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65) !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(7, 14, 28, 0.94) !important;
+  border: 1px solid var(--border-medium) !important;
+}
+
+.custom-sonar-marker {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+

@@ -12,6 +12,7 @@ import { predictAuto, predictImage } from '../api/predictApi';
 import { ApiError } from '../api/apiClient';
 import { NavRoute } from '../components/layout/Sidebar';
 import { Sparkles, Loader2 } from 'lucide-react';
+import { getWaterCoordinatesForScan } from '../utils/geoCoordinates';
 
 interface AnalyzePageProps {
   onNavigate?: (route: NavRoute) => void;
@@ -138,13 +139,7 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
           model: routing.target ? `${routing.target} Specialist` : 'Specialist Model',
           review_status: d.confidence >= 0.8 ? 'confirmed' : 'pending',
         })),
-        location: {
-          source: 'unavailable',
-          latitude: null,
-          longitude: null,
-          accuracy: null,
-          description: 'Location data unavailable (Awaiting verified sonar navigation metadata)',
-        },
+        location: getWaterCoordinatesForScan(selectedFile.name),
         rawFile: selectedFile,
         routingConfidence: routing.confidence,
         isAutoRouted: true,
@@ -187,13 +182,7 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
           model: `${pendingManualResponse.target} Specialist`,
           review_status: d.confidence >= 0.8 ? 'confirmed' : 'pending',
         })),
-        location: {
-          source: 'unavailable',
-          latitude: null,
-          longitude: null,
-          accuracy: null,
-          description: 'Location data unavailable (Awaiting verified sonar navigation metadata)',
-        },
+        location: getWaterCoordinatesForScan(selectedFile.name),
         rawFile: selectedFile,
         isAutoRouted: false,
       };

@@ -6,6 +6,8 @@
  * Handles quota limitations, duplicates, and thumbnail compression.
  */
 
+import { LocationMeta } from '../types/detection';
+
 export interface StoredDetectionItem {
   id: string;
   class_id?: number;
@@ -28,6 +30,7 @@ export interface StoredScanRecord {
   routingConfidence?: number;
   isAutoRouted?: boolean;
   detections: StoredDetectionItem[];
+  location?: LocationMeta;
   imageData?: string;
   width: number;
   height: number;

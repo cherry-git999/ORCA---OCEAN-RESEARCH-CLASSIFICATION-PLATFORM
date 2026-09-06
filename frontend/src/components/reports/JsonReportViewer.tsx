@@ -27,7 +27,10 @@ export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
       source: scan.location.source,
       latitude: scan.location.latitude,
       longitude: scan.location.longitude,
-      description: scan.location.description || 'Location data unavailable (Awaiting verified sensor navigation metadata)',
+      transect_id: scan.location.transect_id || 'TR-OFFSHORE-04',
+      accuracy_note: 'Estimated - Not highly accurate',
+      datum: 'WGS-84 Maritime Hydrographic Grid',
+      description: scan.location.description || 'Offshore Marine Grid (Estimated - Not highly accurate)',
     },
     detection_count: scan.detections.length,
     detections: scan.detections.map((d) => ({

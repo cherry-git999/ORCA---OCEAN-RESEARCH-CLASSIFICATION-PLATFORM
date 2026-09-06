@@ -232,6 +232,12 @@ async function runOrcaE2E() {
     `Reports title is ORCA report: "${reportsTitle}"`
   );
 
+  const hasCoordsInReport = await evaluate(`
+    document.body.innerText.toUpperCase().includes('SURVEY COORDINATES') &&
+    document.body.innerText.includes('(Estimated - Not highly accurate)')
+  `);
+  assert(hasCoordsInReport, 'Reports page displays Survey Coordinates with (Estimated - Not highly accurate)');
+
   const pdfBtn = await evaluate(`!!document.getElementById('btn-download-pdf-report')`);
   assert(pdfBtn, 'Download PDF Report button present in Reports view');
 
@@ -248,6 +254,56 @@ async function runOrcaE2E() {
   assert(pdfTriggerSuccess, 'Download PDF Report triggered without errors');
 
   await captureScreenshot('test_orca_05_reports_page.png');
+
+  // 6b. Test Geospatial Interactive Map & Water Coordinates
+  console.log('\n--- 6b. Testing Geospatial Interactive Map & Water Coordinates ---');
+  await evaluate(`location.hash = '#/geospatial'`);
+  await sleep(1000);
+
+  const hasLeafletMap = await evaluate(`!!document.querySelector('.leaflet-container')`);
+  assert(hasLeafletMap, 'Leaflet interactive map container initialized');
+
+  const markerCount = await evaluate(`document.querySelectorAll('.custom-sonar-marker').length`);
+  assert(markerCount >= 1, `Anomaly markers plotted on map (count: ${markerCount})`);
+
+  const hasDisclaimer = await evaluate(`
+    document.body.innerText.includes('(Estimated - Not highly accurate)')
+  `);
+  assert(hasDisclaimer, 'Accuracy disclaimer (Estimated - Not highly accurate) present on Geospatial page');
+
+  const hasWaterSector = await evaluate(`
+    document.body.innerText.includes('OFFSHORE') ||
+    document.body.innerText.includes('Offshore') ||
+    document.body.innerText.includes('Maritime')
+  `);
+  assert(hasWaterSector, 'Offshore water survey sector indicated on Geospatial chart');
+
+  // Click marker to verify popup
+  const clickedMarker = await evaluate(`
+    (() => {
+      const markerEl = document.querySelector('.leaflet-marker-icon');
+      if (markerEl) {
+        markerEl.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        return true;
+      }
+      return false;
+    })()
+  `);
+  // Wait for popup to render
+  let hasPopup = false;
+  for (let i = 0; i < 6; i++) {
+    hasPopup = await evaluate(`
+      (() => {
+        const popup = document.querySelector('.leaflet-popup');
+        return !!popup && popup.innerText.includes('Estimated - Not highly accurate');
+      })()
+    `);
+    if (hasPopup) break;
+    await sleep(500);
+  }
+  assert(hasPopup, 'Marker popup opened with accuracy disclaimer');
+
+  await captureScreenshot('test_orca_08_geospatial_water_map.png');
 
   // 7. Test Real Scan History Persistence Across Page Reload
   console.log('\n--- 7. Testing Scan History LocalStorage Persistence ---');

@@ -20,6 +20,11 @@ interface PdfScanData {
     confidence: number;
     bbox: { x1: number; y1: number; x2: number; y2: number };
   }>;
+  location?: {
+    latitude: number | null;
+    longitude: number | null;
+    description?: string;
+  };
 }
 
 /**
@@ -105,6 +110,18 @@ function buildPdfDocument(data: PdfScanData): Uint8Array {
   }
 
   drawMetaRow('Objects Detected', `${data.detections.length}`);
+
+  if (data.location && data.location.latitude != null && data.location.longitude != null) {
+    const latStr =
+      data.location.latitude > 0
+        ? `${data.location.latitude.toFixed(4)} N`
+        : `${Math.abs(data.location.latitude).toFixed(4)} S`;
+    const lngStr =
+      data.location.longitude > 0
+        ? `${data.location.longitude.toFixed(4)} E`
+        : `${Math.abs(data.location.longitude).toFixed(4)} W`;
+    drawMetaRow('Survey Coordinates', `${latStr}, ${lngStr} (Estimated - Not highly accurate)`);
+  }
 
   curY -= 15;
 
@@ -245,6 +262,7 @@ export function downloadScanPdfReport(scan: SonarScanItem): void {
       confidence: d.confidence,
       bbox: d.bbox,
     })),
+    location: scan.location,
   };
 
   const pdfBytes = buildPdfDocument(pdfData);

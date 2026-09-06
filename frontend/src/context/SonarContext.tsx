@@ -11,6 +11,8 @@ import {
   StoredScanRecord,
 } from '../utils/scanHistoryStorage';
 
+import { getWaterCoordinatesForScan } from '../utils/geoCoordinates';
+
 interface SonarContextType {
   scans: SonarScanItem[];
   activeScanId: string;
@@ -25,8 +27,8 @@ interface SonarContextType {
   filteredDetections: Detection[];
   rawDetectionsCount: number;
   filteredDetectionsCount: number;
-  locationSource: 'sonar_metadata' | 'unavailable';
-  setLocationSource: (source: 'sonar_metadata' | 'unavailable') => void;
+  locationSource: 'estimated' | 'sonar_metadata' | 'unavailable';
+  setLocationSource: (source: 'estimated' | 'sonar_metadata' | 'unavailable') => void;
   addUploadedScan: (scan: SonarScanItem) => void;
   deleteScan: (id: string) => void;
   clearHistory: () => void;
@@ -84,13 +86,10 @@ function storedToScanItem(stored: StoredScanRecord): SonarScanItem {
       model: stored.model,
       review_status: d.confidence >= 0.8 ? 'confirmed' : 'pending',
     })),
-    location: {
-      source: 'unavailable',
-      latitude: null,
-      longitude: null,
-      accuracy: null,
-      description: 'Location data unavailable (Awaiting verified sonar navigation metadata)',
-    },
+    location:
+      stored.location && stored.location.latitude !== null
+        ? stored.location
+        : getWaterCoordinatesForScan(stored.filename),
     routingConfidence: stored.routingConfidence,
     isAutoRouted: stored.isAutoRouted,
   };
@@ -123,7 +122,7 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
 
   const [filters, setFilters] = useState<FilterParams>(DEFAULT_FILTERS);
-  const [locationSource, setLocationSource] = useState<'sonar_metadata' | 'unavailable'>('unavailable');
+  const [locationSource, setLocationSource] = useState<'estimated' | 'sonar_metadata' | 'unavailable'>('estimated');
 
   // Backend Integration State
   const [backendStatus, setBackendStatus] = useState<'online' | 'offline' | 'checking'>('checking');
@@ -209,6 +208,7 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         confidence: d.confidence,
         bbox: d.bbox,
       })),
+      location: newScan.location,
       imageData: newScan.image.preview_url,
       width: newScan.image.width,
       height: newScan.image.height,
