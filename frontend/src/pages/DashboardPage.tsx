@@ -34,7 +34,50 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
   );
 
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* Core Capabilities Bar (Section 7) */}
+      <div
+        id="core-capabilities-bar"
+        data-testid="core-capabilities-bar"
+        className="glass-panel"
+        style={{
+          padding: '12px 18px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+          border: '1px solid var(--border-subtle)',
+          background: 'rgba(7, 14, 28, 0.75)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Sparkles size={15} color="var(--sonar-cyan)" />
+          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            Core Capabilities
+          </span>
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <span className="badge badge-cyan" style={{ fontSize: '11px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <Cpu size={12} />
+            <span>Multimodal AI Intelligence</span>
+          </span>
+          <span className="badge badge-emerald" style={{ fontSize: '11px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <Target size={12} />
+            <span>Reliable Detection & Classification</span>
+          </span>
+          <span className="badge badge-purple" style={{ fontSize: '11px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <Crosshair size={12} />
+            <span>Geospatial Intelligence</span>
+          </span>
+          <span className="badge badge-amber" style={{ fontSize: '11px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <FileSearch size={12} />
+            <span>Automated Analysis & Reporting</span>
+          </span>
+        </div>
+      </div>
+
       {/* Platform Status Banner */}
       <div
         className="glass-panel-elevated"

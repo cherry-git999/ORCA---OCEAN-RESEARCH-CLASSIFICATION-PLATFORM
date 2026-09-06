@@ -15,10 +15,11 @@ import {
   Box,
   CheckCircle2,
   Sparkles,
+  Map,
 } from 'lucide-react';
 
 interface DetectionWorkspacePageProps {
-  onNavigate: (route: 'analyze' | 'reports' | 'history') => void;
+  onNavigate: (route: 'analyze' | 'reports' | 'history' | 'geospatial') => void;
 }
 
 export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ onNavigate }) => {
@@ -125,6 +126,16 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
           >
             {isExporting ? <Loader2 size={13} className="sonar-ping" /> : <ImageIcon size={13} color="var(--sonar-teal)" />}
             <span>{isExporting ? 'Generating PNG...' : 'Download Annotated Image'}</span>
+          </button>
+
+          <button
+            id="workspace-view-geospatial-top-btn"
+            data-testid="workspace-view-geospatial-top-btn"
+            onClick={() => onNavigate('geospatial')}
+            className="btn btn-secondary btn-sm"
+          >
+            <Map size={13} color="var(--sonar-cyan)" />
+            <span>View Geospatial View</span>
           </button>
 
           <button
@@ -337,12 +348,14 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
               <button
-                onClick={() => onNavigate('reports')}
+                id="workspace-view-geospatial-bottom-btn"
+                data-testid="workspace-view-geospatial-bottom-btn"
+                onClick={() => onNavigate('geospatial')}
                 className="btn btn-secondary"
                 style={{ justifyContent: 'center' }}
               >
-                <FileText size={14} />
-                <span>Generate Report</span>
+                <Map size={14} color="var(--sonar-cyan)" />
+                <span>View Geospatial View</span>
               </button>
 
               <button
@@ -355,6 +368,15 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
                 <span>Annotated PNG</span>
               </button>
             </div>
+
+            <button
+              onClick={() => onNavigate('reports')}
+              className="btn btn-secondary"
+              style={{ width: '100%', justifyContent: 'center' }}
+            >
+              <FileText size={14} />
+              <span>Generate Report</span>
+            </button>
 
             <button
               onClick={() => onNavigate('analyze')}

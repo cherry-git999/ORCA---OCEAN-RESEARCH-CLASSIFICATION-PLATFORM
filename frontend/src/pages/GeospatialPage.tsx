@@ -94,6 +94,8 @@ export const GeospatialPage: React.FC<GeospatialPageProps> = ({ onNavigate }) =>
             onSelectAnomaly={(id) => setSelectedAnomalyId(id)}
             imageWidth={activeScan.image.width}
             imageHeight={activeScan.image.height}
+            scanName={activeScan.image.filename}
+            modelName={activeScan.model_name}
           />
         </div>
 

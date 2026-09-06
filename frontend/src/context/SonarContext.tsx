@@ -8,6 +8,7 @@ import {
   saveScan,
   deleteScan as removeStoredScan,
   clearScanHistory as wipeStoredHistory,
+  updateStoredDetectionReviewStatus,
   StoredScanRecord,
 } from '../utils/scanHistoryStorage';
 
@@ -32,6 +33,7 @@ interface SonarContextType {
   addUploadedScan: (scan: SonarScanItem) => void;
   deleteScan: (id: string) => void;
   clearHistory: () => void;
+  reviewCounts: { confirmed: number; rejected: number; review_required: number };
 
   // Real Backend Health & Telemetry State
   backendStatus: 'online' | 'offline' | 'checking';
@@ -84,7 +86,7 @@ function storedToScanItem(stored: StoredScanRecord): SonarScanItem {
       confidence: d.confidence,
       bbox: d.bbox,
       model: stored.model,
-      review_status: d.confidence >= 0.8 ? 'confirmed' : 'pending',
+      review_status: d.review_status || 'pending',
     })),
     location:
       stored.location && stored.location.latitude !== null
@@ -165,9 +167,11 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const updateReviewStatus = (detectionId: string, status: ReviewStatus) => {
+    if (!activeScan) return;
+    updateStoredDetectionReviewStatus(activeScan.id, detectionId, status);
     setScans((prevScans) =>
       prevScans.map((scan) => {
-        if (scan.id !== activeScan?.id) return scan;
+        if (scan.id !== activeScan.id) return scan;
         return {
           ...scan,
           detections: scan.detections.map((det) =>
@@ -177,6 +181,20 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       })
     );
   };
+
+  const reviewCounts = useMemo(() => {
+    let confirmed = 0;
+    let rejected = 0;
+    let review_required = 0;
+    for (const scan of scans) {
+      for (const det of scan.detections) {
+        if (det.review_status === 'confirmed') confirmed++;
+        else if (det.review_status === 'rejected') rejected++;
+        else if (det.review_status === 'review_required') review_required++;
+      }
+    }
+    return { confirmed, rejected, review_required };
+  }, [scans]);
 
   /**
    * Adds an analyzed scan, updates active state, and persists to localStorage.
@@ -207,6 +225,7 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         class_name: d.class_name,
         confidence: d.confidence,
         bbox: d.bbox,
+        review_status: d.review_status || 'pending',
       })),
       location: newScan.location,
       imageData: newScan.image.preview_url,
@@ -303,6 +322,7 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         addUploadedScan,
         deleteScan,
         clearHistory,
+        reviewCounts,
         backendStatus,
         isAnalyzing,
         setIsAnalyzing,

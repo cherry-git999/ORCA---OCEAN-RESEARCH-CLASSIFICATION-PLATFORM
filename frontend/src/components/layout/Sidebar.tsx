@@ -10,6 +10,7 @@ import {
   Sliders,
   ChevronRight,
   Compass,
+  CheckCircle2,
 } from 'lucide-react';
 
 export type NavRoute = 'dashboard' | 'analyze' | 'detections' | 'geospatial' | 'reports' | 'history';
@@ -25,7 +26,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onNavigate,
   onOpenStatusModal,
 }) => {
-  const { backendStatus, scans } = useSonar();
+  const { backendStatus, scans, reviewCounts } = useSonar();
 
   const navItems = [
     {
@@ -195,6 +196,81 @@ export const Sidebar: React.FC<SidebarProps> = ({
           );
         })}
       </nav>
+
+      {/* Manual Expert Review Status Widget (Section 17) */}
+      <div
+        id="sidebar-expert-review-widget"
+        data-testid="sidebar-expert-review-widget"
+        style={{
+          margin: '0 12px 14px 12px',
+          padding: '12px',
+          borderRadius: 'var(--radius-sm)',
+          background: 'rgba(7, 14, 28, 0.75)',
+          border: '1px solid var(--border-subtle)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <CheckCircle2 size={13} color="var(--sonar-cyan)" />
+            <span
+              style={{
+                fontSize: '10px',
+                fontWeight: 700,
+                color: 'var(--text-muted)',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+              }}
+            >
+              Manual Expert Review
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '11px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Confirmed</span>
+            <span
+              id="sidebar-count-confirmed"
+              className="mono"
+              style={{
+                fontWeight: 700,
+                color: reviewCounts.confirmed > 0 ? 'var(--status-emerald)' : 'var(--text-muted)',
+              }}
+            >
+              {reviewCounts.confirmed}
+            </span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Rejected</span>
+            <span
+              id="sidebar-count-rejected"
+              className="mono"
+              style={{
+                fontWeight: 700,
+                color: reviewCounts.rejected > 0 ? 'var(--status-rose)' : 'var(--text-muted)',
+              }}
+            >
+              {reviewCounts.rejected}
+            </span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Under Review</span>
+            <span
+              id="sidebar-count-under-review"
+              className="mono"
+              style={{
+                fontWeight: 700,
+                color: reviewCounts.review_required > 0 ? 'var(--status-amber)' : 'var(--text-muted)',
+              }}
+            >
+              {reviewCounts.review_required}
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* Bottom Operational Status Card */}
       <div

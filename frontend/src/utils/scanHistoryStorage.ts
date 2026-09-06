@@ -6,7 +6,7 @@
  * Handles quota limitations, duplicates, and thumbnail compression.
  */
 
-import { LocationMeta } from '../types/detection';
+import { LocationMeta, ReviewStatus } from '../types/detection';
 
 export interface StoredDetectionItem {
   id: string;
@@ -19,6 +19,7 @@ export interface StoredDetectionItem {
     x2: number;
     y2: number;
   };
+  review_status?: ReviewStatus;
 }
 
 export interface StoredScanRecord {
@@ -123,5 +124,54 @@ export function clearScanHistory(): void {
     localStorage.removeItem(STORAGE_KEY);
   } catch (err) {
     console.error('[ORCA Storage] Failed to clear scan history:', err);
+  }
+}
+
+export interface ReviewCounts {
+  confirmed: number;
+  rejected: number;
+  review_required: number;
+}
+
+/**
+ * Derives global review counts from persistent stored scans.
+ */
+export function getGlobalReviewCounts(scans?: StoredScanRecord[]): ReviewCounts {
+  const records = scans || getScanHistory();
+  let confirmed = 0;
+  let rejected = 0;
+  let review_required = 0;
+
+  for (const scan of records) {
+    for (const det of scan.detections) {
+      if (det.review_status === 'confirmed') confirmed++;
+      else if (det.review_status === 'rejected') rejected++;
+      else if (det.review_status === 'review_required') review_required++;
+    }
+  }
+
+  return { confirmed, rejected, review_required };
+}
+
+/**
+ * Updates a single detection's review status directly in localStorage.
+ */
+export function updateStoredDetectionReviewStatus(
+  scanId: string,
+  detectionId: string,
+  status: ReviewStatus
+): void {
+  try {
+    const scans = getScanHistory();
+    const targetScan = scans.find((s) => s.id === scanId);
+    if (targetScan) {
+      const targetDet = targetScan.detections.find((d) => d.id === detectionId);
+      if (targetDet) {
+        targetDet.review_status = status;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(scans));
+      }
+    }
+  } catch (err) {
+    console.error('[ORCA Storage] Failed to update detection review status in storage:', err);
   }
 }
