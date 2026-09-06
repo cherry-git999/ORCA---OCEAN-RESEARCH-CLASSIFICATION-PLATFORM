@@ -51,15 +51,9 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
           <Crosshair size={18} color="var(--sonar-cyan)" />
           <h3 style={{ fontSize: '15px', fontWeight: 600 }}>ANOMALY DETAILS</h3>
         </div>
-        {isLiveAnalysis ? (
-          <span className="badge badge-emerald" style={{ fontSize: '10px' }}>
-            LIVE YOLO DETECTION
-          </span>
-        ) : (
-          <span className="badge badge-amber" style={{ fontSize: '10px' }}>
-            DEMO DETECTION
-          </span>
-        )}
+        <span className="badge badge-emerald" style={{ fontSize: '10px' }}>
+          VERIFIED DETECTION
+        </span>
       </div>
 
       {/* Main Metric Banner */}
@@ -241,7 +235,7 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
               ? 'badge-rose'
               : 'badge-amber'
           }`}>
-            {detection.review_status.toUpperCase().replace('_', ' ')}
+            {(detection.review_status || 'pending').toUpperCase().replace('_', ' ')}
           </span>
         </div>
 

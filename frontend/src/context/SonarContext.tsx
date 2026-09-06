@@ -2,11 +2,14 @@ import React, { createContext, useContext, useState, useMemo, useEffect } from '
 import { Detection, ReviewStatus, SonarScanItem } from '../types/detection';
 import { FilterParams } from '../types/filter';
 import { BackendAnalysisResponse } from '../types/api';
-import { DEMO_SCANS } from '../data/demoData';
-import { analyzeSonarImage } from '../api/analysisApi';
 import { checkBackendHealth } from '../api/healthApi';
-import { generateImagePreview } from '../utils/imagePreview';
-import { mapBackendResponseToScanItem } from '../utils/adapters';
+import {
+  getScanHistory,
+  saveScan,
+  deleteScan as removeStoredScan,
+  clearScanHistory as wipeStoredHistory,
+  StoredScanRecord,
+} from '../utils/scanHistoryStorage';
 
 interface SonarContextType {
   scans: SonarScanItem[];
@@ -22,24 +25,29 @@ interface SonarContextType {
   filteredDetections: Detection[];
   rawDetectionsCount: number;
   filteredDetectionsCount: number;
-  locationSource: 'demo' | 'sonar_metadata';
-  setLocationSource: (source: 'demo' | 'sonar_metadata') => void;
+  locationSource: 'sonar_metadata' | 'unavailable';
+  setLocationSource: (source: 'sonar_metadata' | 'unavailable') => void;
   addUploadedScan: (scan: SonarScanItem) => void;
-  
-  // Phase 8.2 Real Backend Integration additions
+  deleteScan: (id: string) => void;
+  clearHistory: () => void;
+
+  // Real Backend Health & Telemetry State
   backendStatus: 'online' | 'offline' | 'checking';
-  isLiveAnalysis: boolean;
   isAnalyzing: boolean;
+  setIsAnalyzing: (analyzing: boolean) => void;
   analysisError: string | null;
+  setAnalysisError: (err: string | null) => void;
   lastBackendResponse: BackendAnalysisResponse | null;
+  setLastBackendResponse: (res: BackendAnalysisResponse | null) => void;
   currentRawFile: File | null;
-  executeLiveAnalysis: (file: File, target: 'pipeline' | 'human') => Promise<boolean>;
+  setCurrentRawFile: (file: File | null) => void;
   clearAnalysisError: () => void;
   refreshHealth: () => Promise<void>;
+  lastAnalysisTimestamp: string | null;
 }
 
 const DEFAULT_FILTERS: FilterParams = {
-  minConfidence: 0.25, // 25% permissive default matching base model threshold
+  minConfidence: 0.25,
   minBoxWidth: 0,
   maxBoxWidth: 16000,
   minBoxHeight: 0,
@@ -48,63 +56,85 @@ const DEFAULT_FILTERS: FilterParams = {
   reviewStatus: 'All',
   confidenceCategory: 'All',
   searchQuery: '',
-  isRawView: false, // Default is filtered view
+  isRawView: false,
 };
+
+function storedToScanItem(stored: StoredScanRecord): SonarScanItem {
+  return {
+    id: stored.id,
+    timestamp: stored.timestamp,
+    target: stored.target,
+    model_name: stored.model,
+    status: 'Complete',
+    mission_id: stored.mission_id || 'SURVEY_RUN',
+    image: {
+      filename: stored.filename,
+      width: stored.width,
+      height: stored.height,
+      size_kb: stored.size_kb || 0,
+      format: stored.filename.split('.').pop()?.toUpperCase() || 'SCAN',
+      preview_url: stored.imageData || '',
+    },
+    detections: stored.detections.map((d) => ({
+      id: d.id,
+      class_id: d.class_id,
+      class_name: d.class_name,
+      confidence: d.confidence,
+      bbox: d.bbox,
+      model: stored.model,
+      review_status: d.confidence >= 0.8 ? 'confirmed' : 'pending',
+    })),
+    location: {
+      source: 'unavailable',
+      latitude: null,
+      longitude: null,
+      accuracy: null,
+      description: 'Location data unavailable (Awaiting verified sonar navigation metadata)',
+    },
+    routingConfidence: stored.routingConfidence,
+    isAutoRouted: stored.isAutoRouted,
+  };
+}
 
 const SonarContext = createContext<SonarContextType | undefined>(undefined);
 
-const SESSION_SCANS_KEY = 'aquasentinel_scans_v1';
-const SESSION_ACTIVE_ID_KEY = 'aquasentinel_active_id_v1';
-const SESSION_LIVE_FLAG_KEY = 'aquasentinel_is_live_v1';
-
 export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Initialize scans directly from browser localStorage (operational persistent storage)
   const [scans, setScans] = useState<SonarScanItem[]>(() => {
     try {
-      const cached = sessionStorage.getItem(SESSION_SCANS_KEY);
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch (e) {}
-    return DEMO_SCANS;
+      const stored = getScanHistory();
+      return stored.map(storedToScanItem);
+    } catch {
+      return [];
+    }
   });
 
   const [activeScanId, setActiveScanId] = useState<string>(() => {
-    try {
-      const cached = sessionStorage.getItem(SESSION_ACTIVE_ID_KEY);
-      if (cached) return cached;
-    } catch (e) {}
-    return 'SSS_2026_0905_001';
+    const stored = getScanHistory();
+    return stored.length > 0 ? stored[0].id : '';
   });
 
-  const [selectedAnomalyId, setSelectedAnomalyId] = useState<string | null>('ANM-001');
+  const [selectedAnomalyId, setSelectedAnomalyId] = useState<string | null>(() => {
+    const stored = getScanHistory();
+    if (stored.length > 0 && stored[0].detections.length > 0) {
+      return stored[0].detections[0].id;
+    }
+    return null;
+  });
+
   const [filters, setFilters] = useState<FilterParams>(DEFAULT_FILTERS);
-  const [locationSource, setLocationSource] = useState<'demo' | 'sonar_metadata'>('demo');
+  const [locationSource, setLocationSource] = useState<'sonar_metadata' | 'unavailable'>('unavailable');
 
   // Backend Integration State
   const [backendStatus, setBackendStatus] = useState<'online' | 'offline' | 'checking'>('checking');
-  const [isLiveAnalysis, setIsLiveAnalysis] = useState<boolean>(() => {
-    try {
-      const cached = sessionStorage.getItem(SESSION_LIVE_FLAG_KEY);
-      if (cached) return cached === 'true';
-    } catch (e) {}
-    return false;
-  });
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [lastBackendResponse, setLastBackendResponse] = useState<BackendAnalysisResponse | null>(null);
   const [currentRawFile, setCurrentRawFile] = useState<File | null>(null);
-
-  // Synchronize activeScanId and live flag with sessionStorage
-  const changeActiveScanId = (id: string) => {
-    setActiveScanId(id);
-    const isLive = id.startsWith('SCAN_');
-    setIsLiveAnalysis(isLive);
-    try {
-      sessionStorage.setItem(SESSION_ACTIVE_ID_KEY, id);
-      sessionStorage.setItem(SESSION_LIVE_FLAG_KEY, isLive ? 'true' : 'false');
-    } catch (e) {}
-  };
+  const [lastAnalysisTimestamp, setLastAnalysisTimestamp] = useState<string | null>(() => {
+    const stored = getScanHistory();
+    return stored.length > 0 ? stored[0].timestamp : null;
+  });
 
   // Poll Backend Health Status
   const refreshHealth = async () => {
@@ -119,7 +149,8 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const activeScan = useMemo(() => {
-    return scans.find((s) => s.id === activeScanId) || scans[0];
+    if (!activeScanId) return scans.length > 0 ? scans[0] : undefined;
+    return scans.find((s) => s.id === activeScanId) || (scans.length > 0 ? scans[0] : undefined);
   }, [scans, activeScanId]);
 
   const updateFilters = (partial: Partial<FilterParams>) => {
@@ -148,108 +179,68 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     );
   };
 
+  /**
+   * Adds an analyzed scan, updates active state, and persists to localStorage.
+   */
   const addUploadedScan = (newScan: SonarScanItem) => {
-    setScans((prev) => [newScan, ...prev]);
+    setScans((prev) => [newScan, ...prev.filter((s) => s.id !== newScan.id)]);
     setActiveScanId(newScan.id);
+    setLastAnalysisTimestamp(newScan.timestamp);
+
     if (newScan.detections.length > 0) {
       setSelectedAnomalyId(newScan.detections[0].id);
     } else {
       setSelectedAnomalyId(null);
     }
+
+    // Persist to localStorage
+    const record: StoredScanRecord = {
+      id: newScan.id,
+      timestamp: newScan.timestamp,
+      filename: newScan.image.filename,
+      model: newScan.model_name,
+      target: newScan.target,
+      routingConfidence: newScan.routingConfidence,
+      isAutoRouted: newScan.isAutoRouted,
+      detections: newScan.detections.map((d) => ({
+        id: d.id,
+        class_id: d.class_id,
+        class_name: d.class_name,
+        confidence: d.confidence,
+        bbox: d.bbox,
+      })),
+      imageData: newScan.image.preview_url,
+      width: newScan.image.width,
+      height: newScan.image.height,
+      size_kb: newScan.image.size_kb,
+      mission_id: newScan.mission_id,
+    };
+    saveScan(record);
   };
 
   /**
-   * Execute real live analysis against FastAPI /analyze endpoint.
-   * Enforces strict STALE-STATE ISOLATION: previous detections are cleared
-   * before running, and if the API call fails, previous boxes are NEVER shown.
+   * Deletes a scan from both state and localStorage.
    */
-  const executeLiveAnalysis = async (file: File, target: 'pipeline' | 'human'): Promise<boolean> => {
-    setIsAnalyzing(true);
-    setAnalysisError(null);
-
-    // Stale-state isolation: unselect anomaly immediately & reset filters to permissive default
-    setSelectedAnomalyId(null);
-    setFilters(DEFAULT_FILTERS);
-
-    try {
-      // 1. Generate browser-safe preview (defensive Netpbm P6/P5 or standard raster)
-      const previewData = await generateImagePreview(file);
-      const fileSizeKb = Math.round(file.size / 1024);
-
-      // 2. Dispatch real multipart/form-data to FastAPI /analyze
-      const apiResponse = await analyzeSonarImage(file, target);
-
-      // 3. Map real response into domain SonarScanItem
-      const liveScanItem = mapBackendResponseToScanItem(apiResponse, previewData.previewUrl, fileSizeKb, file);
-
-      // 4. Update scan inventory and active state
-      setScans((prev) => {
-        const next = [liveScanItem, ...prev.filter((s) => !s.id.startsWith('SCAN_LIVE_TEMP'))];
-        try {
-          sessionStorage.setItem(SESSION_SCANS_KEY, JSON.stringify(next));
-        } catch (e) {
-          console.warn('Could not cache full scans to sessionStorage:', e);
-        }
-        return next;
-      });
-      changeActiveScanId(liveScanItem.id);
-      setLastBackendResponse(apiResponse);
-      setCurrentRawFile(file);
-      setIsLiveAnalysis(true);
-
-      // 5. Select first detected anomaly if available
-      if (liveScanItem.detections.length > 0) {
-        setSelectedAnomalyId(liveScanItem.detections[0].id);
-      } else {
-        setSelectedAnomalyId(null);
+  const deleteScan = (id: string) => {
+    removeStoredScan(id);
+    setScans((prev) => {
+      const next = prev.filter((s) => s.id !== id);
+      if (activeScanId === id) {
+        setActiveScanId(next.length > 0 ? next[0].id : '');
+        setSelectedAnomalyId(next.length > 0 && next[0].detections.length > 0 ? next[0].detections[0].id : null);
       }
+      return next;
+    });
+  };
 
-      setIsAnalyzing(false);
-      return true;
-    } catch (err: unknown) {
-      const errorMsg = err instanceof Error ? err.message : 'Unknown analysis error occurred';
-      setAnalysisError(errorMsg);
-
-      // Stale-State Rule: create an empty error scan so previous detections are NOT displayed over this image
-      const previewData = await generateImagePreview(file).catch(() => ({
-        previewUrl: '',
-        width: 1600,
-        height: 480,
-      }));
-
-      const errorScanItem: SonarScanItem = {
-        id: `ERROR_${Date.now().toString().slice(-4)}`,
-        timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
-        target,
-        model_name: target === 'pipeline' ? 'Pipeline Specialist' : 'Human Specialist',
-        status: 'Pending',
-        mission_id: 'TRANSECT-ERROR',
-        image: {
-          filename: file.name,
-          width: previewData.width,
-          height: previewData.height,
-          size_kb: Math.round(file.size / 1024),
-          format: file.name.split('.').pop()?.toUpperCase() || 'UNKNOWN',
-          preview_url: previewData.previewUrl,
-        },
-        location: {
-          source: 'unavailable',
-          latitude: null,
-          longitude: null,
-          accuracy: null,
-          description: 'Analysis failed; no location telemetry',
-        },
-        detections: [], // ZERO detections to ensure stale boxes never appear!
-      };
-
-      setScans((prev) => [errorScanItem, ...prev]);
-      setActiveScanId(errorScanItem.id);
-      setSelectedAnomalyId(null);
-      setCurrentRawFile(null);
-
-      setIsAnalyzing(false);
-      return false;
-    }
+  /**
+   * Clears all scan history.
+   */
+  const clearHistory = () => {
+    wipeStoredHistory();
+    setScans([]);
+    setActiveScanId('');
+    setSelectedAnomalyId(null);
   };
 
   const allDetections = activeScan ? activeScan.detections : [];
@@ -258,33 +249,25 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const filteredDetections = useMemo(() => {
     if (!activeScan) return [];
     if (filters.isRawView) {
-      // Raw view: returns all detections directly from backend
       return activeScan.detections;
     }
 
     return activeScan.detections.filter((det) => {
-      // 1. Min confidence filter
       if (det.confidence < filters.minConfidence) return false;
 
-      // 2. Bounding box size filter
       const width = Math.abs(det.bbox.x2 - det.bbox.x1);
       const height = Math.abs(det.bbox.y2 - det.bbox.y1);
       if (width < filters.minBoxWidth || width > filters.maxBoxWidth) return false;
       if (height < filters.minBoxHeight || height > filters.maxBoxHeight) return false;
 
-      // 3. Target class filter
       if (filters.targetClass !== 'All' && det.class_name !== filters.targetClass) return false;
-
-      // 4. Review status filter
       if (filters.reviewStatus !== 'All' && det.review_status !== filters.reviewStatus) return false;
 
-      // 5. Confidence category filter
       if (filters.confidenceCategory !== 'All') {
         const cat = det.confidence >= 0.8 ? 'HIGH' : det.confidence >= 0.5 ? 'MEDIUM' : 'LOW';
         if (cat !== filters.confidenceCategory) return false;
       }
 
-      // 6. Search query
       if (filters.searchQuery.trim() !== '') {
         const query = filters.searchQuery.toLowerCase();
         const matchesId = det.id.toLowerCase().includes(query);
@@ -305,7 +288,7 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         scans,
         activeScanId,
         activeScan,
-        setActiveScanId: changeActiveScanId,
+        setActiveScanId,
         selectedAnomalyId,
         setSelectedAnomalyId,
         filters,
@@ -318,15 +301,20 @@ export const SonarProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         locationSource,
         setLocationSource,
         addUploadedScan,
+        deleteScan,
+        clearHistory,
         backendStatus,
-        isLiveAnalysis,
         isAnalyzing,
+        setIsAnalyzing,
         analysisError,
+        setAnalysisError,
         lastBackendResponse,
+        setLastBackendResponse,
         currentRawFile,
-        executeLiveAnalysis,
+        setCurrentRawFile,
         clearAnalysisError,
         refreshHealth,
+        lastAnalysisTimestamp,
       }}
     >
       {children}

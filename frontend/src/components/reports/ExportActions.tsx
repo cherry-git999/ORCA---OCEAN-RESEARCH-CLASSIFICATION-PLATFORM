@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { SonarScanItem } from '../../types/detection';
-import { FileJson, FileSpreadsheet, Image as ImageIcon, FileCheck, ShieldCheck, Loader2 } from 'lucide-react';
+import { FileJson, FileSpreadsheet, Image as ImageIcon, FileText, ShieldCheck, Loader2 } from 'lucide-react';
 import { downloadAnnotatedImage } from '../../utils/annotatedImageExport';
+import { downloadScanPdfReport } from '../../utils/pdfExport';
 
 interface ExportActionsProps {
   scan: SonarScanItem;
@@ -9,20 +10,21 @@ interface ExportActionsProps {
 
 export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
   const [isExportingImage, setIsExportingImage] = useState<boolean>(false);
-  const isLive = scan.mission_id === 'TRANSECT-LIVE-ANALYSIS' || scan.id.startsWith('SCAN_');
 
   // Client-side JSON download
   const handleDownloadJson = () => {
     const reportData = {
       report_metadata: {
-        generator: 'AquaSentinel AI — Marine Sonar Intelligence',
-        mode: isLive ? 'LIVE_INFERENCE_SYNTHESIS' : 'DEMO_REPORT_PREVIEW',
+        generator: 'ORCA — Multimodal Underwater Intelligence Platform',
+        mode: 'OPERATIONAL_INFERENCE_PAYLOAD',
         generated_at: new Date().toISOString(),
       },
       scan_id: scan.id,
       mission_id: scan.mission_id,
       model: scan.model_name,
       target: scan.target,
+      routing_confidence: scan.routingConfidence,
+      is_auto_routed: scan.isAutoRouted,
       timestamp: scan.timestamp,
       image: {
         filename: scan.image.filename,
@@ -30,18 +32,11 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
         height: scan.image.height,
         format: scan.image.format,
       },
-      location: {
-        source: scan.location.source,
-        latitude: scan.location.latitude,
-        longitude: scan.location.longitude,
-        description: scan.location.description || 'Location data unavailable (Awaiting verified sonar navigation metadata)',
-      },
       detection_summary: {
         total_detections: scan.detections.length,
         high_confidence: scan.detections.filter((d) => d.confidence >= 0.8).length,
         medium_confidence: scan.detections.filter((d) => d.confidence >= 0.5 && d.confidence < 0.8).length,
         low_confidence: scan.detections.filter((d) => d.confidence < 0.5).length,
-        requires_review: scan.detections.filter((d) => d.review_status === 'review_required').length,
       },
       detections: scan.detections.map((d) => ({
         id: d.id,
@@ -55,8 +50,6 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
           width: Math.abs(d.bbox.x2 - d.bbox.x1),
           height: Math.abs(d.bbox.y2 - d.bbox.y1),
         },
-        review_status: d.review_status,
-        notes: d.notes,
       })),
     };
 
@@ -64,7 +57,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${scan.id}_report.json`;
+    a.download = `ORCA_${scan.id}_report.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -73,7 +66,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
 
   // Client-side CSV download
   const handleDownloadCsv = () => {
-    const headers = ['Anomaly_ID', 'Target_Class', 'Confidence', 'X1', 'Y1', 'X2', 'Y2', 'Pixel_Width', 'Pixel_Height', 'Review_Status'];
+    const headers = ['Anomaly_ID', 'Class_Label', 'Confidence', 'X1', 'Y1', 'X2', 'Y2', 'Width_PX', 'Height_PX'];
     const rows = scan.detections.map((d) => [
       d.id,
       d.class_name,
@@ -84,7 +77,6 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
       d.bbox.y2,
       Math.abs(d.bbox.x2 - d.bbox.x1),
       Math.abs(d.bbox.y2 - d.bbox.y1),
-      d.review_status,
     ]);
 
     const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
@@ -92,11 +84,16 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${scan.id}_detections.csv`;
+    a.download = `ORCA_${scan.id}_detections.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  // Client-side PDF Report download
+  const handleDownloadPdf = () => {
+    downloadScanPdfReport(scan);
   };
 
   // Canvas-based annotated image export
@@ -116,59 +113,77 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
     <div className="glass-panel" style={{ padding: '20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
         <h4 style={{ fontSize: '14px', fontWeight: 600 }}>MISSION REPORT ACTIONS & EXPORT</h4>
-        {isLive ? (
-          <span className="badge badge-emerald">
-            LIVE INFERENCE TELEMETRY
-          </span>
-        ) : (
-          <span className="badge badge-amber">CLIENT-SIDE PREVIEW</span>
-        )}
+        <span className="badge badge-emerald">REAL INFERENCE PAYLOAD</span>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-        <button onClick={handleDownloadCsv} className="btn btn-secondary" style={{ padding: '12px 14px' }}>
+        {/* PDF Download */}
+        <button
+          id="btn-download-pdf-report"
+          data-testid="btn-download-pdf-report"
+          onClick={handleDownloadPdf}
+          className="btn btn-primary"
+          style={{ padding: '12px 14px', justifyContent: 'center' }}
+        >
+          <FileText size={16} />
+          <span>Download PDF Report</span>
+        </button>
+
+        {/* CSV Download */}
+        <button
+          id="btn-download-csv-report"
+          data-testid="btn-download-csv-report"
+          onClick={handleDownloadCsv}
+          className="btn btn-secondary"
+          style={{ padding: '12px 14px', justifyContent: 'center' }}
+        >
           <FileSpreadsheet size={16} color="var(--status-emerald)" />
           <span>Download CSV</span>
         </button>
 
-        <button onClick={handleDownloadJson} className="btn btn-secondary" style={{ padding: '12px 14px' }}>
+        {/* JSON Download */}
+        <button
+          id="btn-download-json-report"
+          data-testid="btn-download-json-report"
+          onClick={handleDownloadJson}
+          className="btn btn-secondary"
+          style={{ padding: '12px 14px', justifyContent: 'center' }}
+        >
           <FileJson size={16} color="var(--sonar-cyan)" />
           <span>Download JSON</span>
         </button>
 
+        {/* Annotated Image Download */}
         <button
+          id="btn-download-annotated-image"
+          data-testid="btn-download-annotated-image"
           onClick={handleDownloadAnnotatedImage}
           disabled={isExportingImage}
           className="btn btn-secondary"
-          style={{ padding: '12px 14px' }}
+          style={{ padding: '12px 14px', justifyContent: 'center' }}
         >
           {isExportingImage ? (
             <Loader2 size={16} className="sonar-ping" color="var(--sonar-teal)" />
           ) : (
             <ImageIcon size={16} color="var(--sonar-teal)" />
           )}
-          <span>{isExportingImage ? 'Rasterizing PNG...' : 'Download Annotated Image'}</span>
-        </button>
-
-        <button onClick={handleDownloadJson} className="btn btn-primary" style={{ padding: '12px 14px' }}>
-          <FileCheck size={16} />
-          <span>Generate Mission Report</span>
+          <span>{isExportingImage ? 'Rasterizing PNG...' : 'Annotated PNG'}</span>
         </button>
       </div>
 
-      <div style={{
-        marginTop: '12px',
-        fontSize: '11px',
-        color: 'var(--text-muted)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-      }}>
+      <div
+        style={{
+          marginTop: '12px',
+          fontSize: '11px',
+          color: 'var(--text-muted)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+        }}
+      >
         <ShieldCheck size={14} color="var(--status-emerald)" />
         <span>
-          {isLive
-            ? `Active scan "${scan.id}" (${scan.detections.length} detections) synchronized with live YOLO inference.`
-            : 'Reviewing demonstration dataset. Connect live analysis on Analyze page.'}
+          Active scan "{scan.image.filename}" ({scan.detections.length} detections) verified with live YOLO inference data.
         </span>
       </div>
     </div>

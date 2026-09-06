@@ -1,5 +1,5 @@
 /**
- * Real Annotated Image Export Engine for Marine Sonar Intelligence
+ * Real Annotated Image Export Engine for ORCA — Multimodal Underwater Intelligence Platform
  * 
  * Generates client-side annotated PNG images from real YOLO inferences:
  * - Loads original uploaded File (or preview URL)

@@ -2,71 +2,58 @@ import React, { useState } from 'react';
 import { useSonar } from '../context/SonarContext';
 import { Dropzone } from '../components/upload/Dropzone';
 import { ModelRoutingCard } from '../components/upload/ModelRoutingCard';
-import { PipelineStepper } from '../components/upload/PipelineStepper';
 import { AutoRoutingModal } from '../components/upload/AutoRoutingModal';
+import { AnalysisPipelineTransitionModal } from '../components/upload/AnalysisPipelineTransitionModal';
 import { ErrorAlert } from '../components/common/ErrorAlert';
-import { PredictVisualizer } from '../components/detections/PredictVisualizer';
 import { SonarScanItem } from '../types/detection';
 import { ImagePreviewResult } from '../utils/imagePreview';
 import { DetectionMode, PredictAutoResponse, PredictAutoRouting, PredictResponse, PredictTarget } from '../types/api';
 import { predictAuto, predictImage } from '../api/predictApi';
 import { ApiError } from '../api/apiClient';
 import { NavRoute } from '../components/layout/Sidebar';
-import { Sparkles, Loader2, Play, CheckCircle2, RotateCcw } from 'lucide-react';
+import { Sparkles, Loader2 } from 'lucide-react';
 
 interface AnalyzePageProps {
   onNavigate?: (route: NavRoute) => void;
 }
 
-export const AnalyzePage: React.FC<AnalyzePageProps> = () => {
-  const { backendStatus } = useSonar();
+export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
+  const { backendStatus, addUploadedScan } = useSonar();
 
   // Detection mode: 'auto' (default) | 'pipeline' | 'human' | 'hardware'
   const [detectionMode, setDetectionMode] = useState<DetectionMode>('auto');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewData, setPreviewData] = useState<ImagePreviewResult | null>(null);
 
-  // Live analysis state
+  // Analysis state
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
-  const [predictResult, setPredictResult] = useState<PredictResponse | null>(null);
 
-  // Auto-routing modal state
+  // Auto-routing modals state
   const [isAutoModalOpen, setIsAutoModalOpen] = useState<boolean>(false);
+  const [isPipelineTransitionOpen, setIsPipelineTransitionOpen] = useState<boolean>(false);
   const [autoRoutingData, setAutoRoutingData] = useState<PredictAutoRouting | null>(null);
   const [pendingAutoResponse, setPendingAutoResponse] = useState<PredictAutoResponse | null>(null);
-  const [isAutoRouted, setIsAutoRouted] = useState<boolean>(false);
-  const [routingConfidence, setRoutingConfidence] = useState<number | undefined>(undefined);
+  const [pendingManualResponse, setPendingManualResponse] = useState<PredictResponse | null>(null);
 
   // Unified trigger function for analysis
   const executeAnalysis = async (file: File, mode: DetectionMode) => {
     setIsAnalyzing(true);
     setAnalysisError(null);
-    setPredictResult(null);
-    setIsAutoRouted(false);
-    setRoutingConfidence(undefined);
 
     try {
       if (mode === 'auto') {
-        // AUTOMATIC MODE: POST /predict-auto (no target field sent)
+        // AUTOMATIC MODE: POST /predict-auto
         const response = await predictAuto(file);
-
-        if (response.routing.status === 'routed') {
-          // Store response and present the Model Automatically Selected Modal BEFORE results
-          setAutoRoutingData(response.routing);
-          setPendingAutoResponse(response);
-          setIsAutoModalOpen(true);
-        } else {
-          // UNCERTAIN or DEGENERATE: Open uncertain dialog with manual fallbacks (NEVER call specialist)
-          setAutoRoutingData(response.routing);
-          setPendingAutoResponse(response);
-          setIsAutoModalOpen(true);
-        }
+        setAutoRoutingData(response.routing);
+        setPendingAutoResponse(response);
+        setIsAutoModalOpen(true);
       } else {
-        // MANUAL MODE: Existing POST /predict with target=pipeline/human/hardware
+        // MANUAL MODE: POST /predict with target=pipeline/human/hardware
         const response = await predictImage(file, mode as PredictTarget);
-        setPredictResult(response);
-        setIsAutoRouted(false);
+        setPendingManualResponse(response);
+        // Directly show pipeline completion transition for manual mode
+        setIsPipelineTransitionOpen(true);
       }
     } catch (err: unknown) {
       if (err instanceof ApiError) {
@@ -91,49 +78,131 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = () => {
     setSelectedFile(file);
     setPreviewData(preview);
     setAnalysisError(null);
-    setPredictResult(null);
     setAutoRoutingData(null);
     setPendingAutoResponse(null);
+    setPendingManualResponse(null);
 
-    // If in automatic mode, immediately initiate automatic analysis for smooth UX
+    // In auto mode, trigger automatic analysis for smooth operational flow
     if (detectionMode === 'auto') {
       executeAnalysis(file, 'auto');
     }
   };
 
-  const handleSelectSample = (sample: SonarScanItem) => {
-    setDetectionMode(sample.target as DetectionMode);
-    setSelectedFile(null);
-    setPreviewData({
-      previewUrl: sample.image.preview_url,
-      width: sample.image.width,
-      height: sample.image.height,
-      isNetpbm: false,
-      formatDescription: sample.image.format,
-    });
-    setAnalysisError(null);
-    setPredictResult(null);
-    setAutoRoutingData(null);
-    setPendingAutoResponse(null);
-  };
-
-  // User manually clicks Analyze button
   const handleTriggerPredict = () => {
     if (!selectedFile || isAnalyzing) return;
     executeAnalysis(selectedFile, detectionMode);
   };
 
-  // User clicks [ View Results ] on the Model Selected Modal
-  const handleViewResults = () => {
+  // User clicks [ Continue ] on Model Selection Modal -> Transition to Analysis Pipeline UI
+  const handleAcknowledgeModelSelection = () => {
     setIsAutoModalOpen(false);
+    setIsPipelineTransitionOpen(true);
+  };
+
+  // User clicks [ Continue to Detection Workspace ] on Analysis Pipeline UI -> Navigate to workspace
+  const handleTransitionToWorkspace = () => {
+    setIsPipelineTransitionOpen(false);
+
+    if (!selectedFile || !previewData) return;
+
     if (pendingAutoResponse && pendingAutoResponse.routing.status === 'routed') {
-      setPredictResult({
-        model: pendingAutoResponse.routing.model || 'pipeline',
-        target: pendingAutoResponse.routing.target || 'Pipeline',
-        detections: pendingAutoResponse.detections,
-      });
-      setIsAutoRouted(true);
-      setRoutingConfidence(pendingAutoResponse.routing.confidence);
+      const routing = pendingAutoResponse.routing;
+      const targetStr = (routing.target || routing.model || 'pipeline').toLowerCase();
+      const scanId = `SCAN_${targetStr.toUpperCase()}_${Date.now().toString().slice(-4)}`;
+
+      const scanItem: SonarScanItem = {
+        id: scanId,
+        timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
+        target: targetStr,
+        model_name: routing.target ? `${routing.target} Detection Model` : 'Specialist Model',
+        status: 'Complete',
+        mission_id: `TRANSECT_${Date.now().toString().slice(-5)}`,
+        image: {
+          filename: selectedFile.name,
+          width: previewData.width,
+          height: previewData.height,
+          size_kb: Math.round(selectedFile.size / 1024),
+          format: selectedFile.name.split('.').pop()?.toUpperCase() || 'SCAN',
+          preview_url: previewData.previewUrl,
+        },
+        detections: pendingAutoResponse.detections.map((d, idx) => ({
+          id: `ANM-${String(idx + 1).padStart(3, '0')}`,
+          class_name: d.class,
+          confidence: d.confidence,
+          bbox: {
+            x1: d.bbox[0],
+            y1: d.bbox[1],
+            x2: d.bbox[2],
+            y2: d.bbox[3],
+          },
+          model: routing.target ? `${routing.target} Specialist` : 'Specialist Model',
+          review_status: d.confidence >= 0.8 ? 'confirmed' : 'pending',
+        })),
+        location: {
+          source: 'unavailable',
+          latitude: null,
+          longitude: null,
+          accuracy: null,
+          description: 'Location data unavailable (Awaiting verified sonar navigation metadata)',
+        },
+        rawFile: selectedFile,
+        routingConfidence: routing.confidence,
+        isAutoRouted: true,
+      };
+
+      addUploadedScan(scanItem);
+
+      if (onNavigate) {
+        onNavigate('detections');
+      }
+    } else if (pendingManualResponse) {
+      const targetStr = pendingManualResponse.target.toLowerCase();
+      const scanId = `SCAN_${targetStr.toUpperCase()}_${Date.now().toString().slice(-4)}`;
+
+      const scanItem: SonarScanItem = {
+        id: scanId,
+        timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
+        target: targetStr,
+        model_name: `${pendingManualResponse.target} Detection Model`,
+        status: 'Complete',
+        mission_id: `TRANSECT_${Date.now().toString().slice(-5)}`,
+        image: {
+          filename: selectedFile.name,
+          width: previewData.width,
+          height: previewData.height,
+          size_kb: Math.round(selectedFile.size / 1024),
+          format: selectedFile.name.split('.').pop()?.toUpperCase() || 'SCAN',
+          preview_url: previewData.previewUrl,
+        },
+        detections: pendingManualResponse.detections.map((d, idx) => ({
+          id: `ANM-${String(idx + 1).padStart(3, '0')}`,
+          class_name: d.class,
+          confidence: d.confidence,
+          bbox: {
+            x1: d.bbox[0],
+            y1: d.bbox[1],
+            x2: d.bbox[2],
+            y2: d.bbox[3],
+          },
+          model: `${pendingManualResponse.target} Specialist`,
+          review_status: d.confidence >= 0.8 ? 'confirmed' : 'pending',
+        })),
+        location: {
+          source: 'unavailable',
+          latitude: null,
+          longitude: null,
+          accuracy: null,
+          description: 'Location data unavailable (Awaiting verified sonar navigation metadata)',
+        },
+        rawFile: selectedFile,
+        isAutoRouted: false,
+      };
+
+      addUploadedScan(scanItem);
+
+      if (onNavigate) {
+        onNavigate('detections');
+      }
     }
   };
 
@@ -146,35 +215,27 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = () => {
     }
   };
 
-  const handleReset = () => {
-    setSelectedFile(null);
-    setPreviewData(null);
-    setPredictResult(null);
-    setAnalysisError(null);
-    setAutoRoutingData(null);
-    setPendingAutoResponse(null);
-    setIsAutoModalOpen(false);
-    setIsAutoRouted(false);
-    setRoutingConfidence(undefined);
-  };
+  const activeTargetName = pendingAutoResponse?.routing.target || pendingManualResponse?.target || 'Hardware';
+  const activeModelName = pendingAutoResponse?.routing.model || pendingManualResponse?.model || 'Hardware';
+  const activeDetectionsCount = pendingAutoResponse?.detections.length ?? pendingManualResponse?.detections.length ?? 0;
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Backend Offline Banner */}
+      {/* Backend Offline Alert */}
       {backendStatus === 'offline' && (
         <ErrorAlert
           variant="warning"
           title="FastAPI Backend Offline"
-          message="FastAPI service at http://127.0.0.1:8000 is not reachable. Live inference requires starting the backend."
+          message="FastAPI service at http://127.0.0.1:8000 is unreachable. Analysis requires running the backend server."
         />
       )}
 
-      {/* Analysis Error Alert if failed */}
+      {/* Analysis Error Alert */}
       {analysisError && (
         <div id="predict-error-alert" data-testid="predict-error-alert">
           <ErrorAlert
             variant="danger"
-            title="Prediction Request Failed"
+            title="Analysis Request Failed"
             message={analysisError}
             onDismiss={() => setAnalysisError(null)}
           />
@@ -185,7 +246,7 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = () => {
       <div
         className="glass-panel"
         style={{
-          padding: '14px 18px',
+          padding: '16px 20px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -193,41 +254,29 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = () => {
           border: '1px solid var(--border-subtle)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Sparkles size={18} color="var(--sonar-cyan)" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Sparkles size={20} color="var(--sonar-cyan)" />
           <div>
-            <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--sonar-cyan)' }}>
-              AUTOMATIC MODEL SELECTION + SPECIALIST YOLO DETECTION
+            <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
+              AUTOMATIC MODEL SELECTION + SPECIALIST YOLO INFERENCE
             </div>
-            <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
               {detectionMode === 'auto'
-                ? 'Automatic Mode Active: Upload any sonar/optical image (.pbm, .bpm, .png, .jpg) — model is detected automatically.'
-                : `Manual Mode Active: Directing inference specifically to ${detectionMode.toUpperCase()} specialist model.`}
+                ? 'Automatic Mode Active: Ingest any sonar or optical image — Router V1 detects domain and routes to specialist model.'
+                : `Manual Override Active: Inference directed specifically to ${detectionMode.toUpperCase()} specialist model.`}
             </div>
           </div>
         </div>
-
-        {predictResult && (
-          <button
-            onClick={handleReset}
-            className="btn btn-secondary btn-sm"
-            id="reset-analysis-btn"
-            data-testid="reset-analysis-btn"
-          >
-            <RotateCcw size={14} />
-            <span>New Analysis</span>
-          </button>
-        )}
       </div>
 
-      {/* Analysis In-Progress Banner (Section 4 & 15) */}
+      {/* Analyzing Loader Indicator */}
       {isAnalyzing && (
         <div
           id="predict-loading-indicator"
           data-testid="predict-loading-indicator"
           className="glass-panel-elevated"
           style={{
-            padding: '16px 20px',
+            padding: '18px 22px',
             display: 'flex',
             alignItems: 'center',
             gap: '14px',
@@ -239,32 +288,13 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = () => {
           <div>
             <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
               {detectionMode === 'auto'
-                ? 'Analyzing image visual invariants & selecting specialist model (POST /predict-auto)...'
-                : `Executing Live ${detectionMode.toUpperCase()} Specialist Prediction (POST /predict)...`}
+                ? 'Analyzing visual invariants & selecting specialist model (POST /predict-auto)...'
+                : `Executing ${detectionMode.toUpperCase()} Specialist Detection (POST /predict)...`}
             </div>
             <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-              {detectionMode === 'auto'
-                ? 'Extracting color, saturation, texture, contrast, and edge density invariants.'
-                : 'Dispatching to frozen specialist model on PyTorch CUDA engine.'}
+              Extracting color distribution, saturation variance, edge density, and acoustic backscatter signatures.
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Prediction Visualization Result if Available */}
-      {predictResult && previewData && (
-        <div id="predict-results-section" data-testid="predict-results-section">
-          <PredictVisualizer
-            imageUrl={previewData.previewUrl}
-            imageWidth={previewData.width}
-            imageHeight={previewData.height}
-            detections={predictResult.detections}
-            model={predictResult.model}
-            target={predictResult.target}
-            filename={selectedFile?.name || 'sonar_scan.pbm'}
-            isAutoRouted={isAutoRouted}
-            routingConfidence={routingConfidence}
-          />
         </div>
       )}
 
@@ -275,50 +305,9 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = () => {
             onFileSelected={handleFileSelected}
             selectedFile={selectedFile}
             previewData={previewData}
-            onSelectSample={handleSelectSample}
-            availableSamples={[]}
             isAnalyzing={isAnalyzing}
             onTriggerAnalysis={handleTriggerPredict}
           />
-
-          {/* Dedicated Analyze Image Action Button */}
-          {selectedFile && !predictResult && (
-            <div style={{ marginTop: '14px' }}>
-              <button
-                id="analyze-image-button"
-                data-testid="analyze-image-button"
-                onClick={handleTriggerPredict}
-                disabled={isAnalyzing}
-                className="btn btn-primary"
-                style={{
-                  width: '100%',
-                  padding: '14px',
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
-              >
-                {isAnalyzing ? (
-                  <>
-                    <Loader2 size={18} className="sonar-ping" />
-                    <span>Analyzing Image...</span>
-                  </>
-                ) : (
-                  <>
-                    <Play size={18} />
-                    <span>
-                      {detectionMode === 'auto'
-                        ? 'Run Automatic Analysis'
-                        : `Analyze (${detectionMode.toUpperCase()})`}
-                    </span>
-                  </>
-                )}
-              </button>
-            </div>
-          )}
         </div>
 
         <ModelRoutingCard
@@ -328,17 +317,23 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = () => {
         />
       </div>
 
-      {/* Model Selection Modal (Section 5, 6, 13) */}
+      {/* 1. Model Selection Modal (Section 6) */}
       <AutoRoutingModal
         isOpen={isAutoModalOpen}
         routing={autoRoutingData}
-        onViewResults={handleViewResults}
+        onViewResults={handleAcknowledgeModelSelection}
         onSelectManual={handleFallbackManual}
         onClose={() => setIsAutoModalOpen(false)}
       />
 
-      {/* 9-Stage Pipeline Stepper */}
-      <PipelineStepper />
+      {/* 2. UI-Only Analysis Pipeline Transition (Section 7) */}
+      <AnalysisPipelineTransitionModal
+        isOpen={isPipelineTransitionOpen}
+        modelName={activeModelName}
+        targetName={activeTargetName}
+        detectionCount={activeDetectionsCount}
+        onContinue={handleTransitionToWorkspace}
+      />
     </div>
   );
 };

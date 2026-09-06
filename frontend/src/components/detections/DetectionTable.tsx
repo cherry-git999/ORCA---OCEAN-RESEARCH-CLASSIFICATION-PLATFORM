@@ -169,7 +169,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
                     </td>
                     <td style={{ padding: '10px 14px' }}>
                       <span className={`badge ${statusBadge}`}>
-                        {det.review_status.toUpperCase().replace('_', ' ')}
+                        {(det.review_status || 'pending').toUpperCase().replace('_', ' ')}
                       </span>
                     </td>
                     <td style={{ padding: '10px 14px', textAlign: 'right' }}>

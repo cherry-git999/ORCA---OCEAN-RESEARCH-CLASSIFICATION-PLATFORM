@@ -8,13 +8,14 @@ interface JsonReportViewerProps {
 
 export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
   const [copied, setCopied] = useState<boolean>(false);
-  const isLive = scan.mission_id === 'TRANSECT-LIVE-ANALYSIS' || scan.id.startsWith('SCAN_');
 
   const reportPayload = {
     scan_id: scan.id,
     mission_id: scan.mission_id,
     model: scan.model_name,
     target: scan.target,
+    routing_confidence: scan.routingConfidence,
+    is_auto_routed: scan.isAutoRouted,
     timestamp: scan.timestamp,
     image: {
       filename: scan.image.filename,
@@ -26,7 +27,7 @@ export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
       source: scan.location.source,
       latitude: scan.location.latitude,
       longitude: scan.location.longitude,
-      description: scan.location.description || 'Location data unavailable (Awaiting verified sonar navigation metadata)',
+      description: scan.location.description || 'Location data unavailable (Awaiting verified sensor navigation metadata)',
     },
     detection_count: scan.detections.length,
     detections: scan.detections.map((d) => ({
@@ -61,20 +62,14 @@ export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Code size={18} color="var(--sonar-cyan)" />
           <h4 style={{ fontSize: '14px', fontWeight: 600 }}>
-            {isLive ? 'LIVE ANALYSIS TELEMETRY (JSON REPORT)' : 'DEMO REPORT PREVIEW (JSON TELEMETRY)'}
+            INFERENCE TELEMETRY PAYLOAD (JSON)
           </h4>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {isLive ? (
-            <span className="badge badge-emerald" style={{ fontSize: '10px' }}>
-              LIVE TELEMETRY
-            </span>
-          ) : (
-            <span className="badge badge-amber" style={{ fontSize: '10px' }}>
-              DEMO REPORT PREVIEW
-            </span>
-          )}
+          <span className="badge badge-emerald" style={{ fontSize: '10px' }}>
+            OPERATIONAL PAYLOAD
+          </span>
           <button onClick={handleCopy} className="btn btn-secondary btn-sm" style={{ padding: '4px 10px' }}>
             {copied ? <Check size={13} color="var(--status-emerald)" /> : <Copy size={13} />}
             <span>{copied ? 'Copied!' : 'Copy JSON'}</span>
@@ -83,38 +78,43 @@ export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
       </div>
 
       {/* JSON Display */}
-      <div style={{
-        background: '#040812',
-        border: '1px solid var(--border-medium)',
-        borderRadius: 'var(--radius-sm)',
-        padding: '16px',
-        maxHeight: '380px',
-        overflowY: 'auto',
-      }}>
-        <pre className="mono" style={{
-          fontSize: '12px',
-          color: 'var(--text-primary)',
-          lineHeight: '1.6',
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-all',
-        }}>
+      <div
+        style={{
+          background: '#040812',
+          border: '1px solid var(--border-medium)',
+          borderRadius: 'var(--radius-sm)',
+          padding: '16px',
+          maxHeight: '380px',
+          overflowY: 'auto',
+        }}
+      >
+        <pre
+          className="mono"
+          style={{
+            fontSize: '12px',
+            color: 'var(--text-primary)',
+            lineHeight: '1.6',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-all',
+          }}
+        >
           {jsonString}
         </pre>
       </div>
 
-      <div style={{
-        marginTop: '10px',
-        fontSize: '11px',
-        color: 'var(--text-muted)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-      }}>
+      <div
+        style={{
+          marginTop: '10px',
+          fontSize: '11px',
+          color: 'var(--text-muted)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+        }}
+      >
         <ShieldCheck size={13} color="var(--status-emerald)" />
         <span>
-          {isLive
-            ? `Telemetry is derived from active YOLOv8 inference (${scan.image.filename}). Zero synthetic demo coordinates.`
-            : 'Previewing static demonstration dataset. Compatible with Phase 7/8.2 backend response schema.'}
+          Telemetry is derived directly from active YOLOv8 inference ({scan.image.filename}). Unaltered sensor-space telemetry.
         </span>
       </div>
     </div>

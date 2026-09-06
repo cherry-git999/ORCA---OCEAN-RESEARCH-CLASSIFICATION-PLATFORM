@@ -384,7 +384,7 @@ export const SonarImageViewer: React.FC<SonarImageViewerProps> = ({
           bottom: '12px',
           left: '14px',
           background: 'rgba(7, 14, 28, 0.88)',
-          border: `1px solid ${isLiveAnalysis ? 'rgba(16, 185, 129, 0.4)' : 'var(--border-subtle)'}`,
+          border: '1px solid rgba(0, 242, 254, 0.3)',
           borderRadius: 'var(--radius-xs)',
           padding: '6px 10px',
           display: 'flex',
@@ -392,21 +392,10 @@ export const SonarImageViewer: React.FC<SonarImageViewerProps> = ({
           gap: '8px',
           pointerEvents: 'none',
         }}>
-          {isLiveAnalysis ? (
-            <>
-              <span className="status-dot online" />
-              <span className="mono" style={{ fontSize: '10px', color: '#34d399', fontWeight: 600 }}>
-                LIVE YOLO INFERENCE: {detections.length} CANDIDATES (FASTAPI)
-              </span>
-            </>
-          ) : (
-            <>
-              <ShieldAlert size={14} color="var(--status-amber)" />
-              <span className="mono" style={{ fontSize: '10px', color: '#fbbf24' }}>
-                DEMO OVERLAYS: Interactive Bounding Boxes (Phase 8.1 UI Foundation)
-              </span>
-            </>
-          )}
+          <span className="status-dot online" />
+          <span className="mono" style={{ fontSize: '10px', color: 'var(--sonar-cyan)', fontWeight: 600 }}>
+            OBJECT DETECTION: {detections.length} {detections.length === 1 ? 'CANDIDATE' : 'CANDIDATES'}
+          </span>
         </div>
 
         {/* Navigation Hint */}

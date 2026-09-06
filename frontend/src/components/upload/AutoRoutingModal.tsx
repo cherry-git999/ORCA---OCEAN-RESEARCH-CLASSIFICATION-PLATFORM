@@ -255,10 +255,10 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
               Detected automatically from visual sensor invariants (color variance, saturation, acoustic texture, and contrast).
             </p>
 
-            {/* View Results Button */}
+            {/* Continue Button */}
             <button
-              id="modal-view-results-btn"
-              data-testid="modal-view-results-btn"
+              id="modal-continue-btn"
+              data-testid="modal-continue-btn"
               onClick={onViewResults}
               className="btn btn-primary"
               style={{
@@ -277,7 +277,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
                 cursor: 'pointer',
               }}
             >
-              <span>View Results</span>
+              <span>Continue</span>
               <ArrowRight size={18} />
             </button>
           </div>

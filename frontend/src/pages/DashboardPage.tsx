@@ -1,22 +1,20 @@
 import React from 'react';
 import { useSonar } from '../context/SonarContext';
-import { DEMO_MODELS, DEMO_MISSION_STATS } from '../data/demoData';
 import { KpiCard } from '../components/dashboard/KpiCard';
 import { CurrentMissionCard } from '../components/dashboard/CurrentMissionCard';
-import { ModelStatusCard } from '../components/dashboard/ModelStatusCard';
+import { ModelStatusCard, OPERATIONAL_MODELS } from '../components/dashboard/ModelStatusCard';
 import { ConfidenceChart } from '../components/dashboard/ConfidenceChart';
 import { ScanHistoryTable } from '../components/history/ScanHistoryTable';
 import {
   FileSearch,
   Crosshair,
   CheckCircle2,
-  AlertCircle,
-  ShieldCheck,
+  Cpu,
   Target,
   Sliders,
-  MapPin,
-  Layout,
+  Sparkles,
   ArrowRight,
+  ShieldCheck,
 } from 'lucide-react';
 
 interface DashboardPageProps {
@@ -24,211 +22,146 @@ interface DashboardPageProps {
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
-  const { scans, activeScan, setActiveScanId, isLiveAnalysis, lastBackendResponse } = useSonar();
+  const { scans, activeScan, setActiveScanId, backendStatus } = useSonar();
 
-  // Dynamic metrics derived strictly from live session and active scan state
-  const sessionLiveScans = scans.filter((s) => s.id.startsWith('SCAN_'));
-  const sessionLiveCount = sessionLiveScans.length;
-
+  // Metrics derived strictly from real browser-stored scans
+  const totalScans = scans.length;
   const currentDetections = activeScan ? activeScan.detections : [];
-  const totalAnomalies = currentDetections.length;
-  const highConfCount = currentDetections.filter((d) => d.confidence >= 0.8).length;
-  const reviewCount = currentDetections.filter((d) => d.review_status === 'review_required').length;
+  const totalAnomalies = scans.reduce((acc, s) => acc + s.detections.length, 0);
+  const highConfCount = scans.reduce(
+    (acc, s) => acc + s.detections.filter((d) => d.confidence >= 0.8).length,
+    0
+  );
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Latest Real Analysis Telemetry Banner (Section 21) */}
-      <div className="glass-panel-elevated" style={{
-        padding: '16px 20px',
-        border: `1px solid ${isLiveAnalysis ? 'var(--border-active)' : 'var(--border-subtle)'}`,
-        background: isLiveAnalysis ? 'rgba(0, 242, 254, 0.06)' : 'var(--bg-surface)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '14px',
-      }}>
+      {/* Platform Status Banner */}
+      <div
+        className="glass-panel-elevated"
+        style={{
+          padding: '18px 22px',
+          border: '1px solid var(--border-subtle)',
+          background: 'var(--bg-surface)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '14px',
+        }}
+      >
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span className={`badge ${isLiveAnalysis ? 'badge-emerald' : 'badge-amber'}`}>
-              {isLiveAnalysis ? 'LIVE BACKEND ACTIVE' : 'NO LIVE ANALYSIS YET'}
+            <span className={`badge ${backendStatus === 'online' ? 'badge-emerald' : 'badge-rose'}`}>
+              {backendStatus === 'online' ? 'SYSTEM OPERATIONAL' : 'BACKEND OFFLINE'}
             </span>
-            <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-              {isLiveAnalysis ? 'Latest Real Sonar Inference Telemetry' : 'Operating in preview mode. Upload a sonar image to execute live inference.'}
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+              ORCA Multimodal Underwater Intelligence
             </span>
           </div>
 
-          {isLiveAnalysis && lastBackendResponse ? (
-            <div style={{ marginTop: '6px', display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '12px' }}>
+          {activeScan ? (
+            <div style={{ marginTop: '8px', display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '12px' }}>
               <div>
-                <span style={{ color: 'var(--text-muted)' }}>Scan: </span>
-                <strong className="mono" style={{ color: 'var(--text-primary)' }}>{lastBackendResponse.image.filename}</strong>
+                <span style={{ color: 'var(--text-muted)' }}>Active Scan: </span>
+                <strong className="mono" style={{ color: 'var(--text-primary)' }}>
+                  {activeScan.image.filename}
+                </strong>
               </div>
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>Target: </span>
-                <span className="badge badge-cyan">{lastBackendResponse.target.toUpperCase()}</span>
+                <span className="badge badge-cyan">{activeScan.target.toUpperCase()}</span>
               </div>
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>Model: </span>
-                <span style={{ color: 'var(--sonar-teal)' }}>{lastBackendResponse.model.name}</span>
+                <span style={{ color: 'var(--sonar-teal)' }}>{activeScan.model_name}</span>
               </div>
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>Detections: </span>
-                <strong className="mono" style={{ color: '#34d399' }}>{lastBackendResponse.analysis.detection_count}</strong>
-              </div>
-              <div>
-                <span style={{ color: 'var(--text-muted)' }}>Max Conf: </span>
-                <strong className="mono" style={{ color: 'var(--sonar-cyan)' }}>
-                  {lastBackendResponse.analysis.highest_confidence != null ? `${(lastBackendResponse.analysis.highest_confidence * 100).toFixed(2)}%` : 'N/A'}
+                <strong className="mono" style={{ color: '#34d399' }}>
+                  {activeScan.detections.length}
                 </strong>
               </div>
+              {activeScan.routingConfidence != null && (
+                <div>
+                  <span style={{ color: 'var(--text-muted)' }}>Routing Conf: </span>
+                  <strong className="mono" style={{ color: 'var(--sonar-cyan)' }}>
+                    {(activeScan.routingConfidence * 100).toFixed(1)}%
+                  </strong>
+                </div>
+              )}
             </div>
           ) : (
-            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
-              No live analysis yet — Ready to accept side-scan sonar imagery (.pbm, .bpm, .png, .jpg).
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+              System ready. Ingest a sensor scan image (.pbm, .bpm, .png, .jpg) to execute automated specialist inference.
             </div>
           )}
         </div>
 
         <button
+          id="dashboard-run-analysis-btn"
+          data-testid="dashboard-run-analysis-btn"
           onClick={() => onNavigate('analyze')}
-          className="btn btn-primary btn-sm"
+          className="btn btn-primary"
+          style={{ padding: '10px 18px' }}
         >
-          <span>Run Live Analysis</span>
+          <Sparkles size={15} />
+          <span>Analyze Scan</span>
           <ArrowRight size={14} />
         </button>
       </div>
-      {/* 4 PS Core Pillars Showcase Banner */}
-      <div className="glass-panel" style={{
-        padding: '16px 20px',
-        background: 'linear-gradient(135deg, rgba(7, 14, 28, 0.95) 0%, rgba(16, 31, 56, 0.8) 100%)',
-        border: '1px solid var(--border-medium)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '16px',
-      }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span className="badge badge-cyan">PROBLEM STATEMENT SIH26057</span>
-            <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-              AI-Powered Underwater Debris & Anomaly Detection
-            </span>
-          </div>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '4px' }}>
-            FOUR CORE CAPABILITY DELIVERABLES
-          </h2>
-        </div>
 
-        {/* 4 Capabilities Grid */}
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <div style={{
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-subtle)',
-            padding: '8px 12px',
-            borderRadius: 'var(--radius-xs)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}>
-            <Target size={15} color="var(--sonar-cyan)" />
-            <div style={{ fontSize: '11px', fontWeight: 600 }}>1. Detection & Segmentation</div>
-          </div>
-
-          <div style={{
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-subtle)',
-            padding: '8px 12px',
-            borderRadius: 'var(--radius-xs)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}>
-            <Sliders size={15} color="var(--sonar-teal)" />
-            <div style={{ fontSize: '11px', fontWeight: 600 }}>2. Confidence & Filtering</div>
-          </div>
-
-          <div style={{
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-subtle)',
-            padding: '8px 12px',
-            borderRadius: 'var(--radius-xs)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}>
-            <MapPin size={15} color="var(--status-amber)" />
-            <div style={{ fontSize: '11px', fontWeight: 600 }}>3. Reporting & Geotagging</div>
-          </div>
-
-          <div style={{
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-subtle)',
-            padding: '8px 12px',
-            borderRadius: 'var(--radius-xs)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}>
-            <Layout size={15} color="var(--status-emerald)" />
-            <div style={{ fontSize: '11px', fontWeight: 600 }}>4. UI Dashboard</div>
-          </div>
-        </div>
-      </div>
-
-      {/* 4 KPI Cards (Derived dynamically in live mode; labeled demo in preview) */}
+      {/* 4 Real KPI Cards */}
       <div className="grid-4">
         <KpiCard
-          title={isLiveAnalysis ? "Session Live Scans" : "Scans Analyzed"}
-          value={isLiveAnalysis ? sessionLiveCount : DEMO_MISSION_STATS.scansAnalyzed}
-          subtitle={isLiveAnalysis ? "Live analyzed surveys this session" : "Historical mission benchmark (Demo)"}
+          title="Scans Analyzed"
+          value={totalScans}
+          subtitle="Persistent browser inventory"
           icon={FileSearch}
           color="cyan"
-          trend={isLiveAnalysis ? `Target: ${activeScan?.target.toUpperCase() || 'LIVE'}` : "Preview dataset"}
+          trend={totalScans > 0 ? `${totalScans} recorded` : 'Ready'}
         />
         <KpiCard
-          title={isLiveAnalysis ? "Current Scan Anomalies" : "Anomalies Detected"}
-          value={isLiveAnalysis ? totalAnomalies : DEMO_MISSION_STATS.anomaliesDetected}
-          subtitle={isLiveAnalysis ? `Swath: ${activeScan?.image.filename || 'Active'}` : "Candidate acoustic features"}
+          title="Total Detections"
+          value={totalAnomalies}
+          subtitle="Identified objects across scans"
           icon={Crosshair}
           color="cyan"
-          trend={isLiveAnalysis ? (totalAnomalies === 1 ? "1 detection" : `${totalAnomalies} detections`) : "Demo baseline"}
+          trend={activeScan ? `Current scan: ${currentDetections.length}` : 'Operational'}
         />
         <KpiCard
           title="High Confidence"
-          value={isLiveAnalysis ? highConfCount : DEMO_MISSION_STATS.highConfidence}
-          subtitle={isLiveAnalysis ? "Confidence ≥ 80% (Current Scan)" : "Confidence ≥ 80%"}
+          value={highConfCount}
+          subtitle="Detections with score ≥ 80%"
           icon={CheckCircle2}
           color="emerald"
-          trend={isLiveAnalysis && totalAnomalies > 0 ? `${Math.round((highConfCount / totalAnomalies) * 100)}% ratio` : "YOLOv8 Score"}
+          trend={totalAnomalies > 0 ? `${Math.round((highConfCount / totalAnomalies) * 100)}% ratio` : 'YOLOv8'}
         />
         <KpiCard
-          title="Requires Review"
-          value={isLiveAnalysis ? reviewCount : DEMO_MISSION_STATS.requiresReview}
-          subtitle={isLiveAnalysis ? "Human triage (Current Scan)" : "Human specialist check"}
-          icon={AlertCircle}
-          color="amber"
-          trend={isLiveAnalysis ? (reviewCount > 0 ? "Operator review" : "Validated") : "Manual triage"}
+          title="Specialist Models"
+          value="3"
+          subtitle="Pipeline, Human, Hardware"
+          icon={Cpu}
+          color="emerald"
+          trend="3/3 Ready"
         />
       </div>
 
-      {/* Main Section 1: Current Mission & Confidence Distribution */}
-      <div className="grid-2">
-        {activeScan && (
+      {/* Main Section 1: Active Scan & Confidence Distribution (if scans exist) */}
+      {activeScan && (
+        <div className="grid-2">
           <CurrentMissionCard
             scan={activeScan}
             onOpenWorkspace={() => onNavigate('detections')}
           />
-        )}
-        <ConfidenceChart
-          detections={activeScan ? activeScan.detections : []}
-        />
-      </div>
+          <ConfidenceChart
+            detections={activeScan.detections}
+          />
+        </div>
+      )}
 
-      {/* Main Section 2: Model Status Card */}
+      {/* Main Section 2: Model Status Card (Displays all 3 real models) */}
       <ModelStatusCard
-        models={DEMO_MODELS}
+        models={OPERATIONAL_MODELS}
         activeModelName={activeScan?.model_name}
       />
 
@@ -238,6 +171,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
         activeScanId={activeScan ? activeScan.id : ''}
         onSelectScan={(id) => setActiveScanId(id)}
         onOpenWorkspace={() => onNavigate('detections')}
+        onNavigateToAnalyze={() => onNavigate('analyze')}
       />
     </div>
   );

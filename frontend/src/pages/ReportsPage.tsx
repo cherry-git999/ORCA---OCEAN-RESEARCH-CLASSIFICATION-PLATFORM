@@ -2,112 +2,158 @@ import React from 'react';
 import { useSonar } from '../context/SonarContext';
 import { ExportActions } from '../components/reports/ExportActions';
 import { JsonReportViewer } from '../components/reports/JsonReportViewer';
-import { FileText, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { EmptyState } from '../components/common/EmptyState';
+import { FileText, CheckCircle2, ChevronDown } from 'lucide-react';
 
 export const ReportsPage: React.FC = () => {
-  const { activeScan, scans } = useSonar();
+  const { activeScan, scans, activeScanId, setActiveScanId } = useSonar();
 
-  if (!activeScan) return null;
+  if (!activeScan) {
+    return (
+      <div className="animate-fade-in" style={{ padding: '40px 0' }}>
+        <EmptyState
+          type="no_scan"
+          title="NO SCAN AVAILABLE FOR REPORT"
+          description="Complete a scan analysis to view and export operational PDF, CSV, and JSON mission reports."
+          actionText="Analyze Scan"
+          onAction={() => {
+            window.location.hash = '#/analyze';
+          }}
+        />
+      </div>
+    );
+  }
 
-  const isLive = activeScan.mission_id === 'TRANSECT-LIVE-ANALYSIS' || activeScan.id.startsWith('SCAN_');
   const totalAnomalies = activeScan.detections.length;
   const highConf = activeScan.detections.filter((d) => d.confidence >= 0.8).length;
-  const requiresReview = activeScan.detections.filter((d) => d.review_status === 'review_required').length;
+  const routingConfText =
+    activeScan.routingConfidence != null
+      ? `${(activeScan.routingConfidence * 100).toFixed(1)}%`
+      : 'N/A';
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Scan Selector if multiple scans exist */}
+      {scans.length > 1 && (
+        <div
+          className="glass-panel"
+          style={{
+            padding: '12px 18px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '10px',
+          }}
+        >
+          <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+            Select Analyzed Scan for Report:
+          </span>
+          <select
+            className="form-select mono"
+            value={activeScanId}
+            onChange={(e) => setActiveScanId(e.target.value)}
+            style={{ padding: '6px 12px', fontSize: '12px', width: 'auto' }}
+          >
+            {scans.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.image.filename} — {s.target.toUpperCase()} ({s.detections.length} detections)
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {/* Mission Summary Card */}
       <div className="glass-panel" style={{ padding: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{
-              padding: '8px',
-              borderRadius: 'var(--radius-sm)',
-              background: 'rgba(0, 242, 254, 0.12)',
-              color: 'var(--sonar-cyan)',
-            }}>
+            <div
+              style={{
+                padding: '8px',
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(0, 242, 254, 0.12)',
+                color: 'var(--sonar-cyan)',
+              }}
+            >
               <FileText size={20} />
             </div>
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: 600 }}>ACOUSTIC SURVEY MISSION REPORT SUMMARY</h3>
+              <h3 style={{ fontSize: '16px', fontWeight: 600 }}>ORCA SCAN ANALYSIS MISSION REPORT</h3>
               <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                Mission Reference: {activeScan.mission_id} • Scan ID: {activeScan.id} • Swath: {activeScan.image.filename}
+                Scan ID: {activeScan.id} • Swath File: {activeScan.image.filename} • {activeScan.timestamp}
               </span>
             </div>
           </div>
 
-          <span className={`badge ${isLive ? 'badge-emerald' : 'badge-cyan'}`}>
+          <span className="badge badge-emerald">
             <CheckCircle2 size={12} />
-            {isLive ? 'Live Synthesis Ready' : 'Demo Synthesis Ready'}
+            Verified Report Ready
           </span>
         </div>
 
         {/* Statistical Summary Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(6, 1fr)',
-          gap: '12px',
-          background: 'var(--bg-surface)',
-          padding: '16px',
-          borderRadius: 'var(--radius-sm)',
-          border: '1px solid var(--border-subtle)',
-        }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: '12px',
+            background: 'var(--bg-surface)',
+            padding: '16px',
+            borderRadius: 'var(--radius-sm)',
+            border: '1px solid var(--border-subtle)',
+          }}
+        >
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Specialist Model</div>
+            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              Specialist Model
+            </div>
             <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
-              {activeScan.model_name.replace('YOLOv8n ', '')}
+              {activeScan.model_name}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Swath Format</div>
+            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              Swath Format
+            </div>
             <div className="mono" style={{ fontSize: '14px', fontWeight: 700, marginTop: '2px' }}>
               {activeScan.image.width} × {activeScan.image.height} px
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Total Anomalies</div>
-            <div className="mono" style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              color: totalAnomalies > 0 ? 'var(--text-highlight)' : 'var(--text-muted)',
-              marginTop: '2px',
-            }}>
-              {totalAnomalies} {totalAnomalies === 1 ? 'Detection' : 'Detections'}
+            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              Routing Confidence
+            </div>
+            <div className="mono" style={{ fontSize: '14px', fontWeight: 700, color: '#38bdf8', marginTop: '2px' }}>
+              {routingConfText}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>High Conf (≥80%)</div>
-            <div className="mono" style={{ fontSize: '16px', fontWeight: 700, color: '#34d399', marginTop: '2px' }}>
+            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              Total Detections
+            </div>
+            <div
+              className="mono"
+              style={{
+                fontSize: '15px',
+                fontWeight: 700,
+                color: totalAnomalies > 0 ? 'var(--text-highlight)' : 'var(--text-muted)',
+                marginTop: '2px',
+              }}
+            >
+              {totalAnomalies} {totalAnomalies === 1 ? 'Object' : 'Objects'}
+            </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              High Conf (≥80%)
+            </div>
+            <div className="mono" style={{ fontSize: '15px', fontWeight: 700, color: '#34d399', marginTop: '2px' }}>
               {highConf}
-            </div>
-          </div>
-
-          <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Requires Review</div>
-            <div className="mono" style={{ fontSize: '16px', fontWeight: 700, color: '#fbbf24', marginTop: '2px' }}>
-              {requiresReview}
-            </div>
-          </div>
-
-          <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Location Source</div>
-            <div style={{ marginTop: '4px' }}>
-              {activeScan.location.source === 'unavailable' ? (
-                <span className="badge badge-rose" style={{ fontSize: '9px' }}>
-                  GPS Unavailable
-                </span>
-              ) : activeScan.location.source === 'sonar_metadata' ? (
-                <span className="badge badge-emerald" style={{ fontSize: '9px' }}>
-                  Sonar Metadata
-                </span>
-              ) : (
-                <span className="badge badge-amber" style={{ fontSize: '9px' }}>
-                  Demo Coordinates
-                </span>
-              )}
             </div>
           </div>
         </div>

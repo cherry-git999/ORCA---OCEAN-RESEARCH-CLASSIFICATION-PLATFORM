@@ -7,10 +7,9 @@ import {
   Map,
   FileText,
   History,
-  Radio,
   Sliders,
   ChevronRight,
-  ShieldAlert,
+  Compass,
 } from 'lucide-react';
 
 export type NavRoute = 'dashboard' | 'analyze' | 'detections' | 'geospatial' | 'reports' | 'history';
@@ -26,102 +25,110 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onNavigate,
   onOpenStatusModal,
 }) => {
-  const { backendStatus, isLiveAnalysis } = useSonar();
+  const { backendStatus, scans } = useSonar();
+
   const navItems = [
     {
       id: 'dashboard' as NavRoute,
       label: 'Mission Overview',
       icon: LayoutDashboard,
-      badge: 'PS 57',
     },
     {
       id: 'analyze' as NavRoute,
       label: 'Analyze Scan',
       icon: UploadCloud,
-      badge: 'Dropzone',
     },
     {
       id: 'detections' as NavRoute,
       label: 'Detection Workspace',
       icon: Crosshair,
-      badge: 'AI Core',
     },
     {
       id: 'geospatial' as NavRoute,
       label: 'Geospatial View',
       icon: Map,
-      badge: 'Map',
     },
     {
       id: 'reports' as NavRoute,
       label: 'Reports',
       icon: FileText,
-      badge: 'Export',
     },
     {
       id: 'history' as NavRoute,
       label: 'Scan History',
       icon: History,
-      badge: 'Logs',
+      badge: scans.length > 0 ? `${scans.length}` : undefined,
     },
   ];
 
   return (
     <aside className="app-sidebar">
       {/* Brand Header */}
-      <div style={{
-        padding: '20px 20px',
-        borderBottom: '1px solid var(--border-subtle)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-      }}>
-        <div style={{
-          width: '38px',
-          height: '38px',
-          borderRadius: 'var(--radius-sm)',
-          background: 'linear-gradient(135deg, var(--sonar-cyan) 0%, var(--sonar-blue) 100%)',
+      <div
+        style={{
+          padding: '20px 20px',
+          borderBottom: '1px solid var(--border-subtle)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: 'var(--sonar-cyan-glow)',
-          flexShrink: 0,
-        }}>
-          <Radio size={22} color="#040812" className="sonar-ping" />
+          gap: '12px',
+        }}
+      >
+        <div
+          style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'linear-gradient(135deg, var(--sonar-cyan) 0%, var(--sonar-blue) 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: 'var(--sonar-cyan-glow)',
+            flexShrink: 0,
+          }}
+        >
+          <Compass size={24} color="#040812" />
         </div>
         <div className="sidebar-text" style={{ overflow: 'hidden' }}>
-          <h1 style={{
-            fontSize: '16px',
-            fontWeight: 700,
-            letterSpacing: '-0.02em',
-            color: 'var(--text-primary)',
-            whiteSpace: 'nowrap',
-          }}>
-            AquaSentinel <span style={{ color: 'var(--sonar-cyan)', fontWeight: 800 }}>AI</span>
+          <h1
+            style={{
+              fontSize: '18px',
+              fontWeight: 800,
+              letterSpacing: '0.04em',
+              color: 'var(--text-primary)',
+              whiteSpace: 'nowrap',
+              margin: 0,
+            }}
+          >
+            ORCA
           </h1>
-          <div style={{
-            fontSize: '10px',
-            color: 'var(--text-secondary)',
-            letterSpacing: '0.04em',
-            textTransform: 'uppercase',
-            whiteSpace: 'nowrap',
-            marginTop: '1px',
-          }}>
-            Marine Sonar Intelligence
+          <div
+            style={{
+              fontSize: '9.5px',
+              color: 'var(--text-secondary)',
+              letterSpacing: '0.02em',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+              marginTop: '2px',
+              fontWeight: 600,
+            }}
+          >
+            Multimodal Underwater Intelligence Platform
           </div>
         </div>
       </div>
 
       {/* Nav List */}
       <nav style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <div style={{
-          padding: '0 8px 8px 8px',
-          fontSize: '10px',
-          fontWeight: 600,
-          color: 'var(--text-muted)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.08em',
-        }}>
+        <div
+          style={{
+            padding: '0 8px 8px 8px',
+            fontSize: '10px',
+            fontWeight: 600,
+            color: 'var(--text-muted)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+          }}
+        >
           Operations & Intelligence
         </div>
 
@@ -168,51 +175,56 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   {item.label}
                 </span>
               </div>
-              <ChevronRight
-                size={14}
-                style={{
-                  opacity: isActive ? 1 : 0,
-                  transform: isActive ? 'translateX(0)' : 'translateX(-4px)',
-                  transition: 'all 0.2s ease',
-                }}
-              />
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {item.badge && (
+                  <span className="badge badge-muted mono" style={{ fontSize: '9px', padding: '1px 5px' }}>
+                    {item.badge}
+                  </span>
+                )}
+                <ChevronRight
+                  size={14}
+                  style={{
+                    opacity: isActive ? 1 : 0,
+                    transform: isActive ? 'translateX(0)' : 'translateX(-4px)',
+                    transition: 'all 0.2s ease',
+                  }}
+                />
+              </div>
             </button>
           );
         })}
       </nav>
 
-      {/* Bottom Status Card */}
-      <div style={{
-        padding: '14px',
-        borderTop: '1px solid var(--border-subtle)',
-        background: 'rgba(7, 14, 28, 0.6)',
-      }}>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '8px',
-          padding: '10px',
-          borderRadius: 'var(--radius-sm)',
-          background: 'var(--bg-surface)',
-          border: '1px solid var(--border-subtle)',
-        }}>
+      {/* Bottom Operational Status Card */}
+      <div
+        style={{
+          padding: '14px',
+          borderTop: '1px solid var(--border-subtle)',
+          background: 'rgba(7, 14, 28, 0.6)',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            padding: '10px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border-subtle)',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span className={`status-dot ${backendStatus === 'online' ? 'online' : 'danger'}`}></span>
-              FastAPI Backend
+              FastAPI Engine
             </span>
-            <span className={`badge ${backendStatus === 'online' ? 'badge-emerald' : 'badge-rose'}`} style={{ fontSize: '9px', padding: '1px 5px' }}>
+            <span
+              className={`badge ${backendStatus === 'online' ? 'badge-emerald' : 'badge-rose'}`}
+              style={{ fontSize: '9px', padding: '1px 5px' }}
+            >
               {backendStatus === 'online' ? 'ONLINE' : 'OFFLINE'}
-            </span>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span className={`status-dot ${isLiveAnalysis ? 'online' : 'warning'}`}></span>
-              {isLiveAnalysis ? 'Live Pipeline' : 'Preview Mode'}
-            </span>
-            <span className={`badge ${isLiveAnalysis ? 'badge-cyan' : 'badge-amber'}`} style={{ fontSize: '9px', padding: '1px 5px' }}>
-              {isLiveAnalysis ? 'ACTIVE' : 'DEMO'}
             </span>
           </div>
 

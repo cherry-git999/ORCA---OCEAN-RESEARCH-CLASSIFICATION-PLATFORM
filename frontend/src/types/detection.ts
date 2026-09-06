@@ -1,4 +1,4 @@
-export type TargetClass = 'Pipeline' | 'Human';
+export type TargetClass = 'Pipeline' | 'Human' | 'Hardware' | string;
 
 export type ReviewStatus = 'pending' | 'confirmed' | 'rejected' | 'review_required';
 
@@ -13,12 +13,12 @@ export interface BoundingBox {
 
 export interface Detection {
   id: string;
-  class_id: number;
-  class_name: TargetClass;
+  class_id?: number;
+  class_name: string; // "Pipeline", "Human", or Hardware classes ("cap", "clip", "key", "niddle", "scissor")
   confidence: number; // 0.0 to 1.0
   bbox: BoundingBox;
   model: string;
-  review_status: ReviewStatus;
+  review_status?: ReviewStatus;
   notes?: string;
 }
 
@@ -32,7 +32,7 @@ export interface ImageMeta {
 }
 
 export interface LocationMeta {
-  source: 'demo' | 'sonar_metadata' | 'unavailable';
+  source: 'sonar_metadata' | 'unavailable' | string;
   latitude: number | null;
   longitude: number | null;
   accuracy: number | null;
@@ -43,7 +43,7 @@ export interface LocationMeta {
 export interface SonarScanItem {
   id: string;
   timestamp: string;
-  target: 'pipeline' | 'human';
+  target: 'pipeline' | 'human' | 'hardware' | string;
   model_name: string;
   status: 'Complete' | 'Processing' | 'Pending';
   image: ImageMeta;
@@ -51,10 +51,12 @@ export interface SonarScanItem {
   location: LocationMeta;
   mission_id: string;
   rawFile?: File;
+  routingConfidence?: number;
+  isAutoRouted?: boolean;
 }
 
 export interface ModelInfo {
-  id: 'model1' | 'model2';
+  id: 'model1' | 'model2' | 'model3' | string;
   name: string;
   role: string;
   target: TargetClass;
@@ -70,3 +72,4 @@ export interface MissionStats {
   requiresReview: number;
   currentMissionId: string;
 }
+

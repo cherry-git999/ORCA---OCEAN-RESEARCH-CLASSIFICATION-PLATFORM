@@ -3,7 +3,7 @@ import { useSonar } from '../context/SonarContext';
 import { ScanHistoryTable } from '../components/history/ScanHistoryTable';
 
 interface HistoryPageProps {
-  onNavigate: (route: 'detections') => void;
+  onNavigate: (route: 'detections' | 'analyze') => void;
 }
 
 export const HistoryPage: React.FC<HistoryPageProps> = ({ onNavigate }) => {
@@ -16,6 +16,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ onNavigate }) => {
         activeScanId={activeScanId}
         onSelectScan={(id) => setActiveScanId(id)}
         onOpenWorkspace={() => onNavigate('detections')}
+        onNavigateToAnalyze={() => onNavigate('analyze')}
       />
     </div>
   );
