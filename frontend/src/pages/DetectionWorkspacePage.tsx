@@ -3,6 +3,7 @@ import { useSonar } from '../context/SonarContext';
 import { SonarImageViewer } from '../components/sonar/SonarImageViewer';
 import { FilterControlPanel } from '../components/detections/FilterControlPanel';
 import { DetectionDetailPanel } from '../components/detections/DetectionDetailPanel';
+import { CleanupInspectionOrderCard } from '../components/detections/CleanupInspectionOrderCard';
 import { DetectionTable } from '../components/detections/DetectionTable';
 import { EmptyState } from '../components/common/EmptyState';
 import { downloadAnnotatedImage } from '../utils/annotatedImageExport';
@@ -263,6 +264,14 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
             </div>
           </div>
 
+          {/* Cleanup / Inspection Order (Model-Aware Priority Ranking) */}
+          <CleanupInspectionOrderCard
+            detections={activeScan.detections}
+            selectedAnomalyId={selectedAnomalyId}
+            onSelectAnomaly={(id) => setSelectedAnomalyId(id)}
+            target={activeScan.target}
+          />
+
           {/* Itemized Detections (Section 9) */}
           <div className="glass-panel" style={{ padding: '18px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
@@ -337,6 +346,7 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
               detection={selectedDetection}
               onUpdateReviewStatus={updateReviewStatus}
               isLiveAnalysis={true}
+              target={activeScan.target}
             />
           )}
 
@@ -401,6 +411,7 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
         onTargetClassFilterChange={(cls) => updateFilters({ targetClass: cls })}
         reviewStatusFilter={filters.reviewStatus}
         onReviewStatusFilterChange={(st) => updateFilters({ reviewStatus: st })}
+        target={activeScan.target}
       />
     </div>
   );

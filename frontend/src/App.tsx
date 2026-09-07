@@ -10,12 +10,13 @@ import { GeospatialPage } from './pages/GeospatialPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { HardwarePage } from './pages/HardwarePage';
+import { DatasetLabPage } from './pages/DatasetLabPage';
 
 export const App: React.FC = () => {
   // Sync route with URL hash for easy browser navigation & bookmarking
   const getInitialRoute = (): NavRoute => {
     const hash = window.location.hash.replace('#/', '').replace('#', '');
-    const validRoutes: NavRoute[] = ['dashboard', 'analyze', 'detections', 'geospatial', 'reports', 'history', 'hardware'];
+    const validRoutes: NavRoute[] = ['dashboard', 'analyze', 'detections', 'geospatial', 'reports', 'history', 'hardware', 'dataset-lab'];
     return validRoutes.includes(hash as NavRoute) ? (hash as NavRoute) : 'dashboard';
   };
 
@@ -25,7 +26,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#/', '').replace('#', '');
-      const validRoutes: NavRoute[] = ['dashboard', 'analyze', 'detections', 'geospatial', 'reports', 'history', 'hardware'];
+      const validRoutes: NavRoute[] = ['dashboard', 'analyze', 'detections', 'geospatial', 'reports', 'history', 'hardware', 'dataset-lab'];
       if (validRoutes.includes(hash as NavRoute)) {
         setCurrentRoute(hash as NavRoute);
       }
@@ -56,6 +57,8 @@ export const App: React.FC = () => {
         return <HistoryPage onNavigate={handleNavigate} />;
       case 'hardware':
         return <HardwarePage onNavigate={handleNavigate} />;
+      case 'dataset-lab':
+        return <DatasetLabPage onNavigate={handleNavigate} />;
       default:
         return <DashboardPage onNavigate={handleNavigate} />;
     }

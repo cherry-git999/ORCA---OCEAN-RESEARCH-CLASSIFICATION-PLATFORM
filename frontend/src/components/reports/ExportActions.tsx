@@ -4,6 +4,8 @@ import { FileJson, FileSpreadsheet, Image as ImageIcon, FileText, ShieldCheck, L
 import { downloadAnnotatedImage } from '../../utils/annotatedImageExport';
 import { downloadScanPdfReport } from '../../utils/pdfExport';
 
+import { getSimulatedPriority, getSortedDetectionsByPriority } from '../../utils/detectionPriority';
+
 interface ExportActionsProps {
   scan: SonarScanItem;
 }
@@ -13,10 +15,13 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
 
   // Client-side JSON download
   const handleDownloadJson = () => {
+    const rankedDetections = getSortedDetectionsByPriority(scan.detections, scan.target);
+
     const reportData = {
       report_metadata: {
         generator: 'ORCA — Multimodal Underwater Intelligence Platform',
         mode: 'OPERATIONAL_INFERENCE_PAYLOAD',
+        intelligence_layer: 'SIMULATED_PRIORITY_ORDER_V1',
         generated_at: new Date().toISOString(),
       },
       scan_id: scan.id,
@@ -38,22 +43,42 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
         medium_confidence: scan.detections.filter((d) => d.confidence >= 0.5 && d.confidence < 0.8).length,
         low_confidence: scan.detections.filter((d) => d.confidence < 0.5).length,
       },
+      cleanup_inspection_order: rankedDetections.map((item) => ({
+        rank: item.rank,
+        anomaly_id: item.detection.id,
+        class_name: item.detection.class_name,
+        priority: item.priorityData.priority,
+        severity: item.priorityData.severity,
+        hazard: item.priorityData.hazard,
+        location_risk: item.priorityData.locationRisk,
+        recommended_action: item.priorityData.recommendedAction,
+        is_human: item.priorityData.isHuman,
+      })),
       is_hardware_scan: scan.isHardwareScan || false,
       ...(scan.isHardwareScan && { hardware_distance: scan.hardwareDistance || '11.28 cm' }),
-      detections: scan.detections.map((d) => ({
-        id: d.id,
-        class: d.class_name,
-        confidence: d.confidence,
-        ...(scan.isHardwareScan && { distance_of_the_object: d.distance || scan.hardwareDistance || '11.28 cm' }),
-        bbox: {
-          x1: d.bbox.x1,
-          y1: d.bbox.y1,
-          x2: d.bbox.x2,
-          y2: d.bbox.y2,
-          width: Math.abs(d.bbox.x2 - d.bbox.x1),
-          height: Math.abs(d.bbox.y2 - d.bbox.y1),
-        },
-      })),
+      detections: scan.detections.map((d) => {
+        const p = getSimulatedPriority(d, scan.target);
+        return {
+          id: d.id,
+          class: d.class_name,
+          confidence: d.confidence,
+          hazard: p.hazard,
+          location_risk: p.locationRisk,
+          priority: p.priority,
+          severity: p.severity,
+          recommended_action: p.recommendedAction,
+          review_status: d.review_status || 'pending',
+          ...(scan.isHardwareScan && { distance_of_the_object: d.distance || scan.hardwareDistance || '11.28 cm' }),
+          bbox: {
+            x1: d.bbox.x1,
+            y1: d.bbox.y1,
+            x2: d.bbox.x2,
+            y2: d.bbox.y2,
+            width: Math.abs(d.bbox.x2 - d.bbox.x1),
+            height: Math.abs(d.bbox.y2 - d.bbox.y1),
+          },
+        };
+      }),
     };
 
     const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
@@ -70,15 +95,60 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
   // Client-side CSV download
   const handleDownloadCsv = () => {
     const isHw = !!scan.isHardwareScan;
+    const rankedDetections = getSortedDetectionsByPriority(scan.detections, scan.target);
+    const rankMap = new Map(rankedDetections.map((r) => [r.detection.id, r.rank]));
+
     const headers = isHw
-      ? ['Anomaly_ID', 'Class_Label', 'Confidence', 'Distance_Of_The_Object', 'X1', 'Y1', 'X2', 'Y2', 'Width_PX', 'Height_PX']
-      : ['Anomaly_ID', 'Class_Label', 'Confidence', 'X1', 'Y1', 'X2', 'Y2', 'Width_PX', 'Height_PX'];
+      ? [
+          'Anomaly_ID',
+          'Class_Label',
+          'Confidence',
+          'Priority',
+          'Hazard',
+          'Location_Risk',
+          'Recommended_Action',
+          'Inspection_Rank',
+          'Review_Status',
+          'Distance_Of_The_Object',
+          'X1',
+          'Y1',
+          'X2',
+          'Y2',
+          'Width_PX',
+          'Height_PX',
+        ]
+      : [
+          'Anomaly_ID',
+          'Class_Label',
+          'Confidence',
+          'Priority',
+          'Hazard',
+          'Location_Risk',
+          'Recommended_Action',
+          'Inspection_Rank',
+          'Review_Status',
+          'X1',
+          'Y1',
+          'X2',
+          'Y2',
+          'Width_PX',
+          'Height_PX',
+        ];
 
     const rows = scan.detections.map((d) => {
+      const p = getSimulatedPriority(d, scan.target);
+      const rank = rankMap.get(d.id) || 1;
+
       const row: (string | number)[] = [
         d.id,
         d.class_name,
         d.confidence.toFixed(4),
+        p.priority,
+        p.hazard,
+        p.locationRisk,
+        `"${p.recommendedAction.replace(/"/g, '""')}"`,
+        rank,
+        (d.review_status || 'pending').toUpperCase(),
       ];
       if (isHw) {
         row.push(d.distance || scan.hardwareDistance || '11.28 cm');

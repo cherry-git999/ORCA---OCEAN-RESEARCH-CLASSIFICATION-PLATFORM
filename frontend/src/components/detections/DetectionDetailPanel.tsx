@@ -1,17 +1,20 @@
 import React, { useState, useRef } from 'react';
 import { Detection, ReviewStatus } from '../../types/detection';
-import { Crosshair, Check, X, Clock, ShieldCheck } from 'lucide-react';
+import { Crosshair, Check, X, Clock, ShieldAlert } from 'lucide-react';
 import { ReviewConfirmationModal } from './ReviewConfirmationModal';
+import { getSimulatedPriority } from '../../utils/detectionPriority';
 
 interface DetectionDetailPanelProps {
   detection: Detection | undefined;
   onUpdateReviewStatus: (detectionId: string, status: ReviewStatus) => void;
   isLiveAnalysis?: boolean;
+  target?: string;
 }
 
 export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
   detection,
   onUpdateReviewStatus,
+  target = 'pipeline',
 }) => {
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
@@ -232,6 +235,145 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
             </div>
           </div>
         </div>
+
+        {/* DETECTION INTELLIGENCE (UI-Only Simulated Layer) */}
+        {(() => {
+          const priorityData = getSimulatedPriority(detection, target);
+          return (
+            <div
+              id="detection-intelligence-panel"
+              data-testid="detection-intelligence-panel"
+              style={{
+                background: 'var(--bg-surface-elevated)',
+                border: '1px solid var(--border-medium)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '14px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <ShieldAlert size={15} color="var(--sonar-cyan)" />
+                  <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    DETECTION INTELLIGENCE
+                  </span>
+                </div>
+                <span className="badge badge-muted" style={{ fontSize: '9px' }}>
+                  UI SIMULATION • MODEL-AWARE
+                </span>
+              </div>
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
+                  gap: '10px',
+                  background: 'var(--bg-surface)',
+                  padding: '10px 12px',
+                  borderRadius: 'var(--radius-xs)',
+                  border: '1px solid var(--border-subtle)',
+                }}
+              >
+                {/* Field 1: Hazard */}
+                <div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Hazard</div>
+                  <div style={{ marginTop: '3px' }}>
+                    <span
+                      id="det-intel-hazard-badge"
+                      className="badge"
+                      style={{
+                        fontSize: '10.5px',
+                        fontWeight: 700,
+                        background:
+                          priorityData.hazard === 'Very High'
+                            ? 'rgba(244, 63, 94, 0.15)'
+                            : priorityData.hazard === 'High'
+                            ? 'rgba(249, 115, 22, 0.15)'
+                            : 'rgba(0, 242, 254, 0.1)',
+                        color:
+                          priorityData.hazard === 'Very High'
+                            ? 'var(--status-rose)'
+                            : priorityData.hazard === 'High'
+                            ? 'var(--status-amber)'
+                            : 'var(--sonar-cyan)',
+                        border: `1px solid ${
+                          priorityData.hazard === 'Very High'
+                            ? 'rgba(244, 63, 94, 0.3)'
+                            : priorityData.hazard === 'High'
+                            ? 'rgba(249, 115, 22, 0.3)'
+                            : 'rgba(0, 242, 254, 0.3)'
+                        }`,
+                      }}
+                    >
+                      {priorityData.hazard}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Field 2: Location Risk */}
+                <div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Location Risk</div>
+                  <div style={{ marginTop: '3px' }}>
+                    <span
+                      id="det-intel-location-badge"
+                      className="badge mono"
+                      style={{
+                        fontSize: '10.5px',
+                        fontWeight: 600,
+                        background: 'rgba(255, 255, 255, 0.04)',
+                        color: priorityData.locationRisk === 'High' ? 'var(--status-rose)' : 'var(--text-primary)',
+                        border: '1px solid var(--border-subtle)',
+                      }}
+                    >
+                      {priorityData.locationRisk}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Field 3: Priority */}
+                <div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Priority Score</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                    <span
+                      id="det-intel-priority-score"
+                      className="mono"
+                      style={{ fontSize: '16px', fontWeight: 800, color: priorityData.severityColor }}
+                    >
+                      {priorityData.priority}
+                    </span>
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>/ 100</span>
+                    <span
+                      id="det-intel-severity-badge"
+                      className="badge mono"
+                      style={{
+                        fontSize: '9px',
+                        background: `${priorityData.severityColor}20`,
+                        color: priorityData.severityColor,
+                        border: `1px solid ${priorityData.severityColor}40`,
+                        padding: '2px 5px',
+                      }}
+                    >
+                      {priorityData.severityLabel}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Field 4: Recommended Action */}
+                <div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Recommended Action</div>
+                  <div
+                    id="det-intel-action-text"
+                    style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-highlight)', marginTop: '3px', lineHeight: '1.3' }}
+                  >
+                    {priorityData.recommendedAction}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Manual Expert Review (Repositioned Higher, Section 14, 15, 16) */}
         <div

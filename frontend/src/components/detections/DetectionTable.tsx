@@ -1,6 +1,7 @@
 import React from 'react';
 import { Detection, TargetClass, ReviewStatus } from '../../types/detection';
 import { Search, SlidersHorizontal, Crosshair, ArrowUpDown } from 'lucide-react';
+import { getSimulatedPriority } from '../../utils/detectionPriority';
 
 interface DetectionTableProps {
   detections: Detection[];
@@ -12,6 +13,7 @@ interface DetectionTableProps {
   onTargetClassFilterChange: (cls: 'All' | TargetClass) => void;
   reviewStatusFilter: 'All' | ReviewStatus;
   onReviewStatusFilterChange: (st: 'All' | ReviewStatus) => void;
+  target?: string;
 }
 
 export const DetectionTable: React.FC<DetectionTableProps> = ({
@@ -24,6 +26,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
   onTargetClassFilterChange,
   reviewStatusFilter,
   onReviewStatusFilterChange,
+  target = 'pipeline',
 }) => {
   return (
     <div className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -86,6 +89,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
               <th style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--text-secondary)' }}># ID</th>
               <th style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--text-secondary)' }}>CLASS</th>
               <th style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--text-secondary)' }}>CONFIDENCE</th>
+              <th style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--sonar-cyan)' }}>PRIORITY</th>
               <th style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--text-secondary)' }}>X1</th>
               <th style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--text-secondary)' }}>Y1</th>
               <th style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--text-secondary)' }}>X2</th>
@@ -98,7 +102,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
           <tbody>
             {detections.length === 0 ? (
               <tr>
-                <td colSpan={10} style={{ padding: '24px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                <td colSpan={11} style={{ padding: '24px', textAlign: 'center', color: 'var(--text-muted)' }}>
                   No candidate anomalies match the active filters or no detections found in this scan.
                 </td>
               </tr>
@@ -107,6 +111,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
                 const isSelected = selectedAnomalyId === det.id;
                 const width = Math.round(Math.abs(det.bbox.x2 - det.bbox.x1));
                 const height = Math.round(Math.abs(det.bbox.y2 - det.bbox.y1));
+                const priorityData = getSimulatedPriority(det, target);
 
                 const confPercent = (det.confidence * 100).toFixed(2);
                 let confBadge = 'badge-rose';
@@ -147,6 +152,25 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
                         <span className="mono" style={{ fontWeight: 600 }}>{confPercent}%</span>
                         <span className={`badge ${confBadge}`} style={{ fontSize: '9px' }}>
                           {det.confidence >= 0.8 ? 'HIGH' : det.confidence >= 0.5 ? 'MED' : 'LOW'}
+                        </span>
+                      </div>
+                    </td>
+                    <td style={{ padding: '10px 14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span className="mono" style={{ fontWeight: 800, color: priorityData.severityColor }}>
+                          {priorityData.priority}
+                        </span>
+                        <span
+                          className="badge mono"
+                          style={{
+                            fontSize: '9px',
+                            background: `${priorityData.severityColor}18`,
+                            color: priorityData.severityColor,
+                            border: `1px solid ${priorityData.severityColor}35`,
+                            padding: '1px 4px',
+                          }}
+                        >
+                          {priorityData.severityLabel}
                         </span>
                       </div>
                     </td>

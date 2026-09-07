@@ -26,9 +26,11 @@ import {
 } from '../utils/hardwareStorage';
 import { checkHardwareConnectivity, fetchLatestHardwareCapture, HARDWARE_BASE_URL } from '../api/hardwareApi';
 import { extractSonarDistance } from '../utils/sonarDistanceParser';
+import { NavRoute } from '../components/layout/Sidebar';
+import { LivePipelineCard } from '../components/hardware/LivePipelineCard';
 
 interface HardwarePageProps {
-  onNavigate?: (route: 'dashboard' | 'analyze' | 'detections' | 'geospatial' | 'reports' | 'history' | 'hardware') => void;
+  onNavigate?: (route: NavRoute) => void;
 }
 
 export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
@@ -484,6 +486,12 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
           <span>{intakeError}</span>
         </div>
       )}
+
+      {/* 2.5 Live Data Pipeline Flow Component */}
+      <LivePipelineCard
+        connectionState={connectionState}
+        hasCapture={!!capture}
+      />
 
       {/* 3. Empty State (When no hardware capture received yet) */}
       {!capture && (

@@ -104,3 +104,25 @@ With the FastAPI server running on `http://127.0.0.1:8000`:
 ```bash
 "/media/cherry/External Hardisk/py notebook/xai_env/bin/python" -m backend.tests.test_api_phase7
 ```
+
+---
+
+### 4. Stopping / Killing All Running Terminals & Servers
+
+To immediately kill and terminate all running frontend and backend development servers (releasing ports `8000` and `5173`):
+
+**Recommended One-Liner:**
+```bash
+fuser -k 8000/tcp 5173/tcp
+```
+
+**Alternative (kill by process name):**
+```bash
+pkill -f "uvicorn" ; pkill -f "vite"
+```
+
+**Force Kill All (if processes are hanging):**
+```bash
+kill -9 $(lsof -t -i:8000 -i:5173 2>/dev/null) 2>/dev/null || pkill -9 -f "uvicorn|vite"
+```
+

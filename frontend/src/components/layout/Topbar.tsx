@@ -52,6 +52,11 @@ export const Topbar: React.FC<TopbarProps> = ({ currentRoute, onOpenStatusModal 
           title: 'HARDWARE',
           subtitle: 'Physical Hardware Capture & Sonar Intake transmitted from the connected underwater system.',
         };
+      case 'dataset-lab':
+        return {
+          title: 'DATASET LAB',
+          subtitle: 'Upload • Validate • Adapt • Evaluate',
+        };
     }
   };
 

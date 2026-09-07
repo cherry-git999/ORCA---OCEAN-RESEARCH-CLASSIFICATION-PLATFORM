@@ -3,7 +3,8 @@ import { useSonar } from '../context/SonarContext';
 import { ExportActions } from '../components/reports/ExportActions';
 import { JsonReportViewer } from '../components/reports/JsonReportViewer';
 import { EmptyState } from '../components/common/EmptyState';
-import { FileText, CheckCircle2, Compass, Radio, Target } from 'lucide-react';
+import { FileText, CheckCircle2, Compass, Radio, Target, ListOrdered } from 'lucide-react';
+import { getSimulatedPriority, getSortedDetectionsByPriority } from '../utils/detectionPriority';
 
 export const ReportsPage: React.FC = () => {
   const { activeScan, scans, activeScanId, setActiveScanId } = useSonar();
@@ -265,6 +266,158 @@ export const ReportsPage: React.FC = () => {
         </div>
       </div>
 
+      {/* CLEANUP / INSPECTION ORDER (Operational Intelligence Layer) */}
+      {(() => {
+        const rankedDetections = getSortedDetectionsByPriority(activeScan.detections, activeScan.target);
+        const isHumanContext = (activeScan.target || '').toLowerCase().includes('human');
+
+        return (
+          <div
+            id="report-cleanup-order-card"
+            data-testid="report-cleanup-order-card"
+            className="glass-panel"
+            style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div
+                  style={{
+                    padding: '7px',
+                    borderRadius: 'var(--radius-sm)',
+                    background: 'rgba(0, 242, 254, 0.12)',
+                    color: 'var(--sonar-cyan)',
+                  }}
+                >
+                  <ListOrdered size={18} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+                    CLEANUP / INSPECTION ORDER
+                  </h3>
+                  <p style={{ fontSize: '11.5px', color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
+                    {isHumanContext
+                      ? 'Ranked anomaly queue for verification, welfare assessment, and operator confirmation.'
+                      : 'Ranked anomaly queue for priority hazard mitigation, retrieval, and structural inspection.'}
+                  </p>
+                </div>
+              </div>
+
+              <span className="badge badge-cyan mono" style={{ fontSize: '11px' }}>
+                {rankedDetections.length} Prioritized Targets
+              </span>
+            </div>
+
+            {rankedDetections.length === 0 ? (
+              <div
+                id="report-cleanup-empty"
+                style={{
+                  padding: '20px',
+                  textAlign: 'center',
+                  color: 'var(--text-muted)',
+                  background: 'var(--bg-surface)',
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1px dashed var(--border-subtle)',
+                  fontSize: '12px',
+                }}
+              >
+                No detections available for prioritization.
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                  gap: '10px',
+                }}
+              >
+                {rankedDetections.map((item) => (
+                  <div
+                    key={item.detection.id}
+                    style={{
+                      background: 'var(--bg-surface)',
+                      border: '1px solid var(--border-subtle)',
+                      borderRadius: 'var(--radius-sm)',
+                      padding: '12px 16px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      gap: '12px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                      <span
+                        className="mono"
+                        style={{
+                          width: '24px',
+                          height: '24px',
+                          borderRadius: '50%',
+                          background: item.rank === 1 ? 'rgba(244, 63, 94, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                          border: `1px solid ${item.rank === 1 ? 'rgba(244, 63, 94, 0.4)' : 'var(--border-subtle)'}`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '11px',
+                          fontWeight: 800,
+                          color: item.rank === 1 ? '#fda4af' : 'var(--text-secondary)',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {item.rank}
+                      </span>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                          <span className="mono" style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '12.5px' }}>
+                            {item.detection.id}
+                          </span>
+                          <span style={{ color: 'var(--text-muted)' }}>—</span>
+                          <span style={{ fontWeight: 700, color: 'var(--sonar-cyan)', fontSize: '12.5px' }}>
+                            {item.detection.class_name.toUpperCase()}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                          {item.priorityData.recommendedAction}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'flex-end' }}>
+                        <span
+                          style={{
+                            width: '7px',
+                            height: '7px',
+                            borderRadius: '50%',
+                            background: item.priorityData.severityColor,
+                            display: 'inline-block',
+                          }}
+                        />
+                        <span className="mono" style={{ fontSize: '14px', fontWeight: 800, color: item.priorityData.severityColor }}>
+                          {item.priorityData.priority}
+                        </span>
+                        <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>/ 100</span>
+                      </div>
+                      <span
+                        className="badge mono"
+                        style={{
+                          fontSize: '8.5px',
+                          background: `${item.priorityData.severityColor}18`,
+                          color: item.priorityData.severityColor,
+                          border: `1px solid ${item.priorityData.severityColor}40`,
+                          padding: '1px 4px',
+                          marginTop: '2px',
+                        }}
+                      >
+                        {item.priorityData.severityLabel}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
       {/* Mission Detection Breakdown Table */}
       <div
         id="mission-detection-breakdown-panel"
@@ -366,6 +519,10 @@ export const ReportsPage: React.FC = () => {
                     Distance of the Object
                   </th>
                 )}
+                <th style={{ padding: '12px 14px' }}>Hazard</th>
+                <th style={{ padding: '12px 14px' }}>Location Risk</th>
+                <th style={{ padding: '12px 14px', color: 'var(--sonar-cyan)' }}>Priority</th>
+                <th style={{ padding: '12px 14px' }}>Recommended Action</th>
                 <th style={{ padding: '12px 14px' }}>Review Status</th>
                 <th style={{ padding: '12px 14px' }}>Bounding Box [X1, Y1, X2, Y2]</th>
               </tr>
@@ -374,7 +531,7 @@ export const ReportsPage: React.FC = () => {
               {activeScan.detections.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={isHardware ? 7 : 6}
+                    colSpan={isHardware ? 11 : 10}
                     style={{
                       padding: '32px 16px',
                       textAlign: 'center',
@@ -391,6 +548,7 @@ export const ReportsPage: React.FC = () => {
                   const isMedConf = det.confidence >= 0.5 && det.confidence < 0.8;
                   const confColor = isHighConf ? 'var(--status-emerald)' : isMedConf ? '#38bdf8' : 'var(--status-amber)';
                   const objectDistance = det.distance || activeScan.hardwareDistance || '11.28 cm';
+                  const priorityData = getSimulatedPriority(det, activeScan.target);
 
                   return (
                     <tr
@@ -470,6 +628,74 @@ export const ReportsPage: React.FC = () => {
                           </div>
                         </td>
                       )}
+
+                      {/* Hazard */}
+                      <td style={{ padding: '12px 14px' }}>
+                        <span
+                          className="badge"
+                          style={{
+                            fontSize: '10px',
+                            fontWeight: 700,
+                            background:
+                              priorityData.hazard === 'Very High'
+                                ? 'rgba(244, 63, 94, 0.15)'
+                                : priorityData.hazard === 'High'
+                                ? 'rgba(249, 115, 22, 0.15)'
+                                : 'rgba(0, 242, 254, 0.1)',
+                            color:
+                              priorityData.hazard === 'Very High'
+                                ? 'var(--status-rose)'
+                                : priorityData.hazard === 'High'
+                                ? 'var(--status-amber)'
+                                : 'var(--sonar-cyan)',
+                            border: `1px solid ${
+                              priorityData.hazard === 'Very High'
+                                ? 'rgba(244, 63, 94, 0.3)'
+                                : priorityData.hazard === 'High'
+                                ? 'rgba(249, 115, 22, 0.3)'
+                                : 'rgba(0, 242, 254, 0.3)'
+                            }`,
+                          }}
+                        >
+                          {priorityData.hazard}
+                        </span>
+                      </td>
+
+                      {/* Location Risk */}
+                      <td style={{ padding: '12px 14px' }}>
+                        <span className="mono" style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+                          {priorityData.locationRisk}
+                        </span>
+                      </td>
+
+                      {/* Priority */}
+                      <td style={{ padding: '12px 14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span
+                            className="mono"
+                            style={{ fontWeight: 800, fontSize: '13px', color: priorityData.severityColor }}
+                          >
+                            {priorityData.priority}
+                          </span>
+                          <span
+                            className="badge mono"
+                            style={{
+                              fontSize: '8.5px',
+                              background: `${priorityData.severityColor}18`,
+                              color: priorityData.severityColor,
+                              border: `1px solid ${priorityData.severityColor}35`,
+                              padding: '1px 4px',
+                            }}
+                          >
+                            {priorityData.severityLabel}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Recommended Action */}
+                      <td style={{ padding: '12px 14px', fontSize: '11px', color: 'var(--text-primary)', maxWidth: '160px' }}>
+                        {priorityData.recommendedAction}
+                      </td>
 
                       <td style={{ padding: '12px 14px' }}>
                         <span

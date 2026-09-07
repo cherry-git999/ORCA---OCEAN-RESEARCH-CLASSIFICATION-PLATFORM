@@ -6,6 +6,7 @@
  */
 
 import { SonarScanItem } from '../types/detection';
+import { getSimulatedPriority, getSortedDetectionsByPriority } from './detectionPriority';
 
 interface PdfScanData {
   filename: string;
@@ -22,6 +23,17 @@ interface PdfScanData {
     confidence: number;
     distance?: string;
     bbox: { x1: number; y1: number; x2: number; y2: number };
+    hazard?: string;
+    locationRisk?: string;
+    priority?: number;
+    recommendedAction?: string;
+  }>;
+  rankedOrder?: Array<{
+    rank: number;
+    id: string;
+    className: string;
+    priority: number;
+    recommendedAction: string;
   }>;
   location?: {
     latitude: number | null;
@@ -132,40 +144,43 @@ function buildPdfDocument(data: PdfScanData): Uint8Array {
 
   curY -= 15;
 
+  // Section Header: DETECTION SUMMARY
+  streamParts.push('BT');
+  streamParts.push('/F2 11 Tf');
+  streamParts.push('0.0 0.45 0.7 rg');
+  streamParts.push(`40 ${curY} Td`);
+  streamParts.push(`(${escapePdfText('DETECTION SUMMARY & OPERATIONAL INTELLIGENCE')}) Tj`);
+  streamParts.push('ET');
+
+  curY -= 16;
+
   // Detections Table Header
   streamParts.push('0.94 0.96 0.98 rg');
   streamParts.push(`40 ${curY - 6} 515 22 re f`);
 
   streamParts.push('BT');
-  streamParts.push('/F2 9 Tf');
+  streamParts.push('/F2 8.5 Tf');
   streamParts.push('0.2 0.25 0.35 rg');
-
-  if (data.isHardwareScan) {
-    streamParts.push(`45 ${curY} Td (INDEX) Tj`);
-    streamParts.push('50 0 Td (CLASS LABEL) Tj');
-    streamParts.push('110 0 Td (CONFIDENCE) Tj');
-    streamParts.push('95 0 Td (OBJECT DISTANCE) Tj');
-    streamParts.push('100 0 Td (BOUNDING BOX) Tj');
-  } else {
-    streamParts.push(`50 ${curY} Td (INDEX) Tj`);
-    streamParts.push('80 0 Td (CLASS LABEL) Tj');
-    streamParts.push('140 0 Td (CONFIDENCE) Tj');
-    streamParts.push('140 0 Td (BOUNDING BOX [x1, y1, x2, y2]) Tj');
-  }
+  streamParts.push(`45 ${curY} Td (ID / OBJECT) Tj`);
+  streamParts.push('95 0 Td (CONFIDENCE) Tj');
+  streamParts.push('75 0 Td (HAZARD) Tj');
+  streamParts.push('70 0 Td (PRIORITY) Tj');
+  streamParts.push('60 0 Td (LOCATION RISK) Tj');
+  streamParts.push('80 0 Td (RECOMMENDED ACTION) Tj');
   streamParts.push('ET');
 
-  curY -= 26;
+  curY -= 24;
 
   if (data.detections.length === 0) {
     streamParts.push('BT');
-    streamParts.push('/F1 10 Tf');
+    streamParts.push('/F1 9 Tf');
     streamParts.push('0.45 0.45 0.5 rg');
-    streamParts.push(`50 ${curY} Td (No candidate detections found in this scan above threshold.) Tj`);
+    streamParts.push(`45 ${curY} Td (No candidate detections found in this scan above threshold.) Tj`);
     streamParts.push('ET');
-    curY -= 24;
+    curY -= 22;
   } else {
     data.detections.forEach((det, idx) => {
-      if (curY < 80) return; // Prevent page overflow
+      if (curY < 120) return; // Prevent page overflow
 
       // Alternating row background
       if (idx % 2 === 1) {
@@ -173,46 +188,41 @@ function buildPdfDocument(data: PdfScanData): Uint8Array {
         streamParts.push(`40 ${curY - 5} 515 20 re f`);
       }
 
-      const confStr = `${(det.confidence * 100).toFixed(2)}%`;
-      const bboxStr = `[${det.bbox.x1.toFixed(1)}, ${det.bbox.y1.toFixed(1)}, ${det.bbox.x2.toFixed(1)}, ${det.bbox.y2.toFixed(1)}]`;
+      const idObjStr = `${det.id || `#${idx + 1}`} ${det.class_name.toUpperCase()}`;
+      const confStr = `${(det.confidence * 100).toFixed(1)}%`;
+      const hazardStr = det.hazard || 'Medium';
+      const priorityStr = det.priority != null ? `${det.priority} / 100` : '--';
+      const locRiskStr = det.locationRisk || 'Context-based';
+      const actionStr = det.recommendedAction || 'Inspect Anomaly';
 
       streamParts.push('BT');
-      streamParts.push('/F2 9 Tf');
-      streamParts.push('0.3 0.3 0.4 rg');
+      streamParts.push('/F2 8.5 Tf');
+      streamParts.push('0.05 0.2 0.4 rg');
+      streamParts.push(`45 ${curY} Td (${escapePdfText(idObjStr)}) Tj`);
 
-      if (data.isHardwareScan) {
-        streamParts.push(`45 ${curY} Td (#${idx + 1}) Tj`);
+      streamParts.push('/F1 8.5 Tf');
+      streamParts.push('0.1 0.6 0.3 rg');
+      streamParts.push(`95 0 Td (${escapePdfText(confStr)}) Tj`);
 
-        streamParts.push('/F2 10 Tf');
-        streamParts.push('0.05 0.25 0.5 rg');
-        streamParts.push(`50 0 Td (${escapePdfText(det.class_name.toUpperCase())}) Tj`);
-
-        streamParts.push('/F1 10 Tf');
-        streamParts.push('0.1 0.6 0.3 rg');
-        streamParts.push(`110 0 Td (${escapePdfText(confStr)}) Tj`);
-
-        streamParts.push('/F2 9 Tf');
-        streamParts.push('0.0 0.5 0.7 rg');
-        streamParts.push(`95 0 Td (${escapePdfText(det.distance || data.hardwareDistance || '11.28 cm')}) Tj`);
-
-        streamParts.push('/F1 8 Tf');
-        streamParts.push('0.3 0.3 0.35 rg');
-        streamParts.push(`100 0 Td (${escapePdfText(bboxStr)}) Tj`);
+      streamParts.push('/F2 8.5 Tf');
+      if (hazardStr === 'Very High' || hazardStr === 'High') {
+        streamParts.push('0.8 0.1 0.2 rg');
       } else {
-        streamParts.push(`50 ${curY} Td (#${idx + 1}) Tj`);
-
-        streamParts.push('/F2 10 Tf');
-        streamParts.push('0.05 0.25 0.5 rg');
-        streamParts.push(`80 0 Td (${escapePdfText(det.class_name.toUpperCase())}) Tj`);
-
-        streamParts.push('/F1 10 Tf');
-        streamParts.push('0.1 0.6 0.3 rg');
-        streamParts.push(`140 0 Td (${escapePdfText(confStr)}) Tj`);
-
-        streamParts.push('/F1 9 Tf');
-        streamParts.push('0.3 0.3 0.35 rg');
-        streamParts.push(`140 0 Td (${escapePdfText(bboxStr)}) Tj`);
+        streamParts.push('0.0 0.5 0.7 rg');
       }
+      streamParts.push(`75 0 Td (${escapePdfText(hazardStr)}) Tj`);
+
+      streamParts.push('/F2 8.5 Tf');
+      streamParts.push('0.0 0.3 0.6 rg');
+      streamParts.push(`70 0 Td (${escapePdfText(priorityStr)}) Tj`);
+
+      streamParts.push('/F1 8.5 Tf');
+      streamParts.push('0.3 0.3 0.4 rg');
+      streamParts.push(`60 0 Td (${escapePdfText(locRiskStr)}) Tj`);
+
+      streamParts.push('/F2 8 Tf');
+      streamParts.push('0.1 0.1 0.15 rg');
+      streamParts.push(`80 0 Td (${escapePdfText(actionStr)}) Tj`);
       streamParts.push('ET');
 
       // Row separator
@@ -220,7 +230,43 @@ function buildPdfDocument(data: PdfScanData): Uint8Array {
       streamParts.push('0.5 w');
       streamParts.push(`40 ${curY - 6} m 555 ${curY - 6} l S`);
 
-      curY -= 24;
+      curY -= 22;
+    });
+  }
+
+  // Section Header: CLEANUP / INSPECTION ORDER
+  curY -= 10;
+  streamParts.push('BT');
+  streamParts.push('/F2 11 Tf');
+  streamParts.push('0.0 0.45 0.7 rg');
+  streamParts.push(`40 ${curY} Td`);
+  streamParts.push(`(${escapePdfText('CLEANUP / INSPECTION ORDER (PRIORITIZED QUEUE)')}) Tj`);
+  streamParts.push('ET');
+
+  curY -= 18;
+
+  if (!data.rankedOrder || data.rankedOrder.length === 0) {
+    streamParts.push('BT');
+    streamParts.push('/F1 9 Tf');
+    streamParts.push('0.45 0.45 0.5 rg');
+    streamParts.push(`45 ${curY} Td (No detections available for prioritization.) Tj`);
+    streamParts.push('ET');
+    curY -= 20;
+  } else {
+    data.rankedOrder.forEach((item) => {
+      if (curY < 60) return;
+
+      streamParts.push('BT');
+      streamParts.push('/F2 8.5 Tf');
+      streamParts.push('0.8 0.1 0.2 rg');
+      streamParts.push(`45 ${curY} Td (${escapePdfText(`${item.rank}.`)}) Tj`);
+
+      streamParts.push('/F1 8.5 Tf');
+      streamParts.push('0.1 0.15 0.2 rg');
+      streamParts.push(`16 0 Td (${escapePdfText(`${item.id} — ${item.className.toUpperCase()} — Priority ${item.priority}  |  ${item.recommendedAction}`)}) Tj`);
+      streamParts.push('ET');
+
+      curY -= 16;
     });
   }
 
@@ -289,6 +335,8 @@ function buildPdfDocument(data: PdfScanData): Uint8Array {
  * Generates and downloads a client-side PDF analysis report for a given SonarScanItem.
  */
 export function downloadScanPdfReport(scan: SonarScanItem): void {
+  const ranked = getSortedDetectionsByPriority(scan.detections, scan.target);
+
   const pdfData: PdfScanData = {
     filename: scan.image.filename,
     timestamp: scan.timestamp,
@@ -298,12 +346,26 @@ export function downloadScanPdfReport(scan: SonarScanItem): void {
     isAutoRouted: scan.isAutoRouted,
     isHardwareScan: scan.isHardwareScan,
     hardwareDistance: scan.hardwareDistance,
-    detections: scan.detections.map((d) => ({
-      id: d.id,
-      class_name: d.class_name,
-      confidence: d.confidence,
-      distance: d.distance || scan.hardwareDistance,
-      bbox: d.bbox,
+    detections: scan.detections.map((d) => {
+      const p = getSimulatedPriority(d, scan.target);
+      return {
+        id: d.id,
+        class_name: d.class_name,
+        confidence: d.confidence,
+        distance: d.distance || scan.hardwareDistance,
+        bbox: d.bbox,
+        hazard: p.hazard,
+        locationRisk: p.locationRisk,
+        priority: p.priority,
+        recommendedAction: p.recommendedAction,
+      };
+    }),
+    rankedOrder: ranked.map((r) => ({
+      rank: r.rank,
+      id: r.detection.id,
+      className: r.detection.class_name,
+      priority: r.priorityData.priority,
+      recommendedAction: r.priorityData.recommendedAction,
     })),
     location: scan.location,
   };

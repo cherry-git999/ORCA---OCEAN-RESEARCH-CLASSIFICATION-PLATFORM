@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SonarScanItem } from '../../types/detection';
 import { Copy, Check, Code, ShieldCheck } from 'lucide-react';
+import { getSimulatedPriority, getSortedDetectionsByPriority } from '../../utils/detectionPriority';
 
 interface JsonReportViewerProps {
   scan: SonarScanItem;
@@ -8,6 +9,8 @@ interface JsonReportViewerProps {
 
 export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
   const [copied, setCopied] = useState<boolean>(false);
+
+  const ranked = getSortedDetectionsByPriority(scan.detections, scan.target);
 
   const reportPayload = {
     scan_id: scan.id,
@@ -33,24 +36,41 @@ export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
       description: scan.location.description || 'Offshore Marine Grid (Estimated - Not highly accurate)',
     },
     detection_count: scan.detections.length,
+    cleanup_inspection_order: ranked.map((r) => ({
+      rank: r.rank,
+      id: r.detection.id,
+      class_name: r.detection.class_name,
+      priority: r.priorityData.priority,
+      hazard: r.priorityData.hazard,
+      location_risk: r.priorityData.locationRisk,
+      recommended_action: r.priorityData.recommendedAction,
+      is_human: r.priorityData.isHuman,
+    })),
     is_hardware_scan: scan.isHardwareScan || false,
     ...(scan.isHardwareScan && { hardware_distance: scan.hardwareDistance || '11.28 cm' }),
-    detections: scan.detections.map((d) => ({
-      id: d.id,
-      class: d.class_name,
-      confidence: d.confidence,
-      ...(scan.isHardwareScan && { distance_of_the_object: d.distance || scan.hardwareDistance || '11.28 cm' }),
-      bbox: {
-        x1: d.bbox.x1,
-        y1: d.bbox.y1,
-        x2: d.bbox.x2,
-        y2: d.bbox.y2,
-        width: Math.abs(d.bbox.x2 - d.bbox.x1),
-        height: Math.abs(d.bbox.y2 - d.bbox.y1),
-      },
-      review_status: d.review_status,
-      notes: d.notes,
-    })),
+    detections: scan.detections.map((d) => {
+      const p = getSimulatedPriority(d, scan.target);
+      return {
+        id: d.id,
+        class: d.class_name,
+        confidence: d.confidence,
+        hazard: p.hazard,
+        location_risk: p.locationRisk,
+        priority: p.priority,
+        recommended_action: p.recommendedAction,
+        ...(scan.isHardwareScan && { distance_of_the_object: d.distance || scan.hardwareDistance || '11.28 cm' }),
+        bbox: {
+          x1: d.bbox.x1,
+          y1: d.bbox.y1,
+          x2: d.bbox.x2,
+          y2: d.bbox.y2,
+          width: Math.abs(d.bbox.x2 - d.bbox.x1),
+          height: Math.abs(d.bbox.y2 - d.bbox.y1),
+        },
+        review_status: d.review_status,
+        notes: d.notes,
+      };
+    }),
   };
 
   const jsonString = JSON.stringify(reportPayload, null, 2);

@@ -12,9 +12,10 @@ import {
   Compass,
   CheckCircle2,
   HardDrive,
+  FlaskConical,
 } from 'lucide-react';
 
-export type NavRoute = 'dashboard' | 'analyze' | 'detections' | 'geospatial' | 'reports' | 'history' | 'hardware';
+export type NavRoute = 'dashboard' | 'analyze' | 'detections' | 'geospatial' | 'reports' | 'history' | 'hardware' | 'dataset-lab';
 
 interface SidebarProps {
   currentRoute: NavRoute;
@@ -65,6 +66,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'hardware' as NavRoute,
       label: 'Hardware',
       icon: HardDrive,
+    },
+    {
+      id: 'dataset-lab' as NavRoute,
+      label: 'Dataset Lab',
+      icon: FlaskConical,
     },
   ];
 
