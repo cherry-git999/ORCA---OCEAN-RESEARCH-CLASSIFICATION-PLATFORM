@@ -90,7 +90,7 @@ export const ReviewConfirmationModal: React.FC<ReviewConfirmationModalProps> = (
           {icon}
         </div>
 
-        <span className={`badge ${badgeClass}`} style={{ fontSize: '10px', marginBottom: '10px' }}>
+        <span className={`badge ${badgeClass}`} style={{ fontSize: '11.5px', marginBottom: '10px' }}>
           {badgeText}
         </span>
 
@@ -98,7 +98,7 @@ export const ReviewConfirmationModal: React.FC<ReviewConfirmationModalProps> = (
           id="review-modal-title"
           data-testid="review-modal-title"
           style={{
-            fontSize: '17px',
+            fontSize: '19px',
             fontWeight: 800,
             color: 'var(--text-primary, #ffffff)',
             letterSpacing: '0.04em',
@@ -112,7 +112,7 @@ export const ReviewConfirmationModal: React.FC<ReviewConfirmationModalProps> = (
           id="review-modal-message"
           data-testid="review-modal-message"
           style={{
-            fontSize: '13px',
+            fontSize: '14.5px',
             color: 'var(--text-secondary, #94a3b8)',
             lineHeight: '1.5',
             margin: '0 0 22px 0',
@@ -129,7 +129,7 @@ export const ReviewConfirmationModal: React.FC<ReviewConfirmationModalProps> = (
           style={{
             width: '100%',
             padding: '12px',
-            fontSize: '13px',
+            fontSize: '14.5px',
             fontWeight: 700,
             justifyContent: 'center',
             gap: '8px',

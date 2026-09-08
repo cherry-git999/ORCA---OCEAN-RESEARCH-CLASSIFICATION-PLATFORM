@@ -83,10 +83,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       </div>
 
       <div style={{ maxWidth: '420px' }}>
-        <h4 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+        <h4 style={{ fontSize: '16.5px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
           {displayTitle}
         </h4>
-        <p style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+        <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
           {displayDesc}
         </p>
       </div>

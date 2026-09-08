@@ -63,10 +63,10 @@ export const LivePipelineCard: React.FC<LivePipelineCardProps> = ({
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-              <h3 style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.04em', margin: 0, color: 'var(--text-primary)' }}>
+              <h3 style={{ fontSize: '14.5px', fontWeight: 800, letterSpacing: '0.04em', margin: 0, color: 'var(--text-primary)' }}>
                 LIVE DATA PIPELINE
               </h3>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 500 }}>
+              <span style={{ fontSize: '12.5px', color: 'var(--text-muted)', fontWeight: 500 }}>
                 • Real-Time Hardware Data Flow
               </span>
             </div>
@@ -77,7 +77,7 @@ export const LivePipelineCard: React.FC<LivePipelineCardProps> = ({
           <span
             className="badge mono"
             style={{
-              fontSize: '10px',
+              fontSize: '11.5px',
               background: isHardwareConnected && isApiConnected ? 'rgba(16, 185, 129, 0.15)' : 'rgba(0, 242, 254, 0.1)',
               color: isHardwareConnected && isApiConnected ? 'var(--status-emerald)' : 'var(--sonar-cyan)',
               border: `1px solid ${isHardwareConnected && isApiConnected ? 'rgba(16, 185, 129, 0.3)' : 'rgba(0, 242, 254, 0.3)'}`,
@@ -130,11 +130,11 @@ export const LivePipelineCard: React.FC<LivePipelineCardProps> = ({
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                   <NodeIcon size={12} color="var(--sonar-cyan)" style={{ flexShrink: 0 }} />
-                  <span className="mono" style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+                  <span className="mono" style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
                     {node.label}
                   </span>
                 </div>
-                <span style={{ fontSize: '9px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
+                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
                   {node.sub}
                 </span>
               </div>
@@ -164,7 +164,7 @@ export const LivePipelineCard: React.FC<LivePipelineCardProps> = ({
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
           gap: '8px',
-          fontSize: '11px',
+          fontSize: '12.5px',
         }}
       >
         {/* Indicator 1: Hardware Connected */}
@@ -250,7 +250,7 @@ export const LivePipelineCard: React.FC<LivePipelineCardProps> = ({
           gap: '10px',
           paddingTop: '8px',
           borderTop: '1px solid var(--border-subtle)',
-          fontSize: '11px',
+          fontSize: '12.5px',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>

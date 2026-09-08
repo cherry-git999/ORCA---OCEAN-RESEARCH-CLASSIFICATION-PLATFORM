@@ -53,26 +53,26 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Sparkles size={15} color="var(--sonar-cyan)" />
-          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
             Core Capabilities
           </span>
         </div>
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          <span className="badge badge-cyan" style={{ fontSize: '11px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <Cpu size={12} />
+          <span className="badge badge-cyan" style={{ fontSize: '12.5px', padding: '5px 12px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <Cpu size={13} />
             <span>Multimodal AI Intelligence</span>
           </span>
-          <span className="badge badge-emerald" style={{ fontSize: '11px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <Target size={12} />
+          <span className="badge badge-emerald" style={{ fontSize: '12.5px', padding: '5px 12px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <Target size={13} />
             <span>Reliable Detection & Classification</span>
           </span>
-          <span className="badge badge-purple" style={{ fontSize: '11px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <Crosshair size={12} />
+          <span className="badge badge-purple" style={{ fontSize: '12.5px', padding: '5px 12px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <Crosshair size={13} />
             <span>Geospatial Intelligence</span>
           </span>
-          <span className="badge badge-amber" style={{ fontSize: '11px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <FileSearch size={12} />
+          <span className="badge badge-amber" style={{ fontSize: '12.5px', padding: '5px 12px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <FileSearch size={13} />
             <span>Automated Analysis & Reporting</span>
           </span>
         </div>
@@ -97,13 +97,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
             <span className={`badge ${backendStatus === 'online' ? 'badge-emerald' : 'badge-rose'}`}>
               {backendStatus === 'online' ? 'SYSTEM OPERATIONAL' : 'BACKEND OFFLINE'}
             </span>
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+            <span style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--text-primary)' }}>
               ORCA Multimodal Underwater Intelligence
             </span>
           </div>
 
           {activeScan ? (
-            <div style={{ marginTop: '8px', display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '12px' }}>
+            <div style={{ marginTop: '8px', display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '13.5px' }}>
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>Active Scan: </span>
                 <strong className="mono" style={{ color: 'var(--text-primary)' }}>
@@ -134,7 +134,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
               )}
             </div>
           ) : (
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+            <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)', marginTop: '4px' }}>
               System ready. Ingest a sensor scan image (.pbm, .bpm, .png, .jpg) to execute automated specialist inference.
             </div>
           )}

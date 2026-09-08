@@ -183,7 +183,7 @@ export const MapView: React.FC<MapViewProps> = ({
             align-items: center;
             justify-content: center;
             color: #fff;
-            font-size: 10px;
+            font-size: 11px;
             font-family: var(--font-mono, monospace);
             font-weight: 700;
             transform: translate(-50%, -50%);
@@ -200,23 +200,23 @@ export const MapView: React.FC<MapViewProps> = ({
 
       marker.bindPopup(
         `
-        <div style="font-family: var(--font-body, sans-serif); padding: 4px; min-width: 210px;">
-          <div style="font-weight: 700; font-size: 13px; color: ${color}; margin-bottom: 3px;">
+        <div style="font-family: var(--font-body, sans-serif); padding: 4px; min-width: 220px;">
+          <div style="font-weight: 700; font-size: 14px; color: ${color}; margin-bottom: 3px;">
             #${idx + 1} — ${det.class_name.toUpperCase()}
           </div>
-          <div style="font-size: 11px; color: #94a3b8; margin-bottom: 2px;">
+          <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">
             ID: <strong style="color: #fff;">${det.id}</strong> • Conf: <strong style="color: #34d399;">${Math.round(
           det.confidence * 100
         )}%</strong>
           </div>
-          ${modelName ? `<div style="font-size: 10px; color: #38bdf8; margin-bottom: 2px;">Model: <strong>${modelName}</strong></div>` : ''}
-          ${scanName ? `<div style="font-size: 10px; color: #94a3b8; margin-bottom: 4px; font-family: monospace;">Scan: ${scanName}</div>` : ''}
-          <div style="font-size: 10px; color: #cbd5e1; margin-top: 4px; font-family: monospace; background: rgba(0,0,0,0.4); padding: 5px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.06);">
-            <span style="color: #94a3b8; font-size: 9px; text-transform: uppercase;">Geospatial Reference:</span><br />
+          ${modelName ? `<div style="font-size: 11.5px; color: #38bdf8; margin-bottom: 2px;">Model: <strong>${modelName}</strong></div>` : ''}
+          ${scanName ? `<div style="font-size: 11.5px; color: #94a3b8; margin-bottom: 4px; font-family: monospace;">Scan: ${scanName}</div>` : ''}
+          <div style="font-size: 11.5px; color: #cbd5e1; margin-top: 4px; font-family: monospace; background: rgba(0,0,0,0.4); padding: 5px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.06);">
+            <span style="color: #94a3b8; font-size: 11px; text-transform: uppercase;">Geospatial Reference:</span><br />
             Lat: ${markerLat > 0 ? markerLat.toFixed(4) + '° N' : Math.abs(markerLat).toFixed(4) + '° S'}<br />
             Lon: ${markerLng > 0 ? markerLng.toFixed(4) + '° E' : Math.abs(markerLng).toFixed(4) + '° W'}
           </div>
-          <div style="font-size: 9px; color: #fbbf24; margin-top: 4px; font-weight: 500;">
+          <div style="font-size: 11.5px; color: #fbbf24; margin-top: 4px; font-weight: 500;">
             ${ACCURACY_DISCLAIMER}
           </div>
         </div>
@@ -269,7 +269,7 @@ export const MapView: React.FC<MapViewProps> = ({
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Navigation size={18} color="var(--sonar-cyan)" />
-          <h3 style={{ fontSize: '14px', fontWeight: 600, margin: 0, letterSpacing: '0.04em' }}>
+          <h3 style={{ fontSize: '15px', fontWeight: 600, margin: 0, letterSpacing: '0.04em' }}>
             ACOUSTIC & OPTICAL GEOSPATIAL CHART
           </h3>
         </div>
@@ -289,7 +289,7 @@ export const MapView: React.FC<MapViewProps> = ({
             <button
               onClick={() => setBasemapMode('ocean')}
               className={`btn btn-xs ${basemapMode === 'ocean' ? 'btn-primary' : 'btn-ghost'}`}
-              style={{ fontSize: '10px', padding: '3px 8px', borderRadius: '4px' }}
+              style={{ fontSize: '11.5px', padding: '4px 9px', borderRadius: '4px' }}
               title="ESRI Ocean & Marine Bathymetry (No API Key Required)"
             >
               <span>🌊 Ocean Bathymetry</span>
@@ -297,7 +297,7 @@ export const MapView: React.FC<MapViewProps> = ({
             <button
               onClick={() => setBasemapMode('satellite')}
               className={`btn btn-xs ${basemapMode === 'satellite' ? 'btn-primary' : 'btn-ghost'}`}
-              style={{ fontSize: '10px', padding: '3px 8px', borderRadius: '4px' }}
+              style={{ fontSize: '11.5px', padding: '4px 9px', borderRadius: '4px' }}
               title="ESRI High-Resolution Satellite (No API Key Required)"
             >
               <span>🛰️ Satellite</span>
@@ -305,14 +305,14 @@ export const MapView: React.FC<MapViewProps> = ({
             <button
               onClick={() => setBasemapMode('osm')}
               className={`btn btn-xs ${basemapMode === 'osm' ? 'btn-primary' : 'btn-ghost'}`}
-              style={{ fontSize: '10px', padding: '3px 8px', borderRadius: '4px' }}
+              style={{ fontSize: '11.5px', padding: '4px 9px', borderRadius: '4px' }}
               title="OpenStreetMap Marine View (No API Key Required)"
             >
               <span>🗺️ OSM</span>
             </button>
           </div>
 
-          <span className="badge badge-cyan" style={{ fontSize: '10px' }}>
+          <span className="badge badge-cyan" style={{ fontSize: '11.5px' }}>
             OFFSHORE WATER
           </span>
         </div>
@@ -323,11 +323,11 @@ export const MapView: React.FC<MapViewProps> = ({
         style={{
           background: 'rgba(245, 158, 11, 0.08)',
           borderBottom: '1px solid rgba(245, 158, 11, 0.2)',
-          padding: '7px 16px',
+          padding: '8px 16px',
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          fontSize: '11px',
+          fontSize: '12.5px',
           color: '#fbbf24',
           zIndex: 10,
         }}
@@ -355,18 +355,18 @@ export const MapView: React.FC<MapViewProps> = ({
             padding: '12px 14px',
             zIndex: 500,
             boxShadow: 'var(--shadow-md)',
-            maxWidth: '300px',
+            maxWidth: '320px',
             backdropFilter: 'blur(8px)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
             <Compass size={14} color="var(--sonar-cyan)" />
-            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)' }}>
+            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>
               OFFSHORE TRANSECT TELEMETRY
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '11px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ color: 'var(--text-muted)' }}>Transect ID:</span>
               <span className="mono" style={{ color: 'var(--sonar-cyan)' }}>
@@ -388,7 +388,7 @@ export const MapView: React.FC<MapViewProps> = ({
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ color: 'var(--text-muted)' }}>Accuracy:</span>
-              <span style={{ color: '#fbbf24', fontSize: '10px' }}>{ACCURACY_DISCLAIMER}</span>
+              <span style={{ color: '#fbbf24', fontSize: '11px' }}>{ACCURACY_DISCLAIMER}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ color: 'var(--text-muted)' }}>Target Pins:</span>

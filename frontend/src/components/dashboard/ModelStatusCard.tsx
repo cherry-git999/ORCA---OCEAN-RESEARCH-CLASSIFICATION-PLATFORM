@@ -56,8 +56,8 @@ export const ModelStatusCard: React.FC<ModelStatusCardProps> = ({
             <Cpu size={18} />
           </div>
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 600 }}>FROZEN SPECIALIST MODELS STATUS</h3>
-            <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Target-Aware PyTorch Ultralytics Checkpoints</p>
+            <h3 style={{ fontSize: '16.5px', fontWeight: 600 }}>FROZEN SPECIALIST MODELS STATUS</h3>
+            <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>Target-Aware PyTorch Ultralytics Checkpoints</p>
           </div>
         </div>
 
@@ -86,12 +86,12 @@ export const ModelStatusCard: React.FC<ModelStatusCardProps> = ({
             >
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                  <span className="mono" style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                     {model.id.toUpperCase()}
                   </span>
                   <div style={{ display: 'flex', gap: '6px' }}>
                     {isCurrentlyActive && (
-                      <span className="badge badge-cyan" style={{ fontSize: '9px' }}>
+                      <span className="badge badge-cyan" style={{ fontSize: '11px' }}>
                         ACTIVE SCAN
                       </span>
                     )}
@@ -99,10 +99,10 @@ export const ModelStatusCard: React.FC<ModelStatusCardProps> = ({
                   </div>
                 </div>
 
-                <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>
                   {model.name}
                 </div>
-                <div style={{ fontSize: '12px', color: 'var(--sonar-cyan)', marginTop: '2px', fontWeight: 500 }}>
+                <div style={{ fontSize: '13px', color: 'var(--sonar-cyan)', marginTop: '2px', fontWeight: 500 }}>
                   Target: {model.target}
                 </div>
               </div>
@@ -117,13 +117,13 @@ export const ModelStatusCard: React.FC<ModelStatusCardProps> = ({
                   gap: '4px',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Architecture:</span>
                   <span className="mono" style={{ color: 'var(--text-secondary)' }}>{model.architecture}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Dataset:</span>
-                  <span style={{ color: 'var(--text-secondary)' }}>{model.dataset}</span>
+                  <span className="mono" style={{ color: 'var(--text-secondary)' }}>{model.dataset}</span>
                 </div>
               </div>
             </div>
@@ -138,7 +138,7 @@ export const ModelStatusCard: React.FC<ModelStatusCardProps> = ({
           borderRadius: 'var(--radius-xs)',
           background: 'rgba(56, 189, 248, 0.05)',
           border: '1px dashed var(--border-subtle)',
-          fontSize: '11px',
+          fontSize: '12.5px',
           color: 'var(--text-muted)',
           display: 'flex',
           alignItems: 'center',

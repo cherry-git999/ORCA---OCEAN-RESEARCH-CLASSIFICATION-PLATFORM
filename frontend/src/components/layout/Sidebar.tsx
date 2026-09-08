@@ -104,7 +104,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="sidebar-text" style={{ overflow: 'hidden' }}>
           <h1
             style={{
-              fontSize: '18px',
+              fontSize: '20px',
               fontWeight: 800,
               letterSpacing: '0.04em',
               color: 'var(--text-primary)',
@@ -116,7 +116,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </h1>
           <div
             style={{
-              fontSize: '9.5px',
+              fontSize: '11px',
               color: 'var(--text-secondary)',
               letterSpacing: '0.02em',
               textTransform: 'uppercase',
@@ -135,7 +135,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div
           style={{
             padding: '0 8px 8px 8px',
-            fontSize: '10px',
+            fontSize: '11.5px',
             fontWeight: 600,
             color: 'var(--text-muted)',
             textTransform: 'uppercase',
@@ -184,14 +184,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <Icon size={18} color={isActive ? 'var(--sonar-cyan)' : 'currentColor'} />
-                <span className="sidebar-text" style={{ fontSize: '13px', fontWeight: isActive ? 600 : 500 }}>
+                <span className="sidebar-text" style={{ fontSize: '14px', fontWeight: isActive ? 600 : 500 }}>
                   {item.label}
                 </span>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 {item.badge && (
-                  <span className="badge badge-muted mono" style={{ fontSize: '9px', padding: '1px 5px' }}>
+                  <span className="badge badge-muted mono" style={{ fontSize: '11px', padding: '2px 6px' }}>
                     {item.badge}
                   </span>
                 )}
@@ -226,10 +226,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <CheckCircle2 size={13} color="var(--sonar-cyan)" />
+            <CheckCircle2 size={14} color="var(--sonar-cyan)" />
             <span
               style={{
-                fontSize: '10px',
+                fontSize: '11.5px',
                 fontWeight: 700,
                 color: 'var(--text-muted)',
                 letterSpacing: '0.06em',
@@ -241,7 +241,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '11px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12.5px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ color: 'var(--text-secondary)' }}>Confirmed</span>
             <span
@@ -304,13 +304,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '12.5px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span className={`status-dot ${backendStatus === 'online' ? 'online' : 'danger'}`}></span>
               FastAPI Engine
             </span>
             <span
               className={`badge ${backendStatus === 'online' ? 'badge-emerald' : 'badge-rose'}`}
-              style={{ fontSize: '9px', padding: '1px 5px' }}
+              style={{ fontSize: '11px', padding: '2px 6px' }}
             >
               {backendStatus === 'online' ? 'ONLINE' : 'OFFLINE'}
             </span>
@@ -319,9 +319,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             onClick={onOpenStatusModal}
             className="btn btn-secondary btn-sm"
-            style={{ width: '100%', marginTop: '4px', fontSize: '11px', padding: '5px' }}
+            style={{ width: '100%', marginTop: '4px', fontSize: '12.5px', padding: '6px' }}
           >
-            <Sliders size={12} />
+            <Sliders size={13} />
             System Telemetry
           </button>
         </div>

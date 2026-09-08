@@ -193,7 +193,7 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
 
           <h2
             style={{
-              fontSize: '17px',
+              fontSize: '19px',
               fontWeight: 800,
               letterSpacing: '0.06em',
               color: 'var(--text-primary, #ffffff)',
@@ -204,7 +204,7 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
             ANALYSIS PIPELINE
           </h2>
 
-          <div style={{ fontSize: '11px', color: 'var(--text-secondary, #94a3b8)' }}>
+          <div style={{ fontSize: '12.5px', color: 'var(--text-secondary, #94a3b8)' }}>
             Multimodal Underwater Intelligence Workflow Executed
           </div>
         </div>
@@ -233,14 +233,14 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)' }}>
+              <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted, #64748b)' }}>
                 01
               </span>
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}>
+                <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}>
                   Image Ingestion
                 </div>
-                <div style={{ fontSize: '10px', color: 'var(--text-secondary, #94a3b8)' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-secondary, #94a3b8)' }}>
                   Acoustic / optical file stream decoded into memory
                 </div>
               </div>
@@ -275,22 +275,22 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)' }}>
+                <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted, #64748b)' }}>
                   02
                 </span>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary, #ffffff)' }}>
+                    <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary, #ffffff)' }}>
                       Image Quality Check
                     </span>
                     <span
                       className={`badge ${isCompleted ? 'badge-emerald' : 'badge-cyan'}`}
-                      style={{ fontSize: '9px', padding: '1px 6px' }}
+                      style={{ fontSize: '11px', padding: '1px 6px' }}
                     >
                       {isCompleted ? '10/10 COMPLETE' : `STEP ${Math.min(activeSubstep, 10)}/10`}
                     </span>
                   </div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-secondary, #94a3b8)' }}>
+                  <div style={{ fontSize: '11.5px', color: 'var(--text-secondary, #94a3b8)' }}>
                     Spatial resolution, dynamic range & acoustic noise suppression
                   </div>
                 </div>
@@ -349,7 +349,7 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
                         justifyContent: 'space-between',
                         padding: '6px 10px',
                         borderRadius: '6px',
-                        fontSize: '11px',
+                        fontSize: '12.5px',
                         background: isStepActive
                           ? 'rgba(0, 242, 254, 0.10)'
                           : isStepDone
@@ -365,9 +365,9 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
                         <span
                           className="mono"
                           style={{
-                            fontSize: '9px',
+                            fontSize: '11px',
                             color: isStepActive ? '#00f2fe' : isStepDone ? '#34d399' : '#64748b',
-                            width: '16px',
+                            width: '18px',
                           }}
                         >
                           {substep.id < 10 ? `0${substep.id}` : substep.id}
@@ -387,7 +387,7 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
                           </div>
                           <div
                             style={{
-                              fontSize: '9px',
+                              fontSize: '11px',
                               color: isStepActive ? '#38bdf8' : '#64748b',
                             }}
                           >
@@ -407,7 +407,7 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
                               display: 'flex',
                               alignItems: 'center',
                               gap: '4px',
-                              fontSize: '9px',
+                              fontSize: '11px',
                               color: '#00f2fe',
                               fontWeight: 600,
                             }}
@@ -416,7 +416,7 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
                             <span>PROCESSING</span>
                           </div>
                         ) : (
-                          <span style={{ fontSize: '9px', color: '#475569' }}>QUEUED</span>
+                          <span style={{ fontSize: '11px', color: '#475569' }}>QUEUED</span>
                         )}
                       </div>
                     </div>
@@ -435,7 +435,7 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  fontSize: '11px',
+                  fontSize: '12.5px',
                   color: '#34d399',
                   fontWeight: 600,
                 }}
@@ -459,14 +459,14 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)' }}>
+              <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted, #64748b)' }}>
                 03
               </span>
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}>
+                <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}>
                   Domain Identification
                 </div>
-                <div style={{ fontSize: '10px', color: 'var(--text-secondary, #94a3b8)' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-secondary, #94a3b8)' }}>
                   Visual invariants extracted via Router V1 (τ = 0.85)
                 </div>
               </div>
@@ -489,14 +489,14 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)' }}>
+              <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted, #64748b)' }}>
                 04
               </span>
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}>
+                <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}>
                   Specialist Model Selected
                 </div>
-                <div style={{ fontSize: '10px', color: 'var(--text-secondary, #94a3b8)' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-secondary, #94a3b8)' }}>
                   Dedicated YOLOv8 checkpoint ({modelName || targetName.toUpperCase()}) engaged
                 </div>
               </div>
@@ -519,14 +519,14 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)' }}>
+              <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted, #64748b)' }}>
                 05
               </span>
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}>
+                <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}>
                   Object Detection
                 </div>
-                <div style={{ fontSize: '10px', color: 'var(--text-secondary, #94a3b8)' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-secondary, #94a3b8)' }}>
                   Inference executed with bounding box coordinate regression
                 </div>
               </div>
@@ -549,14 +549,14 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)' }}>
+              <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted, #64748b)' }}>
                 06
               </span>
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}>
+                <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}>
                   Annotation Generation
                 </div>
-                <div style={{ fontSize: '10px', color: 'var(--text-secondary, #94a3b8)' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-secondary, #94a3b8)' }}>
                   Confidence scoring & geometric label attribution generated
                 </div>
               </div>
@@ -578,7 +578,7 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
             border: '1px solid rgba(0, 242, 254, 0.2)',
             borderRadius: 'var(--radius-sm, 8px)',
             marginBottom: '14px',
-            fontSize: '11px',
+            fontSize: '12.5px',
             flexShrink: 0,
           }}
         >
@@ -601,7 +601,7 @@ export const AnalysisPipelineTransitionModal: React.FC<AnalysisPipelineTransitio
           style={{
             width: '100%',
             padding: '12px',
-            fontSize: '13px',
+            fontSize: '14.5px',
             fontWeight: 700,
             display: 'flex',
             justifyContent: 'center',

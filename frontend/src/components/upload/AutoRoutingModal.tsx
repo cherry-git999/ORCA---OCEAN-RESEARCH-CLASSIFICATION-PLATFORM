@@ -143,7 +143,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
               </div>
               <h2
                 style={{
-                  fontSize: '18px',
+                  fontSize: '20px',
                   fontWeight: 800,
                   letterSpacing: '0.06em',
                   color: 'var(--text-primary, #ffffff)',
@@ -158,7 +158,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  fontSize: '13px',
+                  fontSize: '14.5px',
                   fontWeight: 600,
                   color: domainColor,
                 }}
@@ -183,14 +183,14 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
             >
               {/* Selected Domain */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94a3b8)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <span style={{ fontSize: '13.5px', color: 'var(--text-secondary, #94a3b8)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   Selected Domain
                 </span>
                 <span
                   id="modal-selected-domain"
                   data-testid="modal-selected-domain"
                   style={{
-                    fontSize: '15px',
+                    fontSize: '16.5px',
                     fontWeight: 800,
                     color: domainColor,
                     letterSpacing: '0.05em',
@@ -203,13 +203,13 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
 
               {/* Specialist Model */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94a3b8)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <span style={{ fontSize: '13.5px', color: 'var(--text-secondary, #94a3b8)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   Specialist Model
                 </span>
                 <span
                   id="modal-specialist-model"
                   data-testid="modal-specialist-model"
-                  style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}
+                  style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--text-primary, #ffffff)' }}
                 >
                   {specialistName}
                 </span>
@@ -217,7 +217,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
 
               {/* Routing Confidence */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94a3b8)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <span style={{ fontSize: '13.5px', color: 'var(--text-secondary, #94a3b8)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   Routing Confidence
                 </span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -225,7 +225,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
                     id="modal-routing-confidence"
                     data-testid="modal-routing-confidence"
                     style={{
-                      fontSize: '14px',
+                      fontSize: '15.5px',
                       fontWeight: 800,
                       color: 'var(--text-primary, #ffffff)',
                       fontFamily: 'monospace',
@@ -235,7 +235,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
                   </span>
                   <span
                     className="badge badge-emerald"
-                    style={{ fontSize: '10px', padding: '2px 6px' }}
+                    style={{ fontSize: '11.5px', padding: '2px 6px' }}
                   >
                     CONFIDENT
                   </span>
@@ -246,7 +246,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
             {/* Detection Mechanism Explanation */}
             <p
               style={{
-                fontSize: '12px',
+                fontSize: '13.5px',
                 color: 'var(--text-secondary, #94a3b8)',
                 margin: 0,
                 lineHeight: '1.5',
@@ -264,7 +264,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
               style={{
                 width: '100%',
                 padding: '14px',
-                fontSize: '14px',
+                fontSize: '15px',
                 fontWeight: 700,
                 display: 'flex',
                 justifyContent: 'center',
@@ -307,7 +307,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
               </div>
               <h2
                 style={{
-                  fontSize: '18px',
+                  fontSize: '20px',
                   fontWeight: 800,
                   letterSpacing: '0.06em',
                   color: 'var(--text-primary, #ffffff)',
@@ -317,7 +317,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
               >
                 IMAGE DOMAIN UNCERTAIN
               </h2>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary, #94a3b8)' }}>
+              <div style={{ fontSize: '14.5px', color: 'var(--text-secondary, #94a3b8)' }}>
                 We could not confidently determine the image type.
               </div>
             </div>
@@ -336,21 +336,21 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94a3b8)' }}>Routing Confidence</span>
+                <span style={{ fontSize: '13.5px', color: 'var(--text-secondary, #94a3b8)' }}>Routing Confidence</span>
                 <span
                   id="modal-uncertain-confidence"
                   data-testid="modal-uncertain-confidence"
-                  style={{ fontSize: '13px', fontWeight: 700, color: '#f59e0b', fontFamily: 'monospace' }}
+                  style={{ fontSize: '14.5px', fontWeight: 700, color: '#f59e0b', fontFamily: 'monospace' }}
                 >
                   {confidencePercent}%
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary, #94a3b8)', flexShrink: 0 }}>Reason</span>
+                <span style={{ fontSize: '13.5px', color: 'var(--text-secondary, #94a3b8)', flexShrink: 0 }}>Reason</span>
                 <span
                   id="modal-uncertain-reason"
                   data-testid="modal-uncertain-reason"
-                  style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary, #ffffff)', textAlign: 'right' }}
+                  style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-primary, #ffffff)', textAlign: 'right' }}
                 >
                   {routing.reason === 'degenerate_image'
                     ? 'Image contains insufficient visual information for automatic routing.'
@@ -363,7 +363,7 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
             <div>
               <div
                 style={{
-                  fontSize: '12px',
+                  fontSize: '13.5px',
                   fontWeight: 600,
                   color: 'var(--text-secondary, #94a3b8)',
                   marginBottom: '10px',
@@ -390,8 +390,8 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
                     borderColor: 'var(--sonar-cyan, #00f2fe)',
                   }}
                 >
-                  <span style={{ fontWeight: 700, fontSize: '13px', color: 'var(--sonar-cyan, #00f2fe)' }}>Pipeline</span>
-                  <span style={{ fontSize: '10px', opacity: 0.8 }}>Model 1</span>
+                  <span style={{ fontWeight: 700, fontSize: '14.5px', color: 'var(--sonar-cyan, #00f2fe)' }}>Pipeline</span>
+                  <span style={{ fontSize: '11.5px', opacity: 0.8 }}>Model 1</span>
                 </button>
 
                 <button
@@ -409,8 +409,8 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
                     borderColor: '#f43f5e',
                   }}
                 >
-                  <span style={{ fontWeight: 700, fontSize: '13px', color: '#f43f5e' }}>Human</span>
-                  <span style={{ fontSize: '10px', opacity: 0.8 }}>Model 2</span>
+                  <span style={{ fontWeight: 700, fontSize: '14.5px', color: '#f43f5e' }}>Human</span>
+                  <span style={{ fontSize: '11.5px', opacity: 0.8 }}>Model 2</span>
                 </button>
 
                 <button
@@ -428,8 +428,8 @@ export const AutoRoutingModal: React.FC<AutoRoutingModalProps> = ({
                     borderColor: '#10b981',
                   }}
                 >
-                  <span style={{ fontWeight: 700, fontSize: '13px', color: '#10b981' }}>Hardware</span>
-                  <span style={{ fontSize: '10px', opacity: 0.8 }}>Model 3</span>
+                  <span style={{ fontWeight: 700, fontSize: '14.5px', color: '#10b981' }}>Hardware</span>
+                  <span style={{ fontSize: '11.5px', opacity: 0.8 }}>Model 3</span>
                 </button>
               </div>
             </div>

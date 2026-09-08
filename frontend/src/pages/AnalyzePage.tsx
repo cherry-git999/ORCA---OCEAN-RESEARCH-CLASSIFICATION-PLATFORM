@@ -286,17 +286,17 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span className="badge badge-cyan" style={{ fontSize: '10px' }}>
+            <span className="badge badge-cyan" style={{ fontSize: '11.5px' }}>
               PHYSICAL HARDWARE INTAKE
             </span>
-            <span style={{ fontSize: '13px', color: 'var(--text-primary)', fontWeight: 600 }}>
+            <span style={{ fontSize: '14px', color: 'var(--text-primary)', fontWeight: 600 }}>
               Hardware Image Ingested: <strong className="mono" style={{ color: 'var(--sonar-cyan)' }}>{selectedFile?.name}</strong>
             </span>
           </div>
           {hardwareScanInfo.distance && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Paired Sonar Distance:</span>
-              <span className="mono" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
+              <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Paired Sonar Distance:</span>
+              <span className="mono" style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
                 {hardwareScanInfo.distance}
               </span>
             </div>
@@ -340,10 +340,10 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <Sparkles size={20} color="var(--sonar-cyan)" />
           <div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
+            <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
               AUTOMATIC MODEL SELECTION + SPECIALIST YOLO INFERENCE
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)', marginTop: '2px' }}>
               {detectionMode === 'auto'
                 ? 'Automatic Mode Active: Ingest any sonar or optical image — Router V1 detects domain and routes to specialist model.'
                 : `Manual Override Active: Inference directed specifically to ${detectionMode.toUpperCase()} specialist model.`}
@@ -369,12 +369,12 @@ export const AnalyzePage: React.FC<AnalyzePageProps> = ({ onNavigate }) => {
         >
           <Loader2 size={24} color="var(--sonar-cyan)" className="sonar-ping" />
           <div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
+            <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)' }}>
               {detectionMode === 'auto'
                 ? 'Analyzing visual invariants & selecting specialist model (POST /predict-auto)...'
                 : `Executing ${detectionMode.toUpperCase()} Specialist Detection (POST /predict)...`}
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)', marginTop: '2px' }}>
               Extracting color distribution, saturation variance, edge density, and acoustic backscatter signatures.
             </div>
           </div>

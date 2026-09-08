@@ -132,17 +132,17 @@ export const SonarImageViewer: React.FC<SonarImageViewerProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Crosshair size={16} color="var(--sonar-cyan)" />
-            <span style={{ fontSize: '13px', fontWeight: 600 }}>ACOUSTIC SONAR VIEWPORT</span>
+            <span style={{ fontSize: '14.5px', fontWeight: 600 }}>ACOUSTIC SONAR VIEWPORT</span>
           </div>
-          <span className="badge badge-cyan" style={{ fontSize: '10px' }}>
+          <span className="badge badge-cyan" style={{ fontSize: '11.5px' }}>
             {imageWidth} × {imageHeight} PX
           </span>
           {isRawView ? (
-            <span className="badge badge-amber" style={{ fontSize: '10px' }}>
+            <span className="badge badge-amber" style={{ fontSize: '11.5px' }}>
               RAW CANDIDATES ({detections.length})
             </span>
           ) : (
-            <span className="badge badge-emerald" style={{ fontSize: '10px' }}>
+            <span className="badge badge-emerald" style={{ fontSize: '11.5px' }}>
               FILTERED DETECTIONS ({detections.length})
             </span>
           )}
@@ -150,7 +150,7 @@ export const SonarImageViewer: React.FC<SonarImageViewerProps> = ({
 
         {/* Zoom & Viewport Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)', marginRight: '4px' }}>
+          <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginRight: '4px' }}>
             {Math.round(zoom * 100)}%
           </span>
 
@@ -159,7 +159,7 @@ export const SonarImageViewer: React.FC<SonarImageViewerProps> = ({
               id="btn-focus-anomaly"
               onClick={() => focusOnAnomaly(selectedAnomalyId)}
               className="btn btn-primary btn-sm"
-              style={{ padding: '4px 8px', fontSize: '11px', gap: '4px' }}
+              style={{ padding: '4px 8px', fontSize: '12.5px', gap: '4px' }}
               title="Focus and Center Viewport on Selected Detection"
             >
               <Crosshair size={13} />
@@ -260,7 +260,7 @@ export const SonarImageViewer: React.FC<SonarImageViewerProps> = ({
               const maxDim = Math.max(imageWidth, imageHeight, 640);
               const baseStroke = Math.max(3, Math.round(maxDim / 450));
               const outerStroke = baseStroke + Math.max(2, Math.round(baseStroke * 0.5));
-              const fontSize = Math.max(13, Math.round(maxDim / 85));
+              const fontSize = Math.max(14.5, Math.round(maxDim / 80));
               const cornerRadius = Math.max(2, Math.round(baseStroke * 0.8));
               const cornerCircleR = Math.max(3, Math.round(baseStroke * 0.9));
               const pillH = Math.round(fontSize * 1.55);
@@ -393,7 +393,7 @@ export const SonarImageViewer: React.FC<SonarImageViewerProps> = ({
           pointerEvents: 'none',
         }}>
           <span className="status-dot online" />
-          <span className="mono" style={{ fontSize: '10px', color: 'var(--sonar-cyan)', fontWeight: 600 }}>
+          <span className="mono" style={{ fontSize: '11.5px', color: 'var(--sonar-cyan)', fontWeight: 600 }}>
             OBJECT DETECTION: {detections.length} {detections.length === 1 ? 'CANDIDATE' : 'CANDIDATES'}
           </span>
         </div>
@@ -403,7 +403,7 @@ export const SonarImageViewer: React.FC<SonarImageViewerProps> = ({
           position: 'absolute',
           bottom: '12px',
           right: '14px',
-          fontSize: '11px',
+          fontSize: '12.5px',
           color: 'var(--text-muted)',
           background: 'rgba(7, 14, 28, 0.75)',
           padding: '4px 8px',

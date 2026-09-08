@@ -48,14 +48,14 @@ export const ReportsPage: React.FC = () => {
             gap: '10px',
           }}
         >
-          <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+          <span style={{ fontSize: '13.5px', color: 'var(--text-secondary)' }}>
             Select Analyzed Scan for Report:
           </span>
           <select
             className="form-select mono"
             value={activeScanId}
             onChange={(e) => setActiveScanId(e.target.value)}
-            style={{ padding: '6px 12px', fontSize: '12px', width: 'auto' }}
+            style={{ padding: '6px 12px', fontSize: '13.5px', width: 'auto' }}
           >
             {scans.map((s) => (
               <option key={s.id} value={s.id}>
@@ -82,19 +82,19 @@ export const ReportsPage: React.FC = () => {
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 600, margin: 0 }}>ORCA SCAN ANALYSIS MISSION REPORT</h3>
+                <h3 style={{ fontSize: '17.5px', fontWeight: 600, margin: 0 }}>ORCA SCAN ANALYSIS MISSION REPORT</h3>
                 {isHardware && (
                   <span
                     id="report-hardware-tag"
                     className="badge badge-cyan"
-                    style={{ fontSize: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    style={{ fontSize: '14.5px', display: 'flex', alignItems: 'center', gap: '4px' }}
                   >
                     <Radio size={10} />
                     <span>LIVE HARDWARE SCAN</span>
                   </span>
                 )}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginTop: '4px', fontSize: '11.5px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginTop: '4px', fontSize: '14.5px' }}>
                 <span className="mono" style={{ color: 'var(--text-muted)' }}>
                   <strong>SCAN ID:</strong> {activeScan.id}
                 </span>
@@ -137,40 +137,40 @@ export const ReportsPage: React.FC = () => {
           }}
         >
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '14.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
               Specialist Model
             </div>
-            <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
+            <div style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
               {activeScan.model_name}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '14.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
               Swath Format
             </div>
-            <div className="mono" style={{ fontSize: '14px', fontWeight: 700, marginTop: '2px' }}>
+            <div className="mono" style={{ fontSize: '16.5px', fontWeight: 700, marginTop: '2px' }}>
               {activeScan.image.width} × {activeScan.image.height} px
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '14.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
               Routing Confidence
             </div>
-            <div className="mono" style={{ fontSize: '14px', fontWeight: 700, color: '#38bdf8', marginTop: '2px' }}>
+            <div className="mono" style={{ fontSize: '16.5px', fontWeight: 700, color: '#38bdf8', marginTop: '2px' }}>
               {routingConfText}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '14.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
               Total Detections
             </div>
             <div
               className="mono"
               style={{
-                fontSize: '15px',
+                fontSize: '16.5px',
                 fontWeight: 700,
                 color: totalAnomalies > 0 ? 'var(--text-highlight)' : 'var(--text-muted)',
                 marginTop: '2px',
@@ -181,10 +181,10 @@ export const ReportsPage: React.FC = () => {
           </div>
 
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '14.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
               High Conf (≥80%)
             </div>
-            <div className="mono" style={{ fontSize: '15px', fontWeight: 700, color: '#34d399', marginTop: '2px' }}>
+            <div className="mono" style={{ fontSize: '16.5px', fontWeight: 700, color: '#34d399', marginTop: '2px' }}>
               {highConf}
             </div>
           </div>
@@ -201,23 +201,23 @@ export const ReportsPage: React.FC = () => {
                 padding: '4px 8px',
               }}
             >
-              <div style={{ fontSize: '10px', color: 'var(--sonar-cyan)', textTransform: 'uppercase', fontWeight: 700 }}>
+              <div style={{ fontSize: '14.5px', color: 'var(--sonar-cyan)', textTransform: 'uppercase', fontWeight: 700 }}>
                 Distance of the Object
               </div>
-              <div className="mono" style={{ fontSize: '15px', fontWeight: 800, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
+              <div className="mono" style={{ fontSize: '16.5px', fontWeight: 800, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
                 {activeScan.hardwareDistance || '11.28 cm'}
               </div>
-              <div style={{ fontSize: '9px', color: 'var(--text-muted)', marginTop: '2px' }}>
+              <div style={{ fontSize: '16.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                 (Physical Sonar Intake)
               </div>
             </div>
           )}
 
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '14.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
               Survey Coordinates
             </div>
-            <div className="mono" style={{ fontSize: '11px', fontWeight: 700, color: '#38bdf8', marginTop: '2px' }}>
+            <div className="mono" style={{ fontSize: '16.5px', fontWeight: 700, color: '#38bdf8', marginTop: '2px' }}>
               {activeScan.location.latitude != null
                 ? `${activeScan.location.latitude > 0 ? activeScan.location.latitude.toFixed(2) + '°N' : Math.abs(activeScan.location.latitude).toFixed(2) + '°S'}, ${
                     activeScan.location.longitude != null && activeScan.location.longitude > 0
@@ -226,7 +226,7 @@ export const ReportsPage: React.FC = () => {
                   }`
                 : '15.35°N, 73.45°E'}
             </div>
-            <div style={{ fontSize: '9px', color: '#fbbf24', marginTop: '2px', fontWeight: 500 }}>
+            <div style={{ fontSize: '16.5px', color: '#fbbf24', marginTop: '2px', fontWeight: 500 }}>
               (Estimated - Not highly accurate)
             </div>
           </div>
@@ -249,17 +249,17 @@ export const ReportsPage: React.FC = () => {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Compass size={16} color="var(--sonar-cyan)" />
-            <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+            <div style={{ fontSize: '16.5px', color: 'var(--text-secondary)' }}>
               <strong style={{ color: 'var(--text-primary)' }}>Marine Survey Sector:</strong>{' '}
               {activeScan.location.description || 'Arabian Sea Offshore Basin (Estimated - Not highly accurate)'}
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span className="badge badge-amber" style={{ fontSize: '9px' }}>
+            <span className="badge badge-amber" style={{ fontSize: '16.5px' }}>
               ESTIMATED (APPROXIMATE)
             </span>
-            <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            <span className="mono" style={{ fontSize: '16.5px', color: 'var(--text-muted)' }}>
               Datum: WGS-84 Hydrographic
             </span>
           </div>
@@ -291,10 +291,10 @@ export const ReportsPage: React.FC = () => {
                   <ListOrdered size={18} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+                  <h3 style={{ fontSize: '16.5px', fontWeight: 700, margin: 0, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
                     CLEANUP / INSPECTION ORDER
                   </h3>
-                  <p style={{ fontSize: '11.5px', color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
+                  <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
                     {isHumanContext
                       ? 'Ranked anomaly queue for verification, welfare assessment, and operator confirmation.'
                       : 'Ranked anomaly queue for priority hazard mitigation, retrieval, and structural inspection.'}
@@ -302,7 +302,7 @@ export const ReportsPage: React.FC = () => {
                 </div>
               </div>
 
-              <span className="badge badge-cyan mono" style={{ fontSize: '11px' }}>
+              <span className="badge badge-cyan mono" style={{ fontSize: '16.5px' }}>
                 {rankedDetections.length} Prioritized Targets
               </span>
             </div>
@@ -317,7 +317,7 @@ export const ReportsPage: React.FC = () => {
                   background: 'var(--bg-surface)',
                   borderRadius: 'var(--radius-sm)',
                   border: '1px dashed var(--border-subtle)',
-                  fontSize: '12px',
+                  fontSize: '13.5px',
                 }}
               >
                 No detections available for prioritization.
@@ -356,7 +356,7 @@ export const ReportsPage: React.FC = () => {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '11px',
+                          fontSize: '16.5px',
                           fontWeight: 800,
                           color: item.rank === 1 ? '#fda4af' : 'var(--text-secondary)',
                           flexShrink: 0,
@@ -366,15 +366,15 @@ export const ReportsPage: React.FC = () => {
                       </span>
                       <div style={{ minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                          <span className="mono" style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '12.5px' }}>
+                          <span className="mono" style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '16.5px' }}>
                             {item.detection.id}
                           </span>
                           <span style={{ color: 'var(--text-muted)' }}>—</span>
-                          <span style={{ fontWeight: 700, color: 'var(--sonar-cyan)', fontSize: '12.5px' }}>
+                          <span style={{ fontWeight: 700, color: 'var(--sonar-cyan)', fontSize: '16.5px' }}>
                             {item.detection.class_name.toUpperCase()}
                           </span>
                         </div>
-                        <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                        <div style={{ fontSize: '16.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                           {item.priorityData.recommendedAction}
                         </div>
                       </div>
@@ -391,15 +391,15 @@ export const ReportsPage: React.FC = () => {
                             display: 'inline-block',
                           }}
                         />
-                        <span className="mono" style={{ fontSize: '14px', fontWeight: 800, color: item.priorityData.severityColor }}>
+                        <span className="mono" style={{ fontSize: '16.5px', fontWeight: 800, color: item.priorityData.severityColor }}>
                           {item.priorityData.priority}
                         </span>
-                        <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>/ 100</span>
+                        <span style={{ fontSize: '14.5px', color: 'var(--text-muted)' }}>/ 100</span>
                       </div>
                       <span
                         className="badge mono"
                         style={{
-                          fontSize: '8.5px',
+                          fontSize: '16.5px',
                           background: `${item.priorityData.severityColor}18`,
                           color: item.priorityData.severityColor,
                           border: `1px solid ${item.priorityData.severityColor}40`,
@@ -447,10 +447,10 @@ export const ReportsPage: React.FC = () => {
               <Target size={18} />
             </div>
             <div>
-              <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0, letterSpacing: '0.03em' }}>
+              <h3 style={{ fontSize: '16.5px', fontWeight: 700, margin: 0, letterSpacing: '0.03em' }}>
                 MISSION DETECTION BREAKDOWN
               </h3>
-              <p style={{ fontSize: '11.5px', color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
+              <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
                 Granular object telemetry, confidence scoring, and review status for each identified anomaly.
               </p>
             </div>
@@ -462,17 +462,17 @@ export const ReportsPage: React.FC = () => {
                 id="report-hardware-intake-badge"
                 data-testid="report-hardware-intake-badge"
                 className="badge badge-cyan"
-                style={{ fontSize: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}
+                style={{ fontSize: '14.5px', display: 'flex', alignItems: 'center', gap: '5px' }}
               >
                 <Radio size={11} />
                 <span>PHYSICAL HARDWARE SCAN (DISTANCE ENABLED)</span>
               </span>
             ) : (
-              <span className="badge badge-blue" style={{ fontSize: '10px' }}>
+              <span className="badge badge-blue" style={{ fontSize: '14.5px' }}>
                 STANDARD SWATH SCAN
               </span>
             )}
-            <span className="badge badge-ghost mono" style={{ fontSize: '11px' }}>
+            <span className="badge badge-ghost mono" style={{ fontSize: '16.5px' }}>
               {activeScan.detections.length} Total Targets
             </span>
           </div>
@@ -487,7 +487,7 @@ export const ReportsPage: React.FC = () => {
               width: '100%',
               borderCollapse: 'collapse',
               textAlign: 'left',
-              fontSize: '12px',
+              fontSize: '13.5px',
             }}
           >
             <thead>
@@ -496,7 +496,7 @@ export const ReportsPage: React.FC = () => {
                   background: 'rgba(7, 14, 28, 0.95)',
                   borderBottom: '1px solid var(--border-medium)',
                   color: 'var(--text-muted)',
-                  fontSize: '11px',
+                  fontSize: '16.5px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                 }}
@@ -620,7 +620,7 @@ export const ReportsPage: React.FC = () => {
                               style={{
                                 fontWeight: 800,
                                 color: 'var(--sonar-cyan)',
-                                fontSize: '13px',
+                                fontSize: '14.5px',
                               }}
                             >
                               {objectDistance}
@@ -634,7 +634,7 @@ export const ReportsPage: React.FC = () => {
                         <span
                           className="badge"
                           style={{
-                            fontSize: '10px',
+                            fontSize: '14.5px',
                             fontWeight: 700,
                             background:
                               priorityData.hazard === 'Very High'
@@ -663,7 +663,7 @@ export const ReportsPage: React.FC = () => {
 
                       {/* Location Risk */}
                       <td style={{ padding: '12px 14px' }}>
-                        <span className="mono" style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+                        <span className="mono" style={{ fontSize: '16.5px', color: 'var(--text-secondary)' }}>
                           {priorityData.locationRisk}
                         </span>
                       </td>
@@ -673,14 +673,14 @@ export const ReportsPage: React.FC = () => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <span
                             className="mono"
-                            style={{ fontWeight: 800, fontSize: '13px', color: priorityData.severityColor }}
+                            style={{ fontWeight: 800, fontSize: '14.5px', color: priorityData.severityColor }}
                           >
                             {priorityData.priority}
                           </span>
                           <span
                             className="badge mono"
                             style={{
-                              fontSize: '8.5px',
+                              fontSize: '16.5px',
                               background: `${priorityData.severityColor}18`,
                               color: priorityData.severityColor,
                               border: `1px solid ${priorityData.severityColor}35`,
@@ -693,7 +693,7 @@ export const ReportsPage: React.FC = () => {
                       </td>
 
                       {/* Recommended Action */}
-                      <td style={{ padding: '12px 14px', fontSize: '11px', color: 'var(--text-primary)', maxWidth: '160px' }}>
+                      <td style={{ padding: '12px 14px', fontSize: '16.5px', color: 'var(--text-primary)', maxWidth: '160px' }}>
                         {priorityData.recommendedAction}
                       </td>
 
@@ -706,13 +706,13 @@ export const ReportsPage: React.FC = () => {
                               ? 'badge-rose'
                               : 'badge-amber'
                           }`}
-                          style={{ fontSize: '10px' }}
+                          style={{ fontSize: '14.5px' }}
                         >
                           {det.review_status?.toUpperCase() || 'PENDING'}
                         </span>
                       </td>
 
-                      <td className="mono" style={{ padding: '12px 14px', color: 'var(--text-muted)', fontSize: '11px' }}>
+                      <td className="mono" style={{ padding: '12px 14px', color: 'var(--text-muted)', fontSize: '16.5px' }}>
                         [{det.bbox.x1}, {det.bbox.y1}, {det.bbox.x2}, {det.bbox.y2}]
                       </td>
                     </tr>

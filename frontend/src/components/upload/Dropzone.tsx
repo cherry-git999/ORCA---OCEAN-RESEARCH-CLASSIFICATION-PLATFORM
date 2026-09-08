@@ -108,10 +108,10 @@ export const Dropzone: React.FC<DropzoneProps> = ({
           {isAnalyzing ? <Loader2 size={30} className="sonar-ping" /> : <UploadCloud size={30} />}
         </div>
 
-        <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>
+        <h3 style={{ fontSize: '17.5px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>
           INGEST SENSOR SCAN IMAGE
         </h3>
-        <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '14px' }}>
+        <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)', marginBottom: '14px' }}>
           Drop image file here or <span style={{ color: 'var(--sonar-cyan)', textDecoration: 'underline' }}>Browse Files</span>
         </p>
 
@@ -126,7 +126,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
           }}
         >
           {SUPPORTED_EXTENSIONS.map((ext) => (
-            <span key={ext} className="badge badge-muted" style={{ fontSize: '10px' }}>
+            <span key={ext} className="badge badge-muted" style={{ fontSize: '11.5px' }}>
               {ext.toUpperCase().replace('.', '')}
             </span>
           ))}
@@ -134,7 +134,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
 
         <div
           style={{
-            fontSize: '11px',
+            fontSize: '12.5px',
             color: 'var(--text-muted)',
             marginTop: '12px',
           }}
@@ -155,7 +155,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
             alignItems: 'center',
             gap: '8px',
             color: '#fb7185',
-            fontSize: '12px',
+            fontSize: '13.5px',
           }}
         >
           <AlertCircle size={16} />
@@ -169,7 +169,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <FileImage size={18} color="var(--sonar-cyan)" />
-              <h4 style={{ fontSize: '14px', fontWeight: 600 }}>IMAGE READY FOR ANALYSIS</h4>
+              <h4 style={{ fontSize: '15.5px', fontWeight: 600 }}>IMAGE READY FOR ANALYSIS</h4>
             </div>
             <span className="badge badge-emerald">
               <CheckCircle size={12} />
@@ -190,26 +190,26 @@ export const Dropzone: React.FC<DropzoneProps> = ({
             }}
           >
             <div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Filename</div>
-              <div className="mono" style={{ fontSize: '12px', fontWeight: 600, marginTop: '2px', wordBreak: 'break-all' }}>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Filename</div>
+              <div className="mono" style={{ fontSize: '13.5px', fontWeight: 600, marginTop: '2px', wordBreak: 'break-all' }}>
                 {selectedFile.name}
               </div>
             </div>
             <div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Resolution</div>
-              <div className="mono" style={{ fontSize: '12px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Resolution</div>
+              <div className="mono" style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
                 {previewData.width} × {previewData.height} px
               </div>
             </div>
             <div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Type</div>
-              <div style={{ fontSize: '12px', marginTop: '2px' }}>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Type</div>
+              <div style={{ fontSize: '13.5px', marginTop: '2px' }}>
                 {previewData.formatDescription}
               </div>
             </div>
             <div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>File Size</div>
-              <div className="mono" style={{ fontSize: '12px', marginTop: '2px' }}>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>File Size</div>
+              <div className="mono" style={{ fontSize: '13.5px', marginTop: '2px' }}>
                 {Math.round(selectedFile.size / 1024)} KB
               </div>
             </div>
@@ -241,7 +241,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
                 background: 'rgba(4, 8, 18, 0.85)',
                 padding: '3px 8px',
                 borderRadius: 'var(--radius-xs)',
-                fontSize: '10px',
+                fontSize: '11.5px',
                 fontFamily: 'var(--font-mono)',
                 color: 'var(--sonar-cyan)',
                 border: '1px solid var(--border-subtle)',
@@ -258,7 +258,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
             onClick={onTriggerAnalysis}
             disabled={isAnalyzing}
             className="btn btn-primary"
-            style={{ width: '100%', padding: '12px', fontSize: '14px', fontWeight: 700 }}
+            style={{ width: '100%', padding: '12px', fontSize: '15px', fontWeight: 700 }}
           >
             {isAnalyzing ? (
               <>

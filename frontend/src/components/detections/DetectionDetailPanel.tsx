@@ -31,8 +31,8 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
     return (
       <div className="glass-panel" style={{ padding: '24px', textAlign: 'center', color: 'var(--text-secondary)' }}>
         <Crosshair size={32} color="var(--text-muted)" style={{ margin: '0 auto 12px auto' }} />
-        <h4 style={{ fontSize: '14px', fontWeight: 600 }}>NO ANOMALY SELECTED</h4>
-        <p style={{ fontSize: '12px', marginTop: '4px' }}>Click a bounding box on the image or select a row in the table.</p>
+        <h4 style={{ fontSize: '15.5px', fontWeight: 600 }}>NO ANOMALY SELECTED</h4>
+        <p style={{ fontSize: '13.5px', marginTop: '4px' }}>Click a bounding box on the image or select a row in the table.</p>
       </div>
     );
   }
@@ -83,9 +83,9 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Crosshair size={18} color="var(--sonar-cyan)" />
-            <h3 style={{ fontSize: '15px', fontWeight: 600, margin: 0 }}>ANOMALY DETAILS</h3>
+            <h3 style={{ fontSize: '16.5px', fontWeight: 600, margin: 0 }}>ANOMALY DETAILS</h3>
           </div>
-          <span className="badge badge-emerald" style={{ fontSize: '10px' }}>
+          <span className="badge badge-emerald" style={{ fontSize: '12px' }}>
             VERIFIED DETECTION
           </span>
         </div>
@@ -101,25 +101,25 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                 Anomaly Identification
               </div>
               <div
                 className="mono"
-                style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}
+                style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}
               >
                 {detection.id}
               </div>
-              <div style={{ fontSize: '13px', color: 'var(--sonar-cyan)', fontWeight: 600, marginTop: '2px' }}>
+              <div style={{ fontSize: '14.5px', color: 'var(--sonar-cyan)', fontWeight: 600, marginTop: '2px' }}>
                 Target Class: {detection.class_name.toUpperCase()}
               </div>
             </div>
 
             <div style={{ textAlign: 'right' }}>
-              <span className={`badge ${confBadgeClass}`} style={{ fontSize: '11px' }}>
+              <span className={`badge ${confBadgeClass}`} style={{ fontSize: '12.5px' }}>
                 {confLevel} CONFIDENCE
               </span>
-              <div className="mono" style={{ fontSize: '22px', fontWeight: 800, color: confColor, marginTop: '4px' }}>
+              <div className="mono" style={{ fontSize: '24px', fontWeight: 800, color: confColor, marginTop: '4px' }}>
                 {confPercent}%
               </div>
             </div>
@@ -149,7 +149,7 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                fontSize: '10px',
+                fontSize: '11.5px',
                 color: 'var(--text-muted)',
                 marginTop: '4px',
               }}
@@ -164,10 +164,10 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
         {/* Bounding Box Metrics Grid (Native API Coordinates & Dimensions) */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
               Native Bounding Box Coordinates
             </div>
-            <span className="badge badge-muted" style={{ fontSize: '9px' }}>
+            <span className="badge badge-muted" style={{ fontSize: '11px' }}>
               API PIXELS [X1, Y1, X2, Y2]
             </span>
           </div>
@@ -184,26 +184,26 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
             }}
           >
             <div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>X1 (Left)</div>
-              <div className="mono" style={{ fontSize: '12px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>X1 (Left)</div>
+              <div className="mono" style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
                 {detection.bbox.x1} px
               </div>
             </div>
             <div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Y1 (Top)</div>
-              <div className="mono" style={{ fontSize: '12px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Y1 (Top)</div>
+              <div className="mono" style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
                 {detection.bbox.y1} px
               </div>
             </div>
             <div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>X2 (Right)</div>
-              <div className="mono" style={{ fontSize: '12px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>X2 (Right)</div>
+              <div className="mono" style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
                 {detection.bbox.x2} px
               </div>
             </div>
             <div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Y2 (Bottom)</div>
-              <div className="mono" style={{ fontSize: '12px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Y2 (Bottom)</div>
+              <div className="mono" style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
                 {detection.bbox.y2} px
               </div>
             </div>
@@ -222,14 +222,14 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
             }}
           >
             <div>
-              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Box Width: </span>
-              <strong className="mono" style={{ fontSize: '12px', color: 'var(--text-primary)' }}>
+              <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Box Width: </span>
+              <strong className="mono" style={{ fontSize: '13.5px', color: 'var(--text-primary)' }}>
                 {width.toFixed(1)} px
               </strong>
             </div>
             <div>
-              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Box Height: </span>
-              <strong className="mono" style={{ fontSize: '12px', color: 'var(--text-primary)' }}>
+              <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Box Height: </span>
+              <strong className="mono" style={{ fontSize: '13.5px', color: 'var(--text-primary)' }}>
                 {height.toFixed(1)} px
               </strong>
             </div>
@@ -256,11 +256,11 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <ShieldAlert size={15} color="var(--sonar-cyan)" />
-                  <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  <span style={{ fontSize: '13.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     DETECTION INTELLIGENCE
                   </span>
                 </div>
-                <span className="badge badge-muted" style={{ fontSize: '9px' }}>
+                <span className="badge badge-muted" style={{ fontSize: '11px' }}>
                   UI SIMULATION • MODEL-AWARE
                 </span>
               </div>
@@ -278,13 +278,13 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
               >
                 {/* Field 1: Hazard */}
                 <div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Hazard</div>
+                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Hazard</div>
                   <div style={{ marginTop: '3px' }}>
                     <span
                       id="det-intel-hazard-badge"
                       className="badge"
                       style={{
-                        fontSize: '10.5px',
+                        fontSize: '12px',
                         fontWeight: 700,
                         background:
                           priorityData.hazard === 'Very High'
@@ -314,13 +314,13 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
 
                 {/* Field 2: Location Risk */}
                 <div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Location Risk</div>
+                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Location Risk</div>
                   <div style={{ marginTop: '3px' }}>
                     <span
                       id="det-intel-location-badge"
                       className="badge mono"
                       style={{
-                        fontSize: '10.5px',
+                        fontSize: '12px',
                         fontWeight: 600,
                         background: 'rgba(255, 255, 255, 0.04)',
                         color: priorityData.locationRisk === 'High' ? 'var(--status-rose)' : 'var(--text-primary)',
@@ -334,21 +334,21 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
 
                 {/* Field 3: Priority */}
                 <div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Priority Score</div>
+                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Priority Score</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
                     <span
                       id="det-intel-priority-score"
                       className="mono"
-                      style={{ fontSize: '16px', fontWeight: 800, color: priorityData.severityColor }}
+                      style={{ fontSize: '18px', fontWeight: 800, color: priorityData.severityColor }}
                     >
                       {priorityData.priority}
                     </span>
-                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>/ 100</span>
+                    <span style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>/ 100</span>
                     <span
                       id="det-intel-severity-badge"
                       className="badge mono"
                       style={{
-                        fontSize: '9px',
+                        fontSize: '11px',
                         background: `${priorityData.severityColor}20`,
                         color: priorityData.severityColor,
                         border: `1px solid ${priorityData.severityColor}40`,
@@ -362,10 +362,10 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
 
                 {/* Field 4: Recommended Action */}
                 <div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Recommended Action</div>
+                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Recommended Action</div>
                   <div
                     id="det-intel-action-text"
-                    style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-highlight)', marginTop: '3px', lineHeight: '1.3' }}
+                    style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-highlight)', marginTop: '3px', lineHeight: '1.3' }}
                   >
                     {priorityData.recommendedAction}
                   </div>
@@ -390,7 +390,7 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <span style={{ fontSize: '13.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Manual Expert Review
             </span>
             <span
@@ -443,7 +443,7 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
             </button>
           </div>
 
-          <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '8px', textAlign: 'center' }}>
+          <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px', textAlign: 'center' }}>
             Operator review status is tracked locally and synchronized across the platform.
           </div>
         </div>
@@ -461,10 +461,10 @@ export const DetectionDetailPanel: React.FC<DetectionDetailPanelProps> = ({
           }}
         >
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
               Inference Model
             </div>
-            <div style={{ fontSize: '12px', fontWeight: 600 }}>{detection.model} (YOLOv8n)</div>
+            <div style={{ fontSize: '13.5px', fontWeight: 600 }}>{detection.model} (YOLOv8n)</div>
           </div>
           <span className="badge badge-emerald">Verified</span>
         </div>

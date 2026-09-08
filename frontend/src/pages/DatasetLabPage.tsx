@@ -210,7 +210,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                 alignItems: 'center',
                 gap: '6px',
                 padding: '4px 10px',
-                fontSize: '11px',
+                fontSize: '13.5px',
                 letterSpacing: '0.06em',
                 fontWeight: 700,
               }}
@@ -218,14 +218,14 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               <FlaskConical size={13} color="var(--sonar-cyan)" />
               DATASET ADAPTATION WORKSPACE
             </span>
-            <span className="badge badge-muted mono" style={{ fontSize: '10px' }}>
+            <span className="badge badge-muted mono" style={{ fontSize: '14.5px' }}>
               ORCA SPECIALIST EXTENSION
             </span>
           </div>
 
           <h1
             style={{
-              fontSize: '24px',
+              fontSize: '26px',
               fontWeight: 800,
               color: 'var(--text-primary)',
               letterSpacing: '-0.02em',
@@ -239,7 +239,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
           </h1>
           <div
             style={{
-              fontSize: '14px',
+              fontSize: '15.5px',
               fontWeight: 600,
               color: 'var(--sonar-cyan)',
               marginBottom: '6px',
@@ -249,7 +249,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
           </div>
           <p
             style={{
-              fontSize: '13px',
+              fontSize: '14.5px',
               color: 'var(--text-secondary)',
               lineHeight: '1.5',
               margin: 0,
@@ -281,10 +281,10 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
             }}
           >
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div style={{ fontSize: '14.5px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Adaptation Pipeline
               </div>
-              <div className="mono" style={{ fontSize: '13px', fontWeight: 700, color: simulationPhase === 'completed' ? 'var(--status-emerald)' : 'var(--sonar-cyan)' }}>
+              <div className="mono" style={{ fontSize: '14.5px', fontWeight: 700, color: simulationPhase === 'completed' ? 'var(--status-emerald)' : 'var(--sonar-cyan)' }}>
                 {simulationPhase === 'idle' && (selectedDataset ? 'DATASET READY' : 'IDLE / AWAITING DATASET')}
                 {simulationPhase === 'validating' && 'VALIDATING SUITE...'}
                 {simulationPhase === 'preprocessing' && 'PREPROCESSING...'}
@@ -345,7 +345,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               <span
                 className="mono"
                 style={{
-                  fontSize: '11px',
+                  fontSize: '13.5px',
                   fontWeight: 700,
                   color: item.active ? 'var(--sonar-cyan)' : 'var(--text-muted)',
                 }}
@@ -354,7 +354,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               </span>
               <span
                 style={{
-                  fontSize: '12px',
+                  fontSize: '13.5px',
                   fontWeight: item.active ? 700 : 500,
                   color: item.active ? 'var(--text-primary)' : 'var(--text-secondary)',
                   letterSpacing: '0.04em',
@@ -391,15 +391,15 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
         >
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
             <div>
-              <h2 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h2 style={{ fontSize: '16.5px', fontWeight: 700, color: 'var(--text-primary)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <UploadCloud size={18} color="var(--sonar-cyan)" />
                 UPLOAD ANNOTATED DATASET
               </h2>
-              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: '4px 0 0 0' }}>
+              <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', margin: '4px 0 0 0' }}>
                 Upload a dataset containing images and corresponding annotations.
               </p>
             </div>
-            <span className="badge badge-muted mono" style={{ fontSize: '10px' }}>
+            <span className="badge badge-muted mono" style={{ fontSize: '14.5px' }}>
               ACCEPTED: ZIP / FOLDER
             </span>
           </div>
@@ -453,10 +453,10 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
             </div>
 
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>
+              <div style={{ fontSize: '15.5px', fontWeight: 600, color: 'var(--text-primary)' }}>
                 Drop dataset here
               </div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+              <div style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                 or <span style={{ color: 'var(--sonar-cyan)', textDecoration: 'underline' }}>browse files</span>
               </div>
             </div>
@@ -464,7 +464,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
             <div
               className="mono"
               style={{
-                fontSize: '11px',
+                fontSize: '13.5px',
                 color: 'var(--text-muted)',
                 background: 'rgba(255, 255, 255, 0.03)',
                 padding: '4px 10px',
@@ -488,17 +488,17 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+              <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                 Expected structure:
               </span>
-              <span className="mono" style={{ fontSize: '10px', color: 'var(--sonar-cyan)' }}>
+              <span className="mono" style={{ fontSize: '14.5px', color: 'var(--sonar-cyan)' }}>
                 YOLO STANDARD
               </span>
             </div>
             <pre
               className="mono"
               style={{
-                fontSize: '11.5px',
+                fontSize: '14.5px',
                 color: 'var(--text-highlight)',
                 margin: 0,
                 lineHeight: '1.4',
@@ -507,7 +507,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
             >
               {`dataset/\n├── images/\n├── labels/\n└── data.yaml`}
             </pre>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
+            <div style={{ fontSize: '13.5px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
               <Info size={12} color="var(--sonar-cyan)" />
               <span>YOLO-format annotated datasets are recommended.</span>
             </div>
@@ -556,10 +556,10 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
               <div>
-                <span className="badge badge-cyan mono" style={{ fontSize: '9.5px', marginBottom: '4px', display: 'inline-block' }}>
+                <span className="badge badge-cyan mono" style={{ fontSize: '14.5px', marginBottom: '4px', display: 'inline-block' }}>
                   MANIFEST PARSED
                 </span>
-                <h2 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                <h2 style={{ fontSize: '17.5px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   DATASET SUMMARY
                 </h2>
               </div>
@@ -569,7 +569,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                   background: 'rgba(16, 185, 129, 0.15)',
                   color: 'var(--status-emerald)',
                   border: '1px solid rgba(16, 185, 129, 0.3)',
-                  fontSize: '10px',
+                  fontSize: '14.5px',
                 }}
               >
                 {selectedDataset.status}
@@ -588,43 +588,43 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               }}
             >
               <div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Dataset:</div>
-                <div className="mono" style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
+                <div style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>Dataset:</div>
+                <div className="mono" style={{ fontSize: '15.5px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
                   {selectedDataset.name}
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Format:</div>
-                <div className="mono" style={{ fontSize: '13px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
+                <div style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>Format:</div>
+                <div className="mono" style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
                   {selectedDataset.format}
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Images:</div>
-                <div className="mono" style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', marginTop: '2px' }}>
+                <div style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>Images:</div>
+                <div className="mono" style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', marginTop: '2px' }}>
                   {selectedDataset.imageCount.toLocaleString()}
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Annotations:</div>
-                <div className="mono" style={{ fontSize: '18px', fontWeight: 800, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
+                <div style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>Annotations:</div>
+                <div className="mono" style={{ fontSize: '20px', fontWeight: 800, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
                   {selectedDataset.annotationCount.toLocaleString()}
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Classes:</div>
-                <div className="mono" style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
+                <div style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>Classes:</div>
+                <div className="mono" style={{ fontSize: '15.5px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
                   {selectedDataset.classesCount}
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Status:</div>
-                <div className="mono" style={{ fontSize: '12px', fontWeight: 700, color: 'var(--status-emerald)', marginTop: '2px' }}>
+                <div style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>Status:</div>
+                <div className="mono" style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--status-emerald)', marginTop: '2px' }}>
                   {selectedDataset.status}
                 </div>
               </div>
@@ -632,7 +632,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
 
             {/* Class Breakdown Chips */}
             <div>
-              <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '6px' }}>
+              <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '6px' }}>
                 Detected Target Classes:
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -641,7 +641,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                     key={cls}
                     className="mono"
                     style={{
-                      fontSize: '11px',
+                      fontSize: '13.5px',
                       padding: '3px 8px',
                       borderRadius: 'var(--radius-xs)',
                       background: 'rgba(0, 242, 254, 0.08)',
@@ -664,10 +664,10 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)' }}>
+                <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-secondary)' }}>
                   TARGET BASE MODEL:
                 </span>
-                <span className="mono" style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                <span className="mono" style={{ fontSize: '14.5px', color: 'var(--text-muted)' }}>
                   YOLOv8n BACKBONE
                 </span>
               </div>
@@ -683,7 +683,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                       border: `1px solid ${selectedBaseModel === modelName ? 'var(--sonar-cyan)' : 'var(--border-subtle)'}`,
                       background: selectedBaseModel === modelName ? 'rgba(0, 242, 254, 0.15)' : 'rgba(255, 255, 255, 0.02)',
                       color: selectedBaseModel === modelName ? 'var(--sonar-cyan)' : 'var(--text-secondary)',
-                      fontSize: '11px',
+                      fontSize: '13.5px',
                       fontWeight: selectedBaseModel === modelName ? 700 : 500,
                       cursor: 'pointer',
                       textAlign: 'left',
@@ -694,7 +694,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                   </button>
                 ))}
               </div>
-              <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '6px', fontStyle: 'italic' }}>
+              <div style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '6px', fontStyle: 'italic' }}>
                 Base-model selection depends on dataset class compatibility.
               </div>
             </div>
@@ -725,7 +725,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
             className="btn btn-primary"
             style={{
               padding: '12px 32px',
-              fontSize: '14px',
+              fontSize: '15.5px',
               fontWeight: 700,
               letterSpacing: '0.04em',
               display: 'flex',
@@ -767,7 +767,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                 setValidatedChecks([]);
               }}
               className="btn btn-secondary"
-              style={{ padding: '12px 18px', fontSize: '12px' }}
+              style={{ padding: '12px 18px', fontSize: '13.5px' }}
             >
               <RotateCcw size={14} />
               Reset
@@ -793,10 +793,10 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               textAlign: 'center',
             }}
           >
-            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--status-emerald)' }}>
+            <div style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--status-emerald)' }}>
               ✓ Dataset adaptation & candidate evaluation workflow prepared.
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+            <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)' }}>
               Simulated specialist model fine-tuning completed (Precision: 88.4%, Recall: 84.2%, mAP50: 86.7%). Candidate model requires backend training and evaluation before activation.
             </div>
           </div>
@@ -807,14 +807,14 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
           <div>
-            <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.01em' }}>
+            <h2 style={{ fontSize: '17.5px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.01em' }}>
               DATASET ADAPTATION LIFECYCLE
             </h2>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)', marginTop: '2px' }}>
               Full 6-step verification and fine-tuning staging architecture (Always Visible)
             </div>
           </div>
-          <span className="badge badge-muted mono" style={{ fontSize: '10px' }}>
+          <span className="badge badge-muted mono" style={{ fontSize: '14.5px' }}>
             STEPS 01 TO 06
           </span>
         </div>
@@ -841,17 +841,17 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="mono" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
+                <span className="mono" style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
                   01
                 </span>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <span style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
                   DATASET UPLOAD
                 </span>
               </div>
               <span
                 className="badge mono"
                 style={{
-                  fontSize: '9.5px',
+                  fontSize: '14.5px',
                   background: selectedDataset ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.05)',
                   color: selectedDataset ? 'var(--status-emerald)' : 'var(--text-muted)',
                   border: `1px solid ${selectedDataset ? 'rgba(16, 185, 129, 0.3)' : 'transparent'}`,
@@ -861,7 +861,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               </span>
             </div>
 
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
+            <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
               Upload an annotated dataset containing images and corresponding labels.
             </p>
 
@@ -874,10 +874,10 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                 border: '1px solid var(--border-subtle)',
               }}
             >
-              <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+              <div style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginBottom: '4px' }}>
                 Expected structure:
               </div>
-              <pre className="mono" style={{ fontSize: '11px', color: 'var(--sonar-cyan)', margin: 0, lineHeight: '1.3' }}>
+              <pre className="mono" style={{ fontSize: '13.5px', color: 'var(--sonar-cyan)', margin: 0, lineHeight: '1.3' }}>
                 {`dataset/\n├── images/\n├── labels/\n└── data.yaml`}
               </pre>
             </div>
@@ -897,17 +897,17 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="mono" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
+                <span className="mono" style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
                   02
                 </span>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <span style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
                   DATASET VALIDATION
                 </span>
               </div>
               <span
                 className="badge mono"
                 style={{
-                  fontSize: '9.5px',
+                  fontSize: '14.5px',
                   background:
                     simulationPhase === 'validating'
                       ? 'rgba(0, 242, 254, 0.15)'
@@ -930,7 +930,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               </span>
             </div>
 
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
+            <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
               Verify dataset integrity before model adaptation.
             </p>
 
@@ -944,7 +944,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                       display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
-                      fontSize: '11px',
+                      fontSize: '13.5px',
                       color: isPassed ? 'var(--text-primary)' : 'var(--text-muted)',
                     }}
                   >
@@ -959,7 +959,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               })}
             </div>
 
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: 'auto', fontStyle: 'italic' }}>
+            <div style={{ fontSize: '14.5px', color: 'var(--text-muted)', marginTop: 'auto', fontStyle: 'italic' }}>
               ORCA designed validation suite. Real validation executes against dataset manifest on backend invocation.
             </div>
           </div>
@@ -978,17 +978,17 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="mono" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
+                <span className="mono" style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
                   03
                 </span>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <span style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
                   PREPROCESSING
                 </span>
               </div>
               <span
                 className="badge mono"
                 style={{
-                  fontSize: '9.5px',
+                  fontSize: '14.5px',
                   background:
                     simulationPhase === 'preprocessing'
                       ? 'rgba(0, 242, 254, 0.15)'
@@ -1011,7 +1011,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               </span>
             </div>
 
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
+            <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
               Normalize the dataset and prepare it for the selected model.
             </p>
 
@@ -1031,10 +1031,10 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                     border: '1px solid var(--border-subtle)',
                   }}
                 >
-                  <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-highlight)' }}>
+                  <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-highlight)' }}>
                     {item.title}
                   </div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                  <div style={{ fontSize: '14.5px', color: 'var(--text-muted)' }}>
                     {item.desc}
                   </div>
                 </div>
@@ -1056,17 +1056,17 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="mono" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
+                <span className="mono" style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
                   04
                 </span>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <span style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
                   MODEL ADAPTATION
                 </span>
               </div>
               <span
                 className="badge mono"
                 style={{
-                  fontSize: '9.5px',
+                  fontSize: '14.5px',
                   background:
                     simulationPhase === 'adapting'
                       ? 'rgba(0, 242, 254, 0.15)'
@@ -1089,7 +1089,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               </span>
             </div>
 
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
+            <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
               Fine-tune a specialist model using the prepared dataset.
             </p>
 
@@ -1106,28 +1106,28 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                 gap: '4px',
               }}
             >
-              <span className="mono" style={{ fontSize: '11px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
+              <span className="mono" style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
                 BASE YOLOv8n
               </span>
               <ArrowDown size={12} color="var(--text-muted)" />
-              <span className="mono" style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-highlight)' }}>
+              <span className="mono" style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-highlight)' }}>
                 NEW DATASET
               </span>
               <ArrowDown size={12} color="var(--text-muted)" />
-              <span className="mono" style={{ fontSize: '11px', fontWeight: 700, color: 'var(--status-amber)' }}>
+              <span className="mono" style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--status-amber)' }}>
                 FINE-TUNING
               </span>
               <ArrowDown size={12} color="var(--text-muted)" />
-              <span className="mono" style={{ fontSize: '11px', fontWeight: 700, color: 'var(--status-emerald)' }}>
+              <span className="mono" style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--status-emerald)' }}>
                 NEW MODEL CHECKPOINT
               </span>
             </div>
 
             <div>
-              <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '4px' }}>
+              <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '4px' }}>
                 BASE MODEL: <span className="mono" style={{ color: 'var(--sonar-cyan)' }}>{selectedBaseModel}</span>
               </div>
-              <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+              <div style={{ fontSize: '13.5px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
                 Base-model selection depends on dataset class compatibility.
               </div>
             </div>
@@ -1147,17 +1147,17 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="mono" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
+                <span className="mono" style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
                   05
                 </span>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <span style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
                   EVALUATION
                 </span>
               </div>
               <span
                 className="badge mono"
                 style={{
-                  fontSize: '9.5px',
+                  fontSize: '14.5px',
                   background:
                     simulationPhase === 'evaluating'
                       ? 'rgba(0, 242, 254, 0.15)'
@@ -1183,7 +1183,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               </span>
             </div>
 
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
+            <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
               Evaluate the adapted model before deployment.
             </p>
 
@@ -1191,7 +1191,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
             <div
               className="mono"
               style={{
-                fontSize: '10px',
+                fontSize: '14.5px',
                 color: simulationPhase === 'completed' ? 'var(--sonar-cyan)' : 'var(--text-muted)',
                 textAlign: 'center',
                 padding: '6px',
@@ -1243,8 +1243,8 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                     transition: 'all 0.3s ease',
                   }}
                 >
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{m.label}</div>
-                  <div className="mono" style={{ fontSize: '18px', fontWeight: 700, color: m.color, marginTop: '2px' }}>
+                  <div style={{ fontSize: '14.5px', color: 'var(--text-muted)' }}>{m.label}</div>
+                  <div className="mono" style={{ fontSize: '20px', fontWeight: 700, color: m.color, marginTop: '2px' }}>
                     {m.value}
                   </div>
                 </div>
@@ -1253,7 +1253,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
 
             <div
               style={{
-                fontSize: '11px',
+                fontSize: '13.5px',
                 color: simulationPhase === 'completed' ? 'var(--status-emerald)' : 'var(--status-amber)',
                 fontWeight: 600,
                 textAlign: 'center',
@@ -1291,17 +1291,17 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="mono" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
+                <span className="mono" style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--sonar-cyan)' }}>
                   06
                 </span>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <span style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
                   MODEL REGISTRATION
                 </span>
               </div>
               <span
                 className="badge mono"
                 style={{
-                  fontSize: '9.5px',
+                  fontSize: '14.5px',
                   background: simulationPhase === 'completed' ? 'rgba(168, 85, 247, 0.15)' : 'rgba(255, 255, 255, 0.05)',
                   color: simulationPhase === 'completed' ? 'var(--status-purple)' : 'var(--text-muted)',
                 }}
@@ -1310,7 +1310,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               </span>
             </div>
 
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
+            <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
               Register the evaluated model as a candidate before activation.
             </p>
 
@@ -1327,24 +1327,24 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span className="mono" style={{ fontSize: '11px', color: 'var(--text-primary)' }}>Pipeline Specialist</span>
-                <span className="badge badge-online mono" style={{ fontSize: '9px', padding: '1px 6px' }}>ACTIVE</span>
+                <span className="mono" style={{ fontSize: '13.5px', color: 'var(--text-primary)' }}>Pipeline Specialist</span>
+                <span className="badge badge-online mono" style={{ fontSize: '13.5px', padding: '1px 6px' }}>ACTIVE</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span className="mono" style={{ fontSize: '11px', color: 'var(--text-primary)' }}>Human Specialist</span>
-                <span className="badge badge-online mono" style={{ fontSize: '9px', padding: '1px 6px' }}>ACTIVE</span>
+                <span className="mono" style={{ fontSize: '13.5px', color: 'var(--text-primary)' }}>Human Specialist</span>
+                <span className="badge badge-online mono" style={{ fontSize: '13.5px', padding: '1px 6px' }}>ACTIVE</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span className="mono" style={{ fontSize: '11px', color: 'var(--text-primary)' }}>Hardware Specialist</span>
-                <span className="badge badge-online mono" style={{ fontSize: '9px', padding: '1px 6px' }}>ACTIVE</span>
+                <span className="mono" style={{ fontSize: '13.5px', color: 'var(--text-primary)' }}>Hardware Specialist</span>
+                <span className="badge badge-online mono" style={{ fontSize: '13.5px', padding: '1px 6px' }}>ACTIVE</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px dashed var(--border-subtle)', paddingTop: '4px' }}>
-                <span className="mono" style={{ fontSize: '11px', color: 'var(--status-purple)', fontWeight: 600 }}>New Specialist</span>
-                <span className="badge mono" style={{ fontSize: '9px', padding: '1px 6px', background: 'rgba(168, 85, 247, 0.2)', color: 'var(--status-purple)' }}>CANDIDATE</span>
+                <span className="mono" style={{ fontSize: '13.5px', color: 'var(--status-purple)', fontWeight: 600 }}>New Specialist</span>
+                <span className="badge mono" style={{ fontSize: '13.5px', padding: '1px 6px', background: 'rgba(168, 85, 247, 0.2)', color: 'var(--status-purple)' }}>CANDIDATE</span>
               </div>
             </div>
 
-            <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: 'auto', fontStyle: 'italic' }}>
+            <div style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: 'auto', fontStyle: 'italic' }}>
               New models remain candidates until evaluation and approval.
             </div>
           </div>
@@ -1363,26 +1363,26 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h2 style={{ fontSize: '17.5px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Layers size={18} color="var(--sonar-cyan)" />
               MODEL REGISTRY
             </h2>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)', marginTop: '2px' }}>
               Specialist inventory, routing activation status, and candidate staging
             </div>
           </div>
           <div style={{ display: 'flex', gap: '8px' }}>
-            <span className="badge badge-online mono" style={{ fontSize: '10px' }}>
+            <span className="badge badge-online mono" style={{ fontSize: '14.5px' }}>
               3 PRODUCTION ACTIVE
             </span>
-            <span className="badge mono" style={{ fontSize: '10px', background: 'rgba(168, 85, 247, 0.15)', color: 'var(--status-purple)' }}>
+            <span className="badge mono" style={{ fontSize: '14.5px', background: 'rgba(168, 85, 247, 0.15)', color: 'var(--status-purple)' }}>
               1 CANDIDATE
             </span>
           </div>
         </div>
 
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13.5px' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border-subtle)', textAlign: 'left' }}>
                 <th style={{ padding: '10px', color: 'var(--text-muted)', fontWeight: 600 }}>SPECIALIST MODEL</th>
@@ -1404,11 +1404,11 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                   Underwater Subsea Pipelines & Corrosions
                 </td>
                 <td style={{ padding: '12px 10px' }}>
-                  <span className="badge badge-online mono" style={{ fontSize: '10px' }}>
+                  <span className="badge badge-online mono" style={{ fontSize: '14.5px' }}>
                     ACTIVE
                   </span>
                 </td>
-                <td className="mono" style={{ padding: '12px 10px', fontSize: '11px', color: 'var(--sonar-cyan)' }}>
+                <td className="mono" style={{ padding: '12px 10px', fontSize: '13.5px', color: 'var(--sonar-cyan)' }}>
                   Industrial / Pipeline Domain
                 </td>
               </tr>
@@ -1424,11 +1424,11 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                   Divers, Human Presence & Search-and-Rescue
                 </td>
                 <td style={{ padding: '12px 10px' }}>
-                  <span className="badge badge-online mono" style={{ fontSize: '10px' }}>
+                  <span className="badge badge-online mono" style={{ fontSize: '14.5px' }}>
                     ACTIVE
                   </span>
                 </td>
-                <td className="mono" style={{ padding: '12px 10px', fontSize: '11px', color: 'var(--sonar-cyan)' }}>
+                <td className="mono" style={{ padding: '12px 10px', fontSize: '13.5px', color: 'var(--sonar-cyan)' }}>
                   Biometric / Diver Domain
                 </td>
               </tr>
@@ -1444,11 +1444,11 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                   Subsea Hardware, Tools, Caps & Transducers
                 </td>
                 <td style={{ padding: '12px 10px' }}>
-                  <span className="badge badge-online mono" style={{ fontSize: '10px' }}>
+                  <span className="badge badge-online mono" style={{ fontSize: '14.5px' }}>
                     ACTIVE
                   </span>
                 </td>
-                <td className="mono" style={{ padding: '12px 10px', fontSize: '11px', color: 'var(--sonar-cyan)' }}>
+                <td className="mono" style={{ padding: '12px 10px', fontSize: '13.5px', color: 'var(--sonar-cyan)' }}>
                   Hardware / Rig Intake
                 </td>
               </tr>
@@ -1468,7 +1468,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                   <span
                     className="badge mono"
                     style={{
-                      fontSize: '10px',
+                      fontSize: '14.5px',
                       background: 'rgba(168, 85, 247, 0.2)',
                       color: 'var(--status-purple)',
                       border: '1px solid rgba(168, 85, 247, 0.4)',
@@ -1477,7 +1477,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
                     CANDIDATE
                   </span>
                 </td>
-                <td className="mono" style={{ padding: '12px 10px', fontSize: '11px', color: simulationPhase === 'completed' ? 'var(--status-emerald)' : 'var(--text-muted)' }}>
+                <td className="mono" style={{ padding: '12px 10px', fontSize: '13.5px', color: simulationPhase === 'completed' ? 'var(--status-emerald)' : 'var(--text-muted)' }}>
                   {simulationPhase === 'completed' ? 'Benchmarked (0.867 mAP50) • Staged for Review' : 'Pending Evaluation & Approval'}
                 </td>
               </tr>
@@ -1491,7 +1491,7 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
             borderRadius: 'var(--radius-xs)',
             background: 'rgba(245, 158, 11, 0.08)',
             border: '1px solid rgba(245, 158, 11, 0.2)',
-            fontSize: '11.5px',
+            fontSize: '14.5px',
             color: 'var(--text-secondary)',
             display: 'flex',
             alignItems: 'center',
@@ -1522,14 +1522,14 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <ShieldCheck size={18} color="var(--sonar-cyan)" />
-          <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, letterSpacing: '0.02em' }}>
+          <h3 style={{ fontSize: '16.5px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, letterSpacing: '0.02em' }}>
             Open & Dataset-Adaptive Architecture
           </h3>
         </div>
 
         <p
           style={{
-            fontSize: '13px',
+            fontSize: '14.5px',
             color: 'var(--text-secondary)',
             maxWidth: '740px',
             margin: 0,
@@ -1550,15 +1550,15 @@ export const DatasetLabPage: React.FC<DatasetLabPageProps> = ({ onNavigate: _onN
             marginTop: '4px',
           }}
         >
-          <span className="badge badge-cyan mono" style={{ fontSize: '11px', padding: '4px 12px' }}>
+          <span className="badge badge-cyan mono" style={{ fontSize: '13.5px', padding: '4px 12px' }}>
             SPECIALIST AI MODELS
           </span>
           <span style={{ color: 'var(--text-muted)', fontWeight: 700 }}>+</span>
-          <span className="badge badge-cyan mono" style={{ fontSize: '11px', padding: '4px 12px' }}>
+          <span className="badge badge-cyan mono" style={{ fontSize: '13.5px', padding: '4px 12px' }}>
             DATASET ADAPTATION
           </span>
           <span style={{ color: 'var(--text-muted)', fontWeight: 700 }}>+</span>
-          <span className="badge badge-cyan mono" style={{ fontSize: '11px', padding: '4px 12px' }}>
+          <span className="badge badge-cyan mono" style={{ fontSize: '13.5px', padding: '4px 12px' }}>
             TARGET-AWARE MODEL ROUTING
           </span>
         </div>

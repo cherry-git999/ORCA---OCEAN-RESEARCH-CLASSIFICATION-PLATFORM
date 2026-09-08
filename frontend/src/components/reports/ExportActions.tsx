@@ -197,7 +197,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
   return (
     <div className="glass-panel" style={{ padding: '20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-        <h4 style={{ fontSize: '14px', fontWeight: 600 }}>MISSION REPORT ACTIONS & EXPORT</h4>
+        <h4 style={{ fontSize: '15px', fontWeight: 600 }}>MISSION REPORT ACTIONS & EXPORT</h4>
         <span className="badge badge-emerald">REAL INFERENCE PAYLOAD</span>
       </div>
 
@@ -259,7 +259,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ scan }) => {
       <div
         style={{
           marginTop: '12px',
-          fontSize: '11px',
+          fontSize: '12.5px',
           color: 'var(--text-muted)',
           display: 'flex',
           alignItems: 'center',

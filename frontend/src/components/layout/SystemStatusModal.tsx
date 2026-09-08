@@ -48,10 +48,10 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Activity size={22} color="var(--sonar-cyan)" />
             <div>
-              <h3 style={{ fontSize: '17px', color: 'var(--text-primary)', margin: 0 }}>
+              <h3 style={{ fontSize: '19px', color: 'var(--text-primary)', margin: 0 }}>
                 ORCA Operational Telemetry & System Status
               </h3>
-              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, marginTop: '2px' }}>
+              <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', margin: 0, marginTop: '2px' }}>
                 Multimodal Underwater Intelligence Platform Health
               </p>
             </div>
@@ -66,7 +66,7 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
           {/* 1. Backend Status */}
           <div className="glass-panel" style={{ padding: '14px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '12.5px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Server size={14} color={backendStatus === 'online' ? 'var(--status-emerald)' : 'var(--status-rose)'} />
                 Backend API
               </span>
@@ -74,8 +74,8 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
                 {backendStatus === 'online' ? 'CONNECTED' : 'DISCONNECTED'}
               </span>
             </div>
-            <div style={{ fontSize: '13px', fontWeight: 600 }}>http://127.0.0.1:8000</div>
-            <div className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+            <div style={{ fontSize: '14.5px', fontWeight: 600 }}>http://127.0.0.1:8000</div>
+            <div className="mono" style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
               Endpoints: /health, /predict-auto, /predict
             </div>
           </div>
@@ -83,14 +83,14 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
           {/* 2. Frontend Status */}
           <div className="glass-panel" style={{ padding: '14px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '12.5px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Terminal size={14} color="var(--status-emerald)" />
                 Frontend Client
               </span>
               <span className="badge badge-emerald">RUNNING</span>
             </div>
-            <div style={{ fontSize: '13px', fontWeight: 600 }}>Vite React + TypeScript</div>
-            <div className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+            <div style={{ fontSize: '14.5px', fontWeight: 600 }}>Vite React + TypeScript</div>
+            <div className="mono" style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
               Port: 5173 • Persistent Storage Active
             </div>
           </div>
@@ -98,14 +98,14 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
           {/* 3. Model Router */}
           <div className="glass-panel" style={{ padding: '14px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '12.5px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Layers size={14} color="var(--sonar-cyan)" />
                 Model Router
               </span>
               <span className="badge badge-cyan">AVAILABLE</span>
             </div>
-            <div style={{ fontSize: '13px', fontWeight: 600 }}>Logistic Regression Router V1</div>
-            <div className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+            <div style={{ fontSize: '14.5px', fontWeight: 600 }}>Logistic Regression Router V1</div>
+            <div className="mono" style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
               Routing Threshold: τ = 0.85
             </div>
           </div>
@@ -113,14 +113,14 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
           {/* 4. Inference Engine */}
           <div className="glass-panel" style={{ padding: '14px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '12.5px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Cpu size={14} color="var(--sonar-teal)" />
                 Inference Device
               </span>
               <span className="badge badge-emerald">READY</span>
             </div>
-            <div style={{ fontSize: '13px', fontWeight: 600 }}>PyTorch Ultralytics</div>
-            <div className="mono" style={{ fontSize: '11px', color: 'var(--sonar-cyan)', marginTop: '2px' }}>
+            <div style={{ fontSize: '14.5px', fontWeight: 600 }}>PyTorch Ultralytics</div>
+            <div className="mono" style={{ fontSize: '12px', color: 'var(--sonar-cyan)', marginTop: '2px' }}>
               Hardware Target: {device}
             </div>
           </div>
@@ -137,7 +137,7 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: '12px',
+            fontSize: '13.5px',
           }}
         >
           <div>
@@ -158,7 +158,7 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
         <div style={{ marginBottom: '18px' }}>
           <div
             style={{
-              fontSize: '11px',
+              fontSize: '12.5px',
               fontWeight: 700,
               color: 'var(--text-secondary)',
               marginBottom: '8px',
@@ -181,12 +181,12 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 600, fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ fontWeight: 600, fontSize: '14.5px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <CheckCircle2 size={15} color="var(--status-emerald)" />
                     {model.name}
                     <span className="badge badge-cyan">{model.target}</span>
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                     {model.role} • Training: {model.dataset}
                   </div>
                 </div>
@@ -206,7 +206,7 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
             alignItems: 'center',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: 'var(--text-muted)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', color: 'var(--text-muted)' }}>
             <ShieldCheck size={14} color="var(--sonar-cyan)" />
             Real Application Telemetry • No Fabricated Hardware Metrics
           </div>

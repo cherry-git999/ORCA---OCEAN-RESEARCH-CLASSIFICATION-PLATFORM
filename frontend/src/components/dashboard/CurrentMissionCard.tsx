@@ -25,8 +25,8 @@ export const CurrentMissionCard: React.FC<CurrentMissionCardProps> = ({
             <Compass size={18} />
           </div>
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 600 }}>CURRENT MISSION EXECUTION</h3>
-            <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            <h3 style={{ fontSize: '16.5px', fontWeight: 600 }}>CURRENT MISSION EXECUTION</h3>
+            <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
               Mission ID: {scan.id}
             </span>
           </div>
@@ -50,25 +50,25 @@ export const CurrentMissionCard: React.FC<CurrentMissionCardProps> = ({
         marginBottom: '16px',
       }}>
         <div>
-          <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Survey Sector</div>
-          <div style={{ fontSize: '13px', fontWeight: 600, marginTop: '2px' }}>{scan.mission_id}</div>
+          <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Survey Sector</div>
+          <div style={{ fontSize: '14.5px', fontWeight: 600, marginTop: '2px' }}>{scan.mission_id}</div>
         </div>
 
         <div>
-          <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Active Model</div>
-          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
+          <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Active Model</div>
+          <div style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
             {scan.model_name}
           </div>
         </div>
 
         <div>
-          <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Acoustic File</div>
-          <div className="mono" style={{ fontSize: '12px', marginTop: '2px' }}>{scan.image.filename}</div>
+          <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Acoustic File</div>
+          <div className="mono" style={{ fontSize: '13.5px', marginTop: '2px' }}>{scan.image.filename}</div>
         </div>
 
         <div>
-          <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Candidate Count</div>
-          <div className="mono" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-highlight)', marginTop: '2px' }}>
+          <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Candidate Count</div>
+          <div className="mono" style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--text-highlight)', marginTop: '2px' }}>
             {scan.detections.length} Anomalies
           </div>
         </div>
@@ -76,7 +76,7 @@ export const CurrentMissionCard: React.FC<CurrentMissionCardProps> = ({
 
       {/* Footer / CTA */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: 'var(--text-secondary)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', color: 'var(--text-secondary)' }}>
           <Waves size={14} color="var(--sonar-teal)" />
           <span>Sidescan swath: 1600 × 480 px • Subsea backscatter validated</span>
         </div>

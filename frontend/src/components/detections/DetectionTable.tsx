@@ -33,8 +33,8 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
       {/* Table Header Controls: Search & Dropdowns */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <h4 style={{ fontSize: '14px', fontWeight: 600 }}>CANDIDATE DETECTION TABLE</h4>
-          <span className="badge badge-cyan" style={{ fontSize: '10px' }}>
+          <h4 style={{ fontSize: '15.5px', fontWeight: 600 }}>CANDIDATE DETECTION TABLE</h4>
+          <span className="badge badge-cyan" style={{ fontSize: '12px' }}>
             {detections.length} Entries
           </span>
         </div>
@@ -49,7 +49,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               className="form-input"
-              style={{ paddingLeft: '30px', paddingRight: '8px', fontSize: '12px', height: '32px' }}
+              style={{ paddingLeft: '30px', paddingRight: '8px', fontSize: '13.5px', height: '34px' }}
             />
           </div>
 
@@ -58,7 +58,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
             className="form-select"
             value={targetClassFilter}
             onChange={(e) => onTargetClassFilterChange(e.target.value as 'All' | TargetClass)}
-            style={{ width: 'auto', fontSize: '12px', height: '32px', padding: '4px 8px' }}
+            style={{ width: 'auto', fontSize: '13.5px', height: '34px', padding: '4px 8px' }}
           >
             <option value="All">All Classes</option>
             <option value="Pipeline">Pipeline</option>
@@ -70,7 +70,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
             className="form-select"
             value={reviewStatusFilter}
             onChange={(e) => onReviewStatusFilterChange(e.target.value as 'All' | ReviewStatus)}
-            style={{ width: 'auto', fontSize: '12px', height: '32px', padding: '4px 8px' }}
+            style={{ width: 'auto', fontSize: '13.5px', height: '34px', padding: '4px 8px' }}
           >
             <option value="All">All Statuses</option>
             <option value="confirmed">Confirmed</option>
@@ -83,7 +83,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
 
       {/* Table Element */}
       <div style={{ overflowX: 'auto', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13.5px' }}>
           <thead>
             <tr style={{ background: 'var(--bg-surface-elevated)', borderBottom: '1px solid var(--border-medium)' }}>
               <th style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--text-secondary)' }}># ID</th>
@@ -150,7 +150,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
                     <td style={{ padding: '10px 14px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span className="mono" style={{ fontWeight: 600 }}>{confPercent}%</span>
-                        <span className={`badge ${confBadge}`} style={{ fontSize: '9px' }}>
+                        <span className={`badge ${confBadge}`} style={{ fontSize: '11px' }}>
                           {det.confidence >= 0.8 ? 'HIGH' : det.confidence >= 0.5 ? 'MED' : 'LOW'}
                         </span>
                       </div>
@@ -163,11 +163,11 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
                         <span
                           className="badge mono"
                           style={{
-                            fontSize: '9px',
+                            fontSize: '11px',
                             background: `${priorityData.severityColor}18`,
                             color: priorityData.severityColor,
                             border: `1px solid ${priorityData.severityColor}35`,
-                            padding: '1px 4px',
+                            padding: '1px 5px',
                           }}
                         >
                           {priorityData.severityLabel}
@@ -203,7 +203,7 @@ export const DetectionTable: React.FC<DetectionTableProps> = ({
                           onSelectAnomaly(det.id);
                         }}
                         className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-ghost'}`}
-                        style={{ padding: '3px 8px', fontSize: '11px' }}
+                        style={{ padding: '4px 10px', fontSize: '12.5px' }}
                       >
                         <Crosshair size={12} />
                         Inspect

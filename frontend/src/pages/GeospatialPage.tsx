@@ -62,10 +62,10 @@ export const GeospatialPage: React.FC<GeospatialPageProps> = ({ onNavigate }) =>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Compass size={22} color="var(--sonar-cyan)" />
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 600, margin: 0, letterSpacing: '0.04em' }}>
+            <h3 style={{ fontSize: '16.5px', fontWeight: 600, margin: 0, letterSpacing: '0.04em' }}>
               GEOSPATIAL ANOMALY LOCALIZATION & MARITIME CHART
             </h3>
-            <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
               Scan: {activeScan.image.filename} • {activeScan.detections.length} Anomaly Waypoints Plotted
             </span>
           </div>
@@ -113,9 +113,9 @@ export const GeospatialPage: React.FC<GeospatialPageProps> = ({ onNavigate }) =>
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Crosshair size={16} color="var(--sonar-cyan)" />
-                  <h4 style={{ fontSize: '14px', fontWeight: 600 }}>SELECTED WAYPOINT</h4>
+                  <h4 style={{ fontSize: '15px', fontWeight: 600 }}>SELECTED WAYPOINT</h4>
                 </div>
-                <span className="badge badge-amber" style={{ fontSize: '10px' }}>
+                <span className="badge badge-amber" style={{ fontSize: '11.5px' }}>
                   ESTIMATED
                 </span>
               </div>
@@ -129,12 +129,12 @@ export const GeospatialPage: React.FC<GeospatialPageProps> = ({ onNavigate }) =>
                   marginBottom: '14px',
                 }}
               >
-                <div className="mono" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <div className="mono" style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)' }}>
                   {selectedDetection.id}
                 </div>
                 <div
                   style={{
-                    fontSize: '13px',
+                    fontSize: '14px',
                     color: 'var(--sonar-cyan)',
                     fontWeight: 600,
                     marginTop: '2px',
@@ -143,7 +143,7 @@ export const GeospatialPage: React.FC<GeospatialPageProps> = ({ onNavigate }) =>
                 >
                   Class: {selectedDetection.class_name}
                 </div>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
                   Confidence:{' '}
                   <strong style={{ color: 'var(--status-emerald)' }}>
                     {Math.round(selectedDetection.confidence * 100)}%
@@ -151,7 +151,7 @@ export const GeospatialPage: React.FC<GeospatialPageProps> = ({ onNavigate }) =>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '11px', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', marginBottom: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Waypoint Lat:</span>
                   <span className="mono" style={{ color: 'var(--text-primary)' }}>
@@ -170,7 +170,7 @@ export const GeospatialPage: React.FC<GeospatialPageProps> = ({ onNavigate }) =>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Accuracy Status:</span>
-                  <span style={{ color: '#fbbf24', fontSize: '10px', fontWeight: 500 }}>
+                  <span style={{ color: '#fbbf24', fontSize: '11.5px', fontWeight: 500 }}>
                     {ACCURACY_DISCLAIMER}
                   </span>
                 </div>
@@ -195,8 +195,8 @@ export const GeospatialPage: React.FC<GeospatialPageProps> = ({ onNavigate }) =>
           ) : (
             <div className="glass-panel" style={{ padding: '24px', textAlign: 'center', color: 'var(--text-secondary)' }}>
               <MapPin size={28} color="var(--text-muted)" style={{ margin: '0 auto 10px auto' }} />
-              <h4 style={{ fontSize: '13px', fontWeight: 600 }}>NO WAYPOINT SELECTED</h4>
-              <p style={{ fontSize: '11px', marginTop: '4px' }}>
+              <h4 style={{ fontSize: '14.5px', fontWeight: 600 }}>NO WAYPOINT SELECTED</h4>
+              <p style={{ fontSize: '12.5px', marginTop: '4px' }}>
                 Click any numbered pin on the marine map to inspect anomaly coordinates.
               </p>
             </div>
@@ -206,10 +206,10 @@ export const GeospatialPage: React.FC<GeospatialPageProps> = ({ onNavigate }) =>
           <div className="glass-panel" style={{ padding: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
               <ShieldCheck size={16} color="var(--sonar-cyan)" />
-              <h4 style={{ fontSize: '13px', fontWeight: 600 }}>OFFSHORE SURVEY TELEMETRY</h4>
+              <h4 style={{ fontSize: '14.5px', fontWeight: 600 }}>OFFSHORE SURVEY TELEMETRY</h4>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '11px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '12.5px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Maritime Sector:</span>
                 <span className="mono" style={{ color: 'var(--sonar-cyan)' }}>
@@ -242,7 +242,7 @@ export const GeospatialPage: React.FC<GeospatialPageProps> = ({ onNavigate }) =>
                 background: 'rgba(245, 158, 11, 0.08)',
                 borderRadius: 'var(--radius-xs)',
                 border: '1px solid rgba(245, 158, 11, 0.2)',
-                fontSize: '10px',
+                fontSize: '11.5px',
                 color: '#fbbf24',
               }}
             >

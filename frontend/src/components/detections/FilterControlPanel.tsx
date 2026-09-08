@@ -27,7 +27,7 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Filter size={16} color="var(--sonar-cyan)" />
-          <h4 style={{ fontSize: '14px', fontWeight: 600 }}>CANDIDATE DETECTION FILTERING</h4>
+          <h4 style={{ fontSize: '15.5px', fontWeight: 600 }}>CANDIDATE DETECTION FILTERING</h4>
         </div>
 
         {/* RAW vs FILTERED Toggle Button */}
@@ -41,8 +41,8 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
           <button
             onClick={() => onUpdateFilters({ isRawView: false })}
             style={{
-              padding: '4px 10px',
-              fontSize: '11px',
+              padding: '5px 12px',
+              fontSize: '12.5px',
               fontWeight: 600,
               borderRadius: 'var(--radius-xs)',
               border: 'none',
@@ -57,8 +57,8 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
           <button
             onClick={() => onUpdateFilters({ isRawView: true })}
             style={{
-              padding: '4px 10px',
-              fontSize: '11px',
+              padding: '5px 12px',
+              fontSize: '12.5px',
               fontWeight: 600,
               borderRadius: 'var(--radius-xs)',
               border: 'none',
@@ -84,26 +84,26 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
         border: '1px solid var(--border-subtle)',
       }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
             Raw Candidates
           </div>
-          <div className="mono" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <div className="mono" style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)' }}>
             {rawCount}
           </div>
         </div>
         <div style={{ textAlign: 'center', borderLeft: '1px solid var(--border-subtle)', borderRight: '1px solid var(--border-subtle)' }}>
-          <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
             Visible Detections
           </div>
-          <div className="mono" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
+          <div className="mono" style={{ fontSize: '20px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
             {filteredCount}
           </div>
         </div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
             Filtered Out
           </div>
-          <div className="mono" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--status-rose)' }}>
+          <div className="mono" style={{ fontSize: '20px', fontWeight: 700, color: 'var(--status-rose)' }}>
             {filteredOutCount}
           </div>
         </div>
@@ -112,10 +112,10 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
       {/* Primary Confidence Slider */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-          <label style={{ fontSize: '12px', fontWeight: 600 }}>
+          <label style={{ fontSize: '13.5px', fontWeight: 600 }}>
             Minimum Detection Confidence:
           </label>
-          <span className="mono badge badge-cyan" style={{ fontSize: '11px' }}>
+          <span className="mono badge badge-cyan" style={{ fontSize: '12px' }}>
             {Math.round(filters.minConfidence * 100)}%
           </span>
         </div>
@@ -129,7 +129,7 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
           className="range-slider"
         />
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
           <span>25% (Permissive / Default)</span>
           <span>50% (Standard)</span>
           <span>100% (Strict)</span>
@@ -138,7 +138,7 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
 
       {/* Quick Category Buttons: High / Medium / Low */}
       <div>
-        <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '6px' }}>
+        <div style={{ fontSize: '12.5px', color: 'var(--text-secondary)', marginBottom: '6px' }}>
           Confidence Category Filter:
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px' }}>
@@ -147,7 +147,7 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
               key={cat}
               onClick={() => onUpdateFilters({ confidenceCategory: cat })}
               className={`btn btn-sm ${filters.confidenceCategory === cat ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ padding: '4px 6px', fontSize: '10px' }}
+              style={{ padding: '5px 8px', fontSize: '12px' }}
             >
               {cat}
             </button>
@@ -167,7 +167,7 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
             background: 'none',
             border: 'none',
             color: 'var(--text-secondary)',
-            fontSize: '12px',
+            fontSize: '13.5px',
             cursor: 'pointer',
             padding: '4px 0',
           }}
@@ -191,43 +191,43 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
           }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
-                <label style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Min Width (px)</label>
+                <label style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Min Width (px)</label>
                 <input
                   type="number"
                   value={filters.minBoxWidth}
                   onChange={(e) => onUpdateFilters({ minBoxWidth: Number(e.target.value) })}
                   className="form-input"
-                  style={{ padding: '4px 8px', fontSize: '11px' }}
+                  style={{ padding: '6px 8px', fontSize: '13px' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Max Width (px)</label>
+                <label style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Max Width (px)</label>
                 <input
                   type="number"
                   value={filters.maxBoxWidth}
                   onChange={(e) => onUpdateFilters({ maxBoxWidth: Number(e.target.value) })}
                   className="form-input"
-                  style={{ padding: '4px 8px', fontSize: '11px' }}
+                  style={{ padding: '6px 8px', fontSize: '13px' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Min Height (px)</label>
+                <label style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Min Height (px)</label>
                 <input
                   type="number"
                   value={filters.minBoxHeight}
                   onChange={(e) => onUpdateFilters({ minBoxHeight: Number(e.target.value) })}
                   className="form-input"
-                  style={{ padding: '4px 8px', fontSize: '11px' }}
+                  style={{ padding: '6px 8px', fontSize: '13px' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Max Height (px)</label>
+                <label style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Max Height (px)</label>
                 <input
                   type="number"
                   value={filters.maxBoxHeight}
                   onChange={(e) => onUpdateFilters({ maxBoxHeight: Number(e.target.value) })}
                   className="form-input"
-                  style={{ padding: '4px 8px', fontSize: '11px' }}
+                  style={{ padding: '6px 8px', fontSize: '13px' }}
                 />
               </div>
             </div>
@@ -244,7 +244,7 @@ export const FilterControlPanel: React.FC<FilterControlPanelProps> = ({
 
       {/* Safety Notice */}
       <div style={{
-        fontSize: '10px',
+        fontSize: '11.5px',
         color: 'var(--text-muted)',
         background: 'rgba(56, 189, 248, 0.04)',
         border: '1px dashed var(--border-subtle)',

@@ -87,13 +87,13 @@ export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Code size={18} color="var(--sonar-cyan)" />
-          <h4 style={{ fontSize: '14px', fontWeight: 600 }}>
+          <h4 style={{ fontSize: '15px', fontWeight: 600 }}>
             INFERENCE TELEMETRY PAYLOAD (JSON)
           </h4>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span className="badge badge-emerald" style={{ fontSize: '10px' }}>
+          <span className="badge badge-emerald" style={{ fontSize: '11.5px' }}>
             OPERATIONAL PAYLOAD
           </span>
           <button onClick={handleCopy} className="btn btn-secondary btn-sm" style={{ padding: '4px 10px' }}>
@@ -117,7 +117,7 @@ export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
         <pre
           className="mono"
           style={{
-            fontSize: '12px',
+            fontSize: '13px',
             color: 'var(--text-primary)',
             lineHeight: '1.6',
             whiteSpace: 'pre-wrap',
@@ -131,7 +131,7 @@ export const JsonReportViewer: React.FC<JsonReportViewerProps> = ({ scan }) => {
       <div
         style={{
           marginTop: '10px',
-          fontSize: '11px',
+          fontSize: '12.5px',
           color: 'var(--text-muted)',
           display: 'flex',
           alignItems: 'center',

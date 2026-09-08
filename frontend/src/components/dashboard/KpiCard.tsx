@@ -82,7 +82,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
         <div>
           <span style={{
-            fontSize: '11px',
+            fontSize: '13px',
             fontWeight: 600,
             textTransform: 'uppercase',
             letterSpacing: '0.06em',
@@ -91,7 +91,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
             {title}
           </span>
           <div className="mono" style={{
-            fontSize: '28px',
+            fontSize: '30px',
             fontWeight: 700,
             color: 'var(--text-primary)',
             marginTop: '4px',
@@ -117,10 +117,10 @@ export const KpiCard: React.FC<KpiCardProps> = ({
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12.5px' }}>
         <span style={{ color: 'var(--text-muted)' }}>{subtitle || 'Operational Telemetry'}</span>
         {trend && (
-          <span className={`badge ${badgeClass}`} style={{ fontSize: '10px' }}>
+          <span className={`badge ${badgeClass}`} style={{ fontSize: '11.5px' }}>
             {trend}
           </span>
         )}

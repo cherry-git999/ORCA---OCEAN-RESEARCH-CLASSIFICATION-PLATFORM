@@ -48,10 +48,10 @@ export const CleanupInspectionOrderCard: React.FC<CleanupInspectionOrderCardProp
             <ListOrdered size={16} />
           </div>
           <div>
-            <h3 style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.04em', margin: 0, textTransform: 'uppercase' }}>
+            <h3 style={{ fontSize: '14.5px', fontWeight: 800, letterSpacing: '0.04em', margin: 0, textTransform: 'uppercase' }}>
               CLEANUP / INSPECTION ORDER
             </h3>
-            <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
               {isHumanContext ? 'Prioritized Verification & Welfare Order' : 'Prioritized Hazard Mitigation & Inspection Queue'}
             </span>
           </div>
@@ -60,7 +60,7 @@ export const CleanupInspectionOrderCard: React.FC<CleanupInspectionOrderCardProp
         <span
           className="badge mono"
           style={{
-            fontSize: '10px',
+            fontSize: '11.5px',
             background: rankedItems.length > 0 ? 'rgba(0, 242, 254, 0.1)' : 'rgba(255, 255, 255, 0.04)',
             color: rankedItems.length > 0 ? 'var(--sonar-cyan)' : 'var(--text-muted)',
             border: `1px solid ${rankedItems.length > 0 ? 'rgba(0, 242, 254, 0.25)' : 'var(--border-subtle)'}`,
@@ -82,7 +82,7 @@ export const CleanupInspectionOrderCard: React.FC<CleanupInspectionOrderCardProp
             background: 'var(--bg-surface)',
             borderRadius: 'var(--radius-sm)',
             border: '1px dashed var(--border-subtle)',
-            fontSize: '12px',
+            fontSize: '13.5px',
           }}
         >
           No detections available for prioritization.
@@ -115,15 +115,15 @@ export const CleanupInspectionOrderCard: React.FC<CleanupInspectionOrderCardProp
                   <span
                     className="mono"
                     style={{
-                      width: '20px',
-                      height: '20px',
+                      width: '22px',
+                      height: '22px',
                       borderRadius: '50%',
                       background: item.rank === 1 ? 'rgba(244, 63, 94, 0.15)' : 'rgba(255, 255, 255, 0.05)',
                       border: `1px solid ${item.rank === 1 ? 'rgba(244, 63, 94, 0.4)' : 'var(--border-subtle)'}`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '11px',
+                      fontSize: '12px',
                       fontWeight: 700,
                       color: item.rank === 1 ? '#fda4af' : 'var(--text-secondary)',
                       flexShrink: 0,
@@ -134,15 +134,15 @@ export const CleanupInspectionOrderCard: React.FC<CleanupInspectionOrderCardProp
 
                   <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                      <span className="mono" style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                      <span className="mono" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
                         {item.detection.id}
                       </span>
-                      <span style={{ color: 'var(--text-muted)', fontSize: '11px' }}>→</span>
-                      <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
+                      <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>→</span>
+                      <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
                         {item.detection.class_name.toUpperCase()}
                       </span>
                     </div>
-                    <span style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    <span style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                       {priorityData.recommendedAction}
                     </span>
                   </div>
@@ -165,18 +165,18 @@ export const CleanupInspectionOrderCard: React.FC<CleanupInspectionOrderCardProp
                       <span
                         className="mono"
                         style={{
-                          fontSize: '13px',
+                          fontSize: '14.5px',
                           fontWeight: 800,
                           color: priorityData.severityColor,
                         }}
                       >
                         {priorityData.priority}
                       </span>
-                      <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>/ 100</span>
+                      <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>/ 100</span>
                     </div>
                     <span
                       style={{
-                        fontSize: '9px',
+                        fontSize: '11px',
                         fontWeight: 700,
                         color: priorityData.severityColor,
                         textTransform: 'uppercase',
@@ -197,7 +197,7 @@ export const CleanupInspectionOrderCard: React.FC<CleanupInspectionOrderCardProp
       {/* Footer Context Note */}
       <div
         style={{
-          fontSize: '10px',
+          fontSize: '11.5px',
           color: 'var(--text-muted)',
           display: 'flex',
           alignItems: 'center',

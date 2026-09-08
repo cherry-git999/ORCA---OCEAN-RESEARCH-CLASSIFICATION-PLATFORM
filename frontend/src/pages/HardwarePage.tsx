@@ -314,7 +314,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <h1
                 style={{
-                  fontSize: '18px',
+                  fontSize: '20px',
                   fontWeight: 800,
                   letterSpacing: '0.06em',
                   margin: 0,
@@ -324,14 +324,14 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
               >
                 HARDWARE
               </h1>
-              <span className="badge badge-cyan" style={{ fontSize: '10px' }}>
+              <span className="badge badge-cyan" style={{ fontSize: '11.5px' }}>
                 PHYSICAL INTAKE
               </span>
             </div>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--sonar-cyan)', margin: '2px 0 0 0' }}>
+            <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--sonar-cyan)', margin: '2px 0 0 0' }}>
               Physical Hardware Capture & Sonar Intake
             </p>
-            <p style={{ fontSize: '11.5px', color: 'var(--text-secondary)', margin: '4px 0 0 0' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', margin: '4px 0 0 0' }}>
               Receive and monitor image and sonar data transmitted from the connected underwater hardware system.
             </p>
           </div>
@@ -415,22 +415,22 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
           )}
 
           <div>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
               HARDWARE SOURCE
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '2px' }}>
-              <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Endpoint:</span>
-              <code className="mono" style={{ color: 'var(--text-primary)', fontSize: '13px', fontWeight: 600 }}>
+              <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>Endpoint:</span>
+              <code className="mono" style={{ color: 'var(--text-primary)', fontSize: '14px', fontWeight: 600 }}>
                 {HARDWARE_BASE_URL.replace(/^https?:\/\//, '')}
               </code>
-              <span style={{ color: 'var(--text-muted)', fontSize: '11px' }}>/upload</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>/upload</span>
             </div>
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div>
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', textAlign: 'right', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textAlign: 'right', textTransform: 'uppercase' }}>
               SOURCE STATUS
             </div>
             <div style={{ marginTop: '2px' }}>
@@ -535,7 +535,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
           <div>
             <h2
               style={{
-                fontSize: '16px',
+                fontSize: '17px',
                 fontWeight: 700,
                 letterSpacing: '0.04em',
                 color: 'var(--text-primary)',
@@ -545,7 +545,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
             >
               LATEST HARDWARE CAPTURE
             </h2>
-            <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+            <div style={{ fontSize: '14.5px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
               No hardware capture received yet.
             </div>
             <div
@@ -557,7 +557,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                 borderRadius: 'var(--radius-sm)',
                 background: 'rgba(0, 242, 254, 0.04)',
                 border: '1px solid rgba(0, 242, 254, 0.15)',
-                fontSize: '12px',
+                fontSize: '13.5px',
                 color: 'var(--text-muted)',
               }}
             >
@@ -580,7 +580,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
               borderRadius: 'var(--radius-md)',
             }}
           >
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+            <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)', marginBottom: '12px' }}>
               Drop hardware files (<strong>.jpg</strong> + <strong>.txt</strong>) here or select from machine:
             </div>
 
@@ -606,7 +606,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div style={{ fontSize: '11px', color: 'var(--text-muted)', maxWidth: '520px', lineHeight: '1.5' }}>
+          <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', maxWidth: '520px', lineHeight: '1.5' }}>
             When the physical hardware system transmits data to <code className="mono">10.169.191.69:5000/upload</code> or
             files are ingested here, the paired JPG image and raw TXT sonar data will render together as a unified capture.
           </div>
@@ -651,10 +651,10 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                 <CheckCircle2 size={20} />
               </div>
               <div>
-                <div style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
+                <div style={{ fontSize: '15.5px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
                   HARDWARE CAPTURE {capture.captureNumber ? `#00${capture.captureNumber}` : `#001`}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '2px', fontSize: '11px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '2px', fontSize: '12.5px' }}>
                   <span style={{ color: capture.image ? 'var(--status-emerald)' : 'var(--status-amber)' }}>
                     {capture.image ? '✓ Image received' : 'Waiting for image'}
                   </span>
@@ -671,7 +671,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-              <span className="badge badge-emerald" style={{ fontSize: '11px' }}>
+              <span className="badge badge-emerald" style={{ fontSize: '12px' }}>
                 CAPTURE RECEIVED
               </span>
               {capture.image && (
@@ -718,11 +718,11 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <ImageIcon size={18} color="var(--sonar-cyan)" />
-                  <h3 style={{ fontSize: '14px', fontWeight: 700, margin: 0, letterSpacing: '0.04em' }}>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0, letterSpacing: '0.04em' }}>
                     HARDWARE IMAGE
                   </h3>
                 </div>
-                <span className={`badge ${capture.image ? 'badge-emerald' : 'badge-amber'}`} style={{ fontSize: '10px' }}>
+                <span className={`badge ${capture.image ? 'badge-emerald' : 'badge-amber'}`} style={{ fontSize: '11.5px' }}>
                   {capture.image ? 'RECEIVED' : 'WAITING FOR IMAGE'}
                 </span>
               </div>
@@ -781,7 +781,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                       display: 'grid',
                       gridTemplateColumns: '1fr 1fr',
                       gap: '8px',
-                      fontSize: '11px',
+                      fontSize: '12.5px',
                     }}
                   >
                     <div>
@@ -812,14 +812,14 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                     </div>
                   </div>
 
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                  <div style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
                     Operational image input received from hardware. (No training labels required).
                   </div>
                 </div>
               ) : (
                 <div style={{ padding: '36px 16px', textAlign: 'center', color: 'var(--text-muted)' }}>
                   <ImageIcon size={32} style={{ margin: '0 auto 8px auto', opacity: 0.4 }} />
-                  <div style={{ fontSize: '12px' }}>Waiting for .jpg image from hardware...</div>
+                  <div style={{ fontSize: '13px' }}>Waiting for .jpg image from hardware...</div>
                 </div>
               )}
             </div>
@@ -839,11 +839,11 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <FileText size={18} color="#38bdf8" />
-                  <h3 style={{ fontSize: '14px', fontWeight: 700, margin: 0, letterSpacing: '0.04em' }}>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0, letterSpacing: '0.04em' }}>
                     SONAR MEASUREMENT DATA
                   </h3>
                 </div>
-                <span className={`badge ${capture.sonar ? 'badge-emerald' : 'badge-amber'}`} style={{ fontSize: '10px' }}>
+                <span className={`badge ${capture.sonar ? 'badge-emerald' : 'badge-amber'}`} style={{ fontSize: '11.5px' }}>
                   {capture.sonar ? 'RECEIVED' : 'WAITING FOR TXT'}
                 </span>
               </div>
@@ -865,13 +865,13 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                     }}
                   >
                     <div>
-                      <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                      <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                         Sonar File
                       </div>
-                      <div className="mono" style={{ fontSize: '13px', color: '#38bdf8', fontWeight: 700 }}>
+                      <div className="mono" style={{ fontSize: '14px', color: '#38bdf8', fontWeight: 700 }}>
                         {capture.sonar.filename}
                       </div>
-                      <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                      <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                         {capture.sonar.lineCount} lines • {(capture.sonar.sizeBytes / 1024).toFixed(1)} KB
                       </div>
                     </div>
@@ -880,7 +880,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                       <button
                         onClick={handleCopyRawSonar}
                         className="btn btn-ghost btn-xs"
-                        style={{ fontSize: '10px' }}
+                        style={{ fontSize: '11.5px' }}
                       >
                         {copiedText ? <Check size={12} color="var(--status-emerald)" /> : <Copy size={12} />}
                         <span>{copiedText ? 'Copied' : 'Copy'}</span>
@@ -888,7 +888,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                       <button
                         onClick={() => setIsRawSonarExpanded(!isRawSonarExpanded)}
                         className="btn btn-secondary btn-xs"
-                        style={{ fontSize: '10px' }}
+                        style={{ fontSize: '11.5px' }}
                       >
                         {isRawSonarExpanded ? <EyeOff size={12} /> : <Eye size={12} />}
                         <span>{isRawSonarExpanded ? 'Collapse' : 'Expand'}</span>
@@ -913,14 +913,14 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Sparkles size={14} color="var(--sonar-cyan)" />
-                        <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                        <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
                           Extracted Sonar Object Distance:
                         </span>
                       </div>
                       <span
                         className="mono"
                         style={{
-                          fontSize: '14px',
+                          fontSize: '15px',
                           fontWeight: 800,
                           color: 'var(--sonar-cyan)',
                           letterSpacing: '0.04em',
@@ -944,7 +944,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                         maxHeight: '320px',
                         overflowY: 'auto',
                         fontFamily: 'var(--font-mono, monospace)',
-                        fontSize: '11.5px',
+                        fontSize: '13px',
                         lineHeight: '1.6',
                         color: '#cbd5e1',
                         whiteSpace: 'pre-wrap',
@@ -964,7 +964,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                       padding: '10px 12px',
                       display: 'flex',
                       gap: '8px',
-                      fontSize: '11px',
+                      fontSize: '12.5px',
                       color: '#7dd3fc',
                       lineHeight: '1.4',
                     }}
@@ -979,7 +979,7 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
               ) : (
                 <div style={{ padding: '36px 16px', textAlign: 'center', color: 'var(--text-muted)' }}>
                   <FileText size={32} style={{ margin: '0 auto 8px auto', opacity: 0.4 }} />
-                  <div style={{ fontSize: '12px' }}>Waiting for .txt sonar data from hardware...</div>
+                  <div style={{ fontSize: '13px' }}>Waiting for .txt sonar data from hardware...</div>
                 </div>
               )}
             </div>
@@ -1002,10 +1002,10 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                 color={capture.image ? 'var(--status-emerald)' : 'var(--text-muted)'}
               />
               <div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   IMAGE INTAKE
                 </div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: capture.image ? '#34d399' : '#64748b' }}>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: capture.image ? '#34d399' : '#64748b' }}>
                   {capture.image ? '✓ Received' : 'Waiting for Image'}
                 </div>
               </div>
@@ -1018,10 +1018,10 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
                 color={capture.sonar ? 'var(--status-emerald)' : 'var(--text-muted)'}
               />
               <div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   SONAR DATA INTAKE
                 </div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: capture.sonar ? '#34d399' : '#64748b' }}>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: capture.sonar ? '#34d399' : '#64748b' }}>
                   {capture.sonar ? '✓ Received' : 'Waiting for TXT Data'}
                 </div>
               </div>
@@ -1031,13 +1031,13 @@ export const HardwarePage: React.FC<HardwarePageProps> = ({ onNavigate }) => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Sparkles size={22} color={capture.image ? 'var(--sonar-cyan)' : 'var(--status-amber)'} />
               <div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   ANALYSIS PIPELINE
                 </div>
-                <div style={{ fontSize: '13px', fontWeight: 700, color: capture.image ? 'var(--sonar-cyan)' : '#fbbf24' }}>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: capture.image ? 'var(--sonar-cyan)' : '#fbbf24' }}>
                   {capture.image ? 'READY TO ANALYZE' : 'WAITING FOR IMAGE'}
                 </div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
                   {capture.image ? 'Ready to forward image + distance' : 'Requires .jpg image file'}
                 </div>
               </div>

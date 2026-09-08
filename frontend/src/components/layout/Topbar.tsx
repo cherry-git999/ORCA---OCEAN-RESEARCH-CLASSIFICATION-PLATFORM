@@ -67,11 +67,11 @@ export const Topbar: React.FC<TopbarProps> = ({ currentRoute, onOpenStatusModal 
       {/* Title & Subtitle */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <h2 style={{ fontSize: '17px', fontWeight: 800, letterSpacing: '0.02em', color: 'var(--text-primary)' }}>
+          <h2 style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '0.02em', color: 'var(--text-primary)' }}>
             {title}
           </h2>
         </div>
-        <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+        <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', marginTop: '2px' }}>
           {subtitle}
         </p>
       </div>
@@ -91,7 +91,7 @@ export const Topbar: React.FC<TopbarProps> = ({ currentRoute, onOpenStatusModal 
           }}
         >
           <span className={`status-dot ${backendStatus === 'online' ? 'online' : 'danger'}`} />
-          <div style={{ fontSize: '11px', lineHeight: '1.2' }}>
+          <div style={{ fontSize: '12.5px', lineHeight: '1.2' }}>
             <span style={{ color: 'var(--text-secondary)' }}>API: </span>
             <span
               className="mono"
@@ -117,7 +117,7 @@ export const Topbar: React.FC<TopbarProps> = ({ currentRoute, onOpenStatusModal 
           }}
         >
           <Cpu size={15} color="var(--sonar-cyan)" />
-          <div style={{ fontSize: '11px', lineHeight: '1.2' }}>
+          <div style={{ fontSize: '12.5px', lineHeight: '1.2' }}>
             <span style={{ color: 'var(--text-secondary)' }}>ENGINE: </span>
             <span className="mono" style={{ color: 'var(--sonar-cyan)', fontWeight: 600 }}>
               {inferenceDevice}

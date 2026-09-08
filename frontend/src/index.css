@@ -61,9 +61,9 @@
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Layout dimensions */
-  --sidebar-width: 260px;
+  --sidebar-width: 275px;
   --sidebar-collapsed-width: 72px;
-  --topbar-height: 68px;
+  --topbar-height: 72px;
 }
 
 /* Reset & Base */
@@ -79,7 +79,7 @@ html, body {
   background-color: var(--bg-abyss);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 15.5px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -118,6 +118,13 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
 }
 
+h1 { font-size: 1.8rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.1rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.9rem; }
+
 .mono {
   font-family: var(--font-mono);
 }
@@ -151,9 +158,9 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   gap: 8px;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
-  padding: 8px 16px;
+  padding: 9px 16px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -232,8 +239,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-sm {
-  padding: 5px 10px;
-  font-size: 12px;
+  padding: 6px 11px;
+  font-size: 13px;
 }
 
 .btn-icon {
@@ -247,9 +254,9 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 5px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: var(--radius-xs);
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -342,10 +349,10 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--bg-surface);
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-sm);
-  padding: 8px 12px;
+  padding: 9px 13px;
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 14px;
   outline: none;
   transition: all 0.2s ease;
 }

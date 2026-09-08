@@ -104,10 +104,10 @@ export const PredictVisualizer: React.FC<PredictVisualizerProps> = ({
             <Crosshair size={20} />
           </div>
           <div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
+            <div style={{ fontSize: '15.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
               SPECIALIST PREDICTION RESULTS
             </div>
-            <div className="mono" style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+            <div className="mono" style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>
               {filename} ({imageWidth} × {imageHeight} px original)
             </div>
           </div>
@@ -240,7 +240,7 @@ export const PredictVisualizer: React.FC<PredictVisualizerProps> = ({
                       backgroundColor: 'rgba(4, 9, 20, 0.92)',
                       border: `1px solid ${boxColor}`,
                       color: boxColor,
-                      fontSize: '11px',
+                      fontSize: '12px',
                       fontWeight: 700,
                       fontFamily: 'monospace',
                       whiteSpace: 'nowrap',
@@ -271,14 +271,14 @@ export const PredictVisualizer: React.FC<PredictVisualizerProps> = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Box size={18} color={primaryColor} />
-            <h4 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', margin: 0 }}>
+            <h4 style={{ fontSize: '15.5px', fontWeight: 700, textTransform: 'uppercase', margin: 0 }}>
               Detection Results Summary
             </h4>
           </div>
 
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
             {isAutoRouted && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13.5px' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Automatic Routing:</span>
                 <span style={{ color: primaryColor, fontWeight: 700 }}>✓ {target}</span>
                 {routingConfidence && (
@@ -288,7 +288,7 @@ export const PredictVisualizer: React.FC<PredictVisualizerProps> = ({
                 )}
               </div>
             )}
-            <div style={{ fontSize: '12px' }}>
+            <div style={{ fontSize: '13.5px' }}>
               <span style={{ color: 'var(--text-muted)' }}>Objects Detected: </span>
               <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{detections.length}</span>
             </div>
@@ -306,7 +306,7 @@ export const PredictVisualizer: React.FC<PredictVisualizerProps> = ({
               background: 'var(--bg-surface)',
               borderRadius: 'var(--radius-sm)',
               border: '1px dashed var(--border-subtle)',
-              fontSize: '13px',
+              fontSize: '14.5px',
             }}
           >
             No objects detected above the confidence threshold (conf ≥ 0.25).
@@ -337,30 +337,30 @@ export const PredictVisualizer: React.FC<PredictVisualizerProps> = ({
                 >
                   {/* Detection Index & Class */}
                   <div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                    <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                       Detection #{idx + 1}
                     </div>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: primaryColor }}>
+                    <div style={{ fontSize: '15px', fontWeight: 700, color: primaryColor }}>
                       {det.class.charAt(0).toUpperCase() + det.class.slice(1)}
                     </div>
                   </div>
 
                   {/* Confidence */}
                   <div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                    <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                       Confidence
                     </div>
-                    <div className="mono" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <div className="mono" style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
                       {(det.confidence * 100).toFixed(2)}%
                     </div>
                   </div>
 
                   {/* Bounding Box Coordinates (Original Pixel Space) */}
                   <div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                    <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                       Bounding Box [x1, y1, x2, y2]
                     </div>
-                    <div className="mono" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    <div className="mono" style={{ fontSize: '13.5px', color: 'var(--text-secondary)' }}>
                       [{x1.toFixed(2)}, {y1.toFixed(2)}, {x2.toFixed(2)}, {y2.toFixed(2)}]
                     </div>
                   </div>

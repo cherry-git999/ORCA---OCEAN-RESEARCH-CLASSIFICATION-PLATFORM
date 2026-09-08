@@ -55,14 +55,14 @@ export const ScanHistoryTable: React.FC<ScanHistoryTableProps> = ({
       {/* Header & Controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h3 style={{ fontSize: '15px', fontWeight: 600 }}>SCAN HISTORY INVENTORY</h3>
-          <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+          <h3 style={{ fontSize: '16.5px', fontWeight: 600 }}>SCAN HISTORY INVENTORY</h3>
+          <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>
             Persistent Browser Storage ({scans.length} {scans.length === 1 ? 'Scan' : 'Scans'} Recorded)
           </p>
         </div>
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ position: 'relative', width: '220px' }}>
+          <div style={{ position: 'relative', width: '230px' }}>
             <Search
               size={13}
               style={{
@@ -79,7 +79,7 @@ export const ScanHistoryTable: React.FC<ScanHistoryTableProps> = ({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="form-input"
-              style={{ paddingLeft: '30px', fontSize: '12px', height: '32px' }}
+              style={{ paddingLeft: '30px', fontSize: '13.5px', height: '34px' }}
             />
           </div>
 
@@ -87,7 +87,7 @@ export const ScanHistoryTable: React.FC<ScanHistoryTableProps> = ({
             className="form-select"
             value={targetFilter}
             onChange={(e) => setTargetFilter(e.target.value as 'All' | 'pipeline' | 'human' | 'hardware')}
-            style={{ width: 'auto', fontSize: '12px', height: '32px', padding: '4px 8px' }}
+            style={{ width: 'auto', fontSize: '13.5px', height: '34px', padding: '4px 8px' }}
           >
             <option value="All">All Targets</option>
             <option value="pipeline">Pipeline</option>
@@ -103,7 +103,7 @@ export const ScanHistoryTable: React.FC<ScanHistoryTableProps> = ({
             }}
             className="btn btn-ghost btn-sm"
             title="Clear Scan History"
-            style={{ fontSize: '11px', color: 'var(--text-muted)' }}
+            style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}
           >
             <Trash2 size={13} />
             <span>Clear</span>
@@ -113,7 +113,7 @@ export const ScanHistoryTable: React.FC<ScanHistoryTableProps> = ({
 
       {/* Table */}
       <div style={{ overflowX: 'auto', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13.5px' }}>
           <thead>
             <tr style={{ background: 'var(--bg-surface-elevated)', borderBottom: '1px solid var(--border-medium)' }}>
               <th style={{ padding: '12px 16px', fontWeight: 600, color: 'var(--text-secondary)' }}>SCAN FILE</th>
@@ -162,12 +162,12 @@ export const ScanHistoryTable: React.FC<ScanHistoryTableProps> = ({
                           {scan.image.filename}
                         </span>
                         {isActive && (
-                          <span className="badge badge-cyan" style={{ fontSize: '9px', padding: '1px 5px' }}>
+                          <span className="badge badge-cyan" style={{ fontSize: '11px', padding: '2px 6px' }}>
                             ACTIVE
                           </span>
                         )}
                       </div>
-                      <div className="mono" style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                      <div className="mono" style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                         {scan.id} • {scan.image.width} × {scan.image.height} px
                       </div>
                     </td>
@@ -183,13 +183,13 @@ export const ScanHistoryTable: React.FC<ScanHistoryTableProps> = ({
                       <span className="badge badge-cyan" style={{ marginBottom: '2px', display: 'inline-block' }}>
                         {scan.target.toUpperCase()}
                       </span>
-                      <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                         {scan.model_name}
                       </div>
                     </td>
 
                     <td style={{ padding: '12px 16px' }}>
-                      <span className="mono" style={{ fontSize: '12px', fontWeight: 600, color: scan.isAutoRouted ? '#a855f7' : 'var(--text-secondary)' }}>
+                      <span className="mono" style={{ fontSize: '13px', fontWeight: 600, color: scan.isAutoRouted ? '#a855f7' : 'var(--text-secondary)' }}>
                         {routingText}
                       </span>
                     </td>
@@ -199,7 +199,7 @@ export const ScanHistoryTable: React.FC<ScanHistoryTableProps> = ({
                         className="mono"
                         style={{
                           fontWeight: 700,
-                          fontSize: '13px',
+                          fontSize: '14px',
                           color: scan.detections.length > 0 ? '#34d399' : 'var(--text-muted)',
                         }}
                       >

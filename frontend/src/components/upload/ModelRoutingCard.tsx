@@ -85,8 +85,8 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
             {currentMode === 'auto' ? <Sparkles size={18} /> : <GitBranch size={18} />}
           </div>
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 600, margin: 0 }}>DETECTION & ROUTING MODE</h3>
-            <p style={{ fontSize: '11px', color: 'var(--text-secondary)', margin: 0 }}>
+            <h3 style={{ fontSize: '16.5px', fontWeight: 600, margin: 0 }}>DETECTION & ROUTING MODE</h3>
+            <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)', margin: 0 }}>
               {currentMode === 'auto'
                 ? 'Automatic Image-Level Model Selection (No Manual Target Needed)'
                 : 'Manual Specialist Model Override'}
@@ -103,7 +103,7 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
       <div style={{ marginBottom: '16px' }}>
         <div
           style={{
-            fontSize: '11px',
+            fontSize: '12.5px',
             color: 'var(--text-muted)',
             marginBottom: '8px',
             textTransform: 'uppercase',
@@ -137,11 +137,11 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
               borderColor: currentMode === 'auto' ? 'var(--sonar-cyan)' : undefined,
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700, fontSize: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700, fontSize: '13.5px' }}>
               <Sparkles size={12} />
               <span>Automatic</span>
             </div>
-            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Auto Selector</div>
+            <div style={{ fontSize: '11px', opacity: 0.85, marginTop: '2px' }}>Auto Selector</div>
           </button>
 
           {/* 2. Pipeline */}
@@ -154,8 +154,8 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
             className={`btn ${currentMode === 'pipeline' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ padding: '10px 8px', textAlign: 'center', height: 'auto', display: 'flex', flexDirection: 'column' }}
           >
-            <div style={{ fontWeight: 700, fontSize: '12px' }}>Pipeline</div>
-            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Model 1</div>
+            <div style={{ fontWeight: 700, fontSize: '13.5px' }}>Pipeline</div>
+            <div style={{ fontSize: '11px', opacity: 0.85, marginTop: '2px' }}>Model 1</div>
           </button>
 
           {/* 3. Human */}
@@ -168,8 +168,8 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
             className={`btn ${currentMode === 'human' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ padding: '10px 8px', textAlign: 'center', height: 'auto', display: 'flex', flexDirection: 'column' }}
           >
-            <div style={{ fontWeight: 700, fontSize: '12px' }}>Human</div>
-            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Model 2</div>
+            <div style={{ fontWeight: 700, fontSize: '13.5px' }}>Human</div>
+            <div style={{ fontSize: '11px', opacity: 0.85, marginTop: '2px' }}>Model 2</div>
           </button>
 
           {/* 4. Hardware */}
@@ -182,8 +182,8 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
             className={`btn ${currentMode === 'hardware' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ padding: '10px 8px', textAlign: 'center', height: 'auto', display: 'flex', flexDirection: 'column' }}
           >
-            <div style={{ fontWeight: 700, fontSize: '12px' }}>Hardware</div>
-            <div style={{ fontSize: '9px', opacity: 0.85, marginTop: '2px' }}>Model 3</div>
+            <div style={{ fontWeight: 700, fontSize: '13.5px' }}>Hardware</div>
+            <div style={{ fontSize: '11px', opacity: 0.85, marginTop: '2px' }}>Model 3</div>
           </button>
         </div>
       </div>
@@ -217,11 +217,11 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Layers size={14} color={details.accentColor} />
-            <span style={{ fontSize: '12px', fontWeight: 600 }}>
+            <span style={{ fontSize: '13.5px', fontWeight: 600 }}>
               {currentMode === 'auto' ? 'Automatic Selector Mode' : `Selected Target: ${details.title}`}
             </span>
           </div>
-          <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+          <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
             {currentMode === 'auto' ? 'POST /predict-auto' : `POST /predict (target=${currentMode})`}
           </span>
         </div>
@@ -229,7 +229,7 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
         {/* Step 2: Downward Arrow */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
           <ArrowDown size={14} />
-          <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          <span style={{ fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             {currentMode === 'auto' ? 'Feature Extraction & Confidence Gating (τ = 0.85)' : 'TargetRouter Direct Dispatch'}
           </span>
         </div>
@@ -251,18 +251,18 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Cpu size={14} color={details.accentColor} />
-              <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)' }}>
+              <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
                 {details.title}
               </span>
             </div>
-            <span className="badge badge-outline" style={{ fontSize: '10px' }}>
+            <span className="badge badge-outline" style={{ fontSize: '11.5px' }}>
               FROZEN
             </span>
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+          <div style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>
             {details.subtitle}
           </div>
-          <div style={{ fontSize: '10px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+          <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
             {details.desc}
           </div>
         </div>
@@ -278,7 +278,7 @@ export const ModelRoutingCard: React.FC<ModelRoutingCardProps> = ({
           padding: '8px 12px',
           background: 'rgba(255, 255, 255, 0.02)',
           borderRadius: 'var(--radius-xs)',
-          fontSize: '11px',
+          fontSize: '12.5px',
           color: 'var(--text-secondary)',
         }}
       >

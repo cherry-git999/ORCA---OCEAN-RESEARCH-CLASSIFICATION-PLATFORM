@@ -100,7 +100,7 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0 }}>ORCA DETECTION WORKSPACE</h2>
+              <h2 style={{ fontSize: '17px', fontWeight: 700, margin: 0 }}>ORCA DETECTION WORKSPACE</h2>
               <span className="badge badge-cyan">{activeScan.target.toUpperCase()} SPECIALIST</span>
               {activeScan.isAutoRouted && (
                 <span className="badge badge-purple" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
@@ -109,7 +109,7 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
                 </span>
               )}
             </div>
-            <div className="mono" style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '3px' }}>
+            <div className="mono" style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '3px' }}>
               Scan: {activeScan.image.filename} • {activeScan.image.width} × {activeScan.image.height} px •{' '}
               {activeScan.timestamp}
             </div>
@@ -201,7 +201,7 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Box size={16} color="var(--sonar-cyan)" />
-                <h3 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', margin: 0 }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 700, textTransform: 'uppercase', margin: 0 }}>
                   Analysis Summary
                 </h3>
               </div>
@@ -223,36 +223,36 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
               }}
             >
               <div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Model</div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Model</div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--sonar-cyan)', marginTop: '2px' }}>
                   {activeScan.model_name}
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Target</div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: '#38bdf8', marginTop: '2px' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Target</div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#38bdf8', marginTop: '2px' }}>
                   {activeScan.target.toUpperCase()}
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   Routing Confidence
                 </div>
-                <div className="mono" style={{ fontSize: '13px', fontWeight: 700, marginTop: '2px' }}>
+                <div className="mono" style={{ fontSize: '14.5px', fontWeight: 700, marginTop: '2px' }}>
                   {routingConfText}
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   Objects Detected
                 </div>
                 <div
                   className="mono"
                   style={{
-                    fontSize: '15px',
+                    fontSize: '17px',
                     fontWeight: 800,
                     color: activeScan.detections.length > 0 ? '#34d399' : 'var(--text-muted)',
                     marginTop: '2px',
@@ -275,10 +275,10 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
           {/* Itemized Detections (Section 9) */}
           <div className="glass-panel" style={{ padding: '18px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <h3 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', margin: 0 }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 700, textTransform: 'uppercase', margin: 0 }}>
                 Detections ({filteredDetections.length})
               </h3>
-              <span className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+              <span className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
                 Original Pixel Coordinates
               </span>
             </div>
@@ -292,7 +292,7 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
                   background: 'var(--bg-surface)',
                   borderRadius: 'var(--radius-sm)',
                   border: '1px dashed var(--border-subtle)',
-                  fontSize: '12px',
+                  fontSize: '13px',
                 }}
               >
                 No candidate detections above current filter threshold.
@@ -318,19 +318,19 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span className="mono" style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)' }}>
+                          <span className="mono" style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)' }}>
                             #{idx + 1}
                           </span>
-                          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
+                          <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--sonar-cyan)' }}>
                             {det.class_name.toUpperCase()}
                           </span>
                         </div>
-                        <span className="mono" style={{ fontSize: '13px', fontWeight: 700, color: '#34d399' }}>
+                        <span className="mono" style={{ fontSize: '14px', fontWeight: 700, color: '#34d399' }}>
                           {(det.confidence * 100).toFixed(2)}%
                         </span>
                       </div>
 
-                      <div className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                      <div className="mono" style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
                         Bounding Box: [{x1.toFixed(1)}, {y1.toFixed(1)}, {x2.toFixed(1)}, {y2.toFixed(1)}]
                       </div>
                     </div>
@@ -352,7 +352,7 @@ export const DetectionWorkspacePage: React.FC<DetectionWorkspacePageProps> = ({ 
 
           {/* Actions Block (Section 9) */}
           <div className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <h4 style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
+            <h4 style={{ fontSize: '13.5px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
               Scan Actions
             </h4>
 

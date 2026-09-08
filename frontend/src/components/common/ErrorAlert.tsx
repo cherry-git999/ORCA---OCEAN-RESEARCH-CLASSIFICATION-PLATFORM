@@ -33,10 +33,10 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({
           <AlertTriangle size={18} color="var(--status-amber)" style={{ flexShrink: 0, marginTop: '2px' }} />
         )}
         <div>
-          <div style={{ fontSize: '13px', fontWeight: 600, color: isDanger ? '#fb7185' : '#fbbf24' }}>
+          <div style={{ fontSize: '14.5px', fontWeight: 600, color: isDanger ? '#fb7185' : '#fbbf24' }}>
             {title}
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+          <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)', marginTop: '2px' }}>
             {message}
           </div>
         </div>

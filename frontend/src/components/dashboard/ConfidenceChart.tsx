@@ -21,9 +21,9 @@ export const ConfidenceChart: React.FC<ConfidenceChartProps> = ({ detections }) 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <BarChart3 size={18} color="var(--sonar-cyan)" />
-          <h3 style={{ fontSize: '15px', fontWeight: 600 }}>CONFIDENCE DISTRIBUTION</h3>
+          <h3 style={{ fontSize: '16.5px', fontWeight: 600 }}>CONFIDENCE DISTRIBUTION</h3>
         </div>
-        <span className="mono" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+        <span className="mono" style={{ fontSize: '13.5px', color: 'var(--text-secondary)' }}>
           {detections.length} Candidates Analyzed
         </span>
       </div>
@@ -74,14 +74,14 @@ export const ConfidenceChart: React.FC<ConfidenceChartProps> = ({ detections }) 
           borderRadius: 'var(--radius-sm)',
           padding: '10px',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#34d399', fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#34d399', fontWeight: 600 }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }} />
             HIGH (≥ 80%)
           </div>
-          <div className="mono" style={{ fontSize: '20px', fontWeight: 700, marginTop: '4px' }}>
+          <div className="mono" style={{ fontSize: '22px', fontWeight: 700, marginTop: '4px' }}>
             {high}
           </div>
-          <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{highPct}% of total</div>
+          <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{highPct}% of total</div>
         </div>
 
         {/* Medium */}
@@ -91,14 +91,14 @@ export const ConfidenceChart: React.FC<ConfidenceChartProps> = ({ detections }) 
           borderRadius: 'var(--radius-sm)',
           padding: '10px',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#fbbf24', fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#fbbf24', fontWeight: 600 }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b' }} />
             MEDIUM (50–79%)
           </div>
-          <div className="mono" style={{ fontSize: '20px', fontWeight: 700, marginTop: '4px' }}>
+          <div className="mono" style={{ fontSize: '22px', fontWeight: 700, marginTop: '4px' }}>
             {medium}
           </div>
-          <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{medPct}% of total</div>
+          <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{medPct}% of total</div>
         </div>
 
         {/* Low */}
@@ -108,14 +108,14 @@ export const ConfidenceChart: React.FC<ConfidenceChartProps> = ({ detections }) 
           borderRadius: 'var(--radius-sm)',
           padding: '10px',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#fb7185', fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#fb7185', fontWeight: 600 }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f43f5e' }} />
             LOW (&lt; 50%)
           </div>
-          <div className="mono" style={{ fontSize: '20px', fontWeight: 700, marginTop: '4px' }}>
+          <div className="mono" style={{ fontSize: '22px', fontWeight: 700, marginTop: '4px' }}>
             {low}
           </div>
-          <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{lowPct}% of total</div>
+          <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{lowPct}% of total</div>
         </div>
       </div>
 
@@ -124,7 +124,7 @@ export const ConfidenceChart: React.FC<ConfidenceChartProps> = ({ detections }) 
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
-        fontSize: '11px',
+        fontSize: '12.5px',
         color: 'var(--text-muted)',
       }}>
         <Info size={13} color="var(--sonar-cyan)" />
