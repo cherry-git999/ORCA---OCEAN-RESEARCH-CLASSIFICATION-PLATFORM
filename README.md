@@ -56,33 +56,38 @@ The diagram below illustrates the end-to-end dataflow across sensing, automated 
 
 ```mermaid
 flowchart TD
-    subgraph IngestionStage["1. Field Ingestion & Quality Analysis"]
-        A["Field / Sonar / Hardware Data"] --> B["Image + Sensor Data Ingestion"]
-        B --> C["Image Quality / Analysis Pipeline\n(10 Expandable Acoustic Substeps)"]
+    subgraph HardwareLayer["Physical Hardware Data Acquisition"]
+        HW["ESP32-CAM (Camera / Image Acquisition)\n+\nSonar / Ultrasonic Sensor (Distance Data)"]
+    end
+
+    subgraph IngestionStage["1. Field Ingestion & Quality Preprocessing"]
+        HW --> Ingest["Image + Sonar Distance Data Ingestion\n(FastAPI Interface)"]
+        Ingest --> Preprocess["Image Quality / Preprocessing Pipeline\n(10 Expandable Acoustic Substeps)"]
     end
 
     subgraph RoutingStage["2. Visual Domain Routing"]
-        C --> D["Automatic Domain Router\n(17 Visual Invariant Features + Degeneracy Gate)"]
-        D --> E{"Domain Classification\n(Confidence p >= 0.85?)"}
-        E -- "Yes" --> F["Select Specialist AI Model\n(Pipeline / Human / Hardware YOLOv8n)"]
-        E -- "Uncertain / Degenerate" --> Degen["Operator Manual Target Override"]
-        Degen --> F
+        Preprocess --> Router["Automatic Domain Router\n(17 Visual Invariant Features + Degeneracy Gate)"]
+        Router --> Gate{"Domain Classification\n(Confidence p >= 0.85?)"}
+        Gate -- "Pipeline Domain" --> M1["Pipeline Specialist (YOLOv8n)"]
+        Gate -- "Human Domain" --> M2["Human Specialist (YOLOv8n)"]
+        Gate -- "Hardware Domain" --> M3["Hardware Specialist / Model 3 (YOLOv8n)\n(Our Own Hardware-Captured Dataset)"]
+        Gate -- "Uncertain / Degenerate" --> Override["Operator Manual Target Override"]
+        Override --> M1 & M2 & M3
     end
 
-    subgraph InferenceStage["3. Specialist Inference & Evidence"]
-        F --> G["Execute Specialist YOLOv8n\n(Bounding Boxes + Confidence Telemetry)"]
+    subgraph InferenceEvidence["3. Specialist Inference & Evidence"]
+        M1 & M2 & M3 --> DetEvidence["Detection + Confidence +\nBounding Box Evidence"]
     end
 
-    subgraph DecisionSupport["4. Tactical Intelligence & Verification"]
-        G --> H["Detection Intelligence Layer\n(Context, Location Risk, Priority 0-100)"]
-        H --> I["Priority & Tactical Action Order"]
-        I --> J["Human Expert Verification\n(Confirm / Reject / Review)"]
+    subgraph DecisionSupport["4. Tactical Intelligence & Expert Review"]
+        DetEvidence --> Intel["Detection Intelligence Layer\n(Context, Location Risk, Priority 0-100)"]
+        Intel --> Review["Human-in-the-Loop Expert Review\n(Confirm / Reject / Review)"]
     end
 
-    subgraph OperationalOutputs["5. Geospatial Mapping & Reporting"]
-        J --> K["Geospatial Visualization\n(Maritime Hydrographic Bathymetry Chart)"]
-        K --> L["History & Structured Mission Reports\n(Client-Side PDF / CSV / JSON)"]
-        L --> M["Operational Decision Support"]
+    subgraph OperationalOutputs["5. Geospatial Visualization & Reporting"]
+        Review --> GeoMap["Geospatial Anomaly Visualization\n(Maritime Hydrographic Bathymetry Chart)"]
+        GeoMap --> Reports["History & Structured Mission Reports\n(Client-Side PDF / CSV / JSON with Sonar Telemetry)"]
+        Reports --> Decision["Operational Decision Support"]
     end
 ```
 
@@ -131,8 +136,28 @@ Trained specifically for infrastructure inspection on high-aspect-ratio side-sca
 ### Human Specialist
 Trained as a dedicated human-target detector on subsea diver and underwater human activity imagery derived from the AquaScan supervised dataset. It provides critical search-and-rescue and diver monitoring capability in optical and acoustic regimes.
 
-### Hardware Specialist
-Trained for hardware-domain object detection and recovery operations using the hardware dataset. It detects five discrete tool and hardware classes: `cap`, `clip`, `key`, `niddle` (needle), and `scissor`.
+### Model 3 — Hardware Specialist
+
+Model 3 is ORCA's hardware-domain specialist detector, developed using **our own hardware-captured dataset** collected specifically for the ORCA/SIH26057 project.
+
+The dataset contains real images captured through our physical hardware acquisition setup (ESP32-CAM) and is annotated for five hardware-object classes:
+- `cap`
+- `clip`
+- `key`
+- `niddle` (needle)
+- `scissor`
+
+The model uses YOLOv8n for object detection and is designed specifically for the hardware-acquired image domain.
+
+This is **our own team-captured dataset**:
+- **50 real images** captured through our hardware acquisition setup
+- **52 annotated objects** after the validated annotation-cleaning step
+- **5 distinct hardware classes**
+- Standardized **YOLO-format annotations**
+- Dedicated **train / validation / test split**
+- Model 3 checkpoint is frozen for the current ORCA release
+
+*(Note: Model 3 is trained exclusively on our own team-captured hardware dataset; it does not derive from AquaScan, GhostVision, SubPipeMiniSSS, SeabedObjects, or Ghost Nets).*
 
 > [!NOTE]
 > These specialist models are maintained as independent, frozen checkpoints and are never bundled into an unjustified universal weight file.
@@ -332,35 +357,81 @@ flowchart TD
 
 ## 11. Hardware Integration
 
-ORCA supports direct edge hardware ingestion from field acquisition laptops, ROV sensor packs, and tethered sonar transducers:
+ORCA supports direct edge hardware ingestion from physical field acquisition units combining optical imaging with acoustic/ultrasonic proximity sensing:
+
+### Physical Hardware Sensing Components
+The physical hardware acquisition setup comprises two discrete, complementary sensing components:
+- **ESP32-CAM**: Dedicated embedded camera module responsible for optical image acquisition.
+- **Sonar / Ultrasonic Sensor**: Dedicated acoustic/ultrasonic ranging sensor responsible for distance and physical proximity data acquisition.
+
+> [!IMPORTANT]
+> **Component Role Separation**: The ESP32-CAM is strictly an optical image acquisition camera and is never termed a sonar sensor. The sonar/ultrasonic sensor provides complementary physical distance telemetry. Neither component generates autonomous GPS coordinates.
+
+---
+
+### Hardware-to-ORCA Data Flow
+
+The ORCA hardware workflow connects field sensing to the AI analysis platform:
+
+1. **ESP32-CAM** captures the optical image frame.
+2. The **sonar / ultrasonic sensor** provides physical distance/sensing information.
+3. The captured data is transferred to the ORCA ingestion service through the **FastAPI REST interface**.
+4. ORCA receives the image and associated sensor data, allowing the image to enter the specialist AI workflow while sensor information can be carried forward as supporting evidence for downstream analysis and reporting.
 
 ```mermaid
 flowchart TD
-    subgraph FieldEdge["Field Edge Acquisition Unit"]
-        Sensor["Camera / Acoustic Transducer"] --> Img["Sensor Image File (.pbm / .png / .jpg)"]
-        Sensor --> SonarTxt["Sonar Distance Text File (.txt)"]
+    subgraph Sensing["Field Hardware Acquisition Setup"]
+        CAM["ESP32-CAM\n(Camera / Image Acquisition)"] --> Img["Image Frame (.jpg / .png)"]
+        SONAR["Sonar / Ultrasonic Sensor\n(Distance / Sensing Data)"] --> Dist["Distance Telemetry (.txt)"]
     end
 
-    subgraph NetworkAPI["Network & Ingestion Layer"]
-        Img --> API["FastAPI Ingestion Endpoint\n(Configurable: VITE_HARDWARE_API_URL)"]
-        SonarTxt --> API
+    subgraph Ingestion["FastAPI Data Ingestion Interface"]
+        Img --> IngestAPI["FastAPI Ingestion Endpoint\n(Configurable: VITE_HARDWARE_API_URL)"]
+        Dist --> IngestAPI
     end
 
-    subgraph AICore["ORCA AI Core Engine"]
-        API --> RouterEngine["Visual Router & Specialist Inference"]
+    subgraph AIPlatform["ORCA AI Core Engine"]
+        IngestAPI --> Router["Automatic Visual Domain Router"]
+        Router --> M3["Model 3 — Hardware Specialist (YOLOv8n)\n(Our Own Hardware-Captured Dataset)"]
+        M3 --> Det["Detection: cap, clip, key, niddle, scissor"]
     end
 
-    subgraph DashboardConsole["ORCA Operator Dashboard"]
-        RouterEngine --> UIWorkspace["Detection Workspace & Live Hardware Card"]
-        RouterEngine --> RepOutput["Mission Reports (Distance Telemetry Evidence)"]
+    subgraph Reporting["Downstream Operational Evidence"]
+        IngestAPI -.-> Evidence["Sonar Distance Telemetry Evidence\n(Carried to Reports & Operational Summary)"]
+        Det --> Evidence
+        Evidence --> Dashboard["Operator Dashboard & Tactical Reports"]
     end
 ```
 
+### Model 3 Position in the Hardware Flow
+
+The relationship between physical hardware acquisition and Model 3 is direct and explicit:
+
+$$\text{ESP32-CAM + Sonar Sensor} \longrightarrow \text{Hardware-Captured Data} \longrightarrow \text{Hardware Specialist (Model 3)} \longrightarrow \text{\texttt{cap} / \texttt{clip} / \texttt{key} / \texttt{niddle} / \texttt{scissor}}$$
+
+- **Model 3 (Hardware Specialist)** is the specialist AI component responsible for interpreting the hardware-acquired image domain.
+- The **sonar/ultrasonic sensor** provides complementary physical sensing information (distance telemetry) rather than becoming a YOLO detection class.
+
+### Product Architecture Statement
+
+> "ORCA bridges physical underwater sensing and AI analysis by combining camera-based image acquisition through ESP32-CAM with sonar/ultrasonic sensing data and a modular specialist-model architecture."
+>
+> "Model 3 demonstrates this hardware-domain integration using our own team-captured and annotated dataset."
+
 ### Ingested Hardware Assets
-1. **Sensor Image File**: Optical frame or acoustic sonar raster captured by the field sensor.
-2. **Sonar Data Text File**: Sensor distance telemetry containing calibrated physical distance measurements.
+1. **Sensor Image File**: Optical frame captured by the ESP32-CAM unit.
+2. **Sonar Data Text File**: Calibrated distance measurements captured by the sonar/ultrasonic sensor.
 
 This sonar distance data is ingested alongside the image and displayed as physical evidence in downstream reporting and object-distance interpretation. Hardware connectivity is configurable through environment variables (`VITE_HARDWARE_API_URL`, default `http://localhost:5000`), allowing field units to interface across any local subnet or radio link.
+
+> [!NOTE]
+> **Operational Verification Boundaries**:
+> - ESP32-CAM is used strictly for image acquisition.
+> - Sonar / ultrasonic sensing provides distance/sensor telemetry.
+> - FastAPI provides the software ingestion interface.
+> - ORCA processes the acquired image through its hardware specialist workflow.
+> - Sensor data can be carried into downstream reporting/evidence workflows.
+> *(ORCA does not claim autonomous underwater navigation, autonomous sonar interpretation, automatic GPS generation from sensors, cloud-connected hardware deployment, or real-time distance-to-object neural network prediction).*
 
 ---
 
