@@ -643,16 +643,31 @@ git clone <repository-url>
 cd mldashbordproject
 ```
 
-### Step 2: Set Up Backend Virtual Environment
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
+### Step 2: Set Up Backend Virtual Environment (.venv)
 
+Create an isolated virtual environment to prevent package conflicts with the system Python:
+
+```bash
+# Create virtual environment in project root
+python3 -m venv .venv
+
+# Activate virtual environment
+# On Linux / macOS:
+source .venv/bin/activate
+# On Windows: .venv\Scripts\activate
+
+# Upgrade pip and install production backend dependencies
+pip install --upgrade pip
 pip install -r backend/requirements.txt
 ```
 
 > [!TIP]
 > **GPU Acceleration**: If you have an NVIDIA GPU, install PyTorch matching your installed CUDA toolkit version (e.g. for CUDA 12.1: `pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121`). If CUDA is unavailable, PyTorch automatically runs on CPU without configuration changes.
+
+Verify installed libraries in `.venv`:
+```bash
+python -c "import fastapi, uvicorn, pydantic, torch, torchvision, ultralytics, cv2, PIL, sklearn, joblib, numpy; print('✓ All ORCA libraries verified in .venv!')"
+```
 
 ### Step 3: Install Frontend Dependencies
 ```bash
@@ -813,7 +828,42 @@ Reviewers can inspect request schemas, review parameter specifications, and exec
 
 ## 33. Product Positioning
 
-> "ORCA is designed not as a single-purpose detector, but as a modular underwater intelligence platform that connects sensing, specialist AI, operator intelligence, expert verification, geospatial context, and reporting into one unified workflow."
+> "ORCA is designed not as a single-purpose detector or proof-of-concept prototype, but as a complete, fully operational multimodal underwater intelligence platform that connects sensing, specialist AI, operator intelligence, expert verification, geospatial context, and reporting into one unified production-ready workflow."
 
-### ORCA — Multimodal Underwater Intelligence Platform
-*Smart India Hackathon 2026 — Problem Statement SIH26057*
+### Complete Operational Product (Not a Prototype)
+ORCA is delivered as an **end-to-end, fully realized operational software product**, featuring:
+- Production-grade decoupled microservices (FastAPI asynchronous backend + React 19 / TypeScript dashboard).
+- Repository-local frozen deep learning neural networks verified by cryptographic SHA256 integrity checksums.
+- Automatic sub-15ms visual domain routing with degeneracy filtering and confidence abstention gates.
+- Real-time tactical decision support organizing raw detections into operational hazard tiers, location risk, and prioritized action orders.
+- Interactive maritime bathymetry geospatial mapping and client-side vector PDF 1.4 mission reporting.
+- Ready for immediate operational evaluation and vessel deployment without external research drive dependencies.
+
+---
+
+## 34. License & Usage Terms
+
+### MIT License with Explicit Prior Permission Requirement
+Copyright (c) 2026 **A SRI SAI CHARAN**, **Team Synkros** — **Andhra University**.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to inspect, evaluate, and test the Software, subject to the following express condition:
+
+> [!IMPORTANT]
+> **Prior Written Permission Required**: Any commercial use, production deployment, public redistribution, derivative modification, benchmarking, or academic reproduction of this Software is strictly permitted **only after obtaining explicit prior written permission** from the author / copyright holder.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+## 35. Authors & Product Credits
+
+**ORCA — Multimodal Underwater Intelligence Platform** is proudly developed and engineered as a complete operational product for **Smart India Hackathon 2026** (Problem Statement SIH26057).
+
+- **Lead Developer**: **A SRI SAI CHARAN**
+- **Email (Queries & Usage Permissions)**: [`cherry2544t@gmail.com`](mailto:cherry2544t@gmail.com)
+- **Team**: **Team Synkros**
+- **Institution**: **Andhra University**
+- **Product Status**: **Complete Operational Platform (Fully Realized Product — Not a Prototype)**
+- **Problem Statement**: **SIH26057**
+
+*ORCA — Multimodal Underwater Intelligence Platform. Connecting Sonar, Hardware Sensing, Specialist AI, and Operator Decision Support.*

@@ -33,16 +33,29 @@ ls -F
 
 ---
 
-## 3. Python Virtual Environment
+## 3. Creating & Managing the Python Virtual Environment (.venv)
 
-Create and activate a clean Python virtual environment in the project root:
+A Python virtual environment (`.venv`) is an isolated execution directory containing its own Python interpreter, its own pip installer, and an independent `site-packages` directory. It guarantees that the ORCA backend dependencies do not interfere with or depend upon your operating system's global Python packages.
+
+### Step 3.1: Create the Virtual Environment
+From the repository root (`mldashbordproject/`), run:
 
 ```bash
-# Create virtual environment
+# On Ubuntu / Debian / Linux:
+# (If venv module is not pre-installed: sudo apt install python3-venv)
 python3 -m venv .venv
+```
 
-# Activate virtual environment
-# On Linux / macOS:
+This creates a local `.venv/` directory structured as:
+- `.venv/bin/python`: Isolated Python executable
+- `.venv/bin/pip`: Isolated package installer
+- `.venv/lib/python3.x/site-packages/`: Isolated repository for installed packages
+
+### Step 3.2: Activate the Virtual Environment
+Activate the environment so your current shell session redirects `python` and `pip` commands to `.venv`:
+
+```bash
+# On Linux / macOS (bash or zsh):
 source .venv/bin/activate
 
 # On Windows (Command Prompt):
@@ -52,30 +65,73 @@ source .venv/bin/activate
 # .venv\Scripts\Activate.ps1
 ```
 
-Confirm that the virtual environment interpreter is active:
+### Step 3.3: Verify Environment Activation
+After activation, your terminal prompt will be prefixed with `(.venv)`. Verify that the shell is using the virtual environment interpreter:
+
 ```bash
 which python
-# Should output: .../mldashbordproject/.venv/bin/python
+# Output should point strictly to your workspace:
+# /.../mldashbordproject/.venv/bin/python
+
+python --version
+# Output: Python 3.10.x or Python 3.12.x
 ```
 
 ---
 
-## 4. Install Backend Dependencies
+## 4. Install Backend Dependencies & Libraries in .venv
 
-Install the required Python libraries:
+The ORCA backend is powered by a high-performance machine learning and asynchronous REST microservice stack. All required libraries match the verified configuration of the team's development environment (`xai_env` on external HDD).
+
+### Required Libraries in .venv (Inventory & Roles)
+
+The table below details every library that must reside in your `.venv`, its operational role in ORCA, and its verified version:
+
+| Package | Role in ORCA Platform | Verified Version (Team HDD Environment) |
+| :--- | :--- | :--- |
+| `fastapi` | High-throughput asynchronous REST API microservice framework | `0.141.1` (or `>=0.110.0`) |
+| `uvicorn[standard]` | ASGI web server handling HTTP requests and WebSocket streams | `0.52.4` (or `>=0.29.0`) |
+| `pydantic` | Strict request/response schema validation and telemetry serialization | `2.13.5` (or `>=2.0.0`) |
+| `python-multipart` | Binary multipart form-data parser for image and sonar uploads | `0.0.12` (or `>=0.0.9`) |
+| `torch` | PyTorch deep learning tensor runtime executing YOLO neural networks | `2.14.0+cu130` (or `>=2.0.0`) |
+| `torchvision` | Computer vision transformations and tensor operations | `0.29.0+cu130` (or `>=0.15.0`) |
+| `ultralytics` | Official YOLOv8 architecture running our 3 frozen specialist models | `8.4.138` (or `>=8.1.0`) |
+| `opencv-python-headless` | Image decoding, color variance, and edge gradient calculation | `5.0.0` (or `>=4.8.0`) |
+| `pillow` | Binary Netpbm side-scan sonar waterfall parser (`.pbm`, `.bpm`, `.png`) | `12.2.0` (or `>=10.0.0`) |
+| `scikit-learn` | Multinomial Logistic Regression model for 17-feature domain routing | `1.9.0` (or `>=1.4.0`) |
+| `joblib` | High-speed serializer for loading pre-trained router artifacts | `1.5.3` (or `>=1.3.0`) |
+| `numpy` | High-dimensional array computations for visual invariant vectors | `2.5.2` (or `>=1.24.0`) |
+
+### Step 4.1: Install Dependencies via Pip
+
+With `(.venv)` active, upgrade `pip` and install the complete dependency manifest:
 
 ```bash
+# Upgrade pip to latest
 pip install --upgrade pip
+
+# Option A: Standard Installation (CPU-Compatible / Auto-Detect)
 pip install -r backend/requirements.txt
 ```
 
-### GPU vs CPU PyTorch Note
-- **CPU (Default)**: The dependencies in `backend/requirements.txt` will automatically run on CPU if no CUDA GPU is detected.
-- **NVIDIA GPU Acceleration (Optional)**: To enable GPU inference, install the PyTorch wheel matching your CUDA version, e.g.:
-  ```bash
-  # For CUDA 12.1+:
-  pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
-  ```
+### Step 4.2: GPU Acceleration (Optional)
+If you have an NVIDIA GPU and wish to accelerate YOLO inference with CUDA, install the PyTorch build tailored to your CUDA driver version:
+
+```bash
+# Example for CUDA 12.1+:
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+# Example for CUDA 11.8:
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+```
+*(Note: If an NVIDIA GPU is not present or CUDA is not installed, PyTorch seamlessly runs on CPU with zero configuration changes).*
+
+### Step 4.3: Verify Installed Libraries in .venv
+Confirm that all core packages can be imported without errors:
+
+```bash
+python -c "import fastapi, uvicorn, pydantic, torch, torchvision, ultralytics, cv2, PIL, sklearn, joblib, numpy; print('✓ ALL ORCA BACKEND LIBRARIES VERIFIED IN .VENV!')"
+```
 
 ---
 
