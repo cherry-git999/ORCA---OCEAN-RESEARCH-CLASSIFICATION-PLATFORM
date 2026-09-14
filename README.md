@@ -52,20 +52,23 @@ ORCA delivers an end-to-end operational software platform designed for subsea su
 
 ## 3. Complete ORCA Workflow
 
-The diagram below illustrates the end-to-end dataflow across sensing, automated routing, specialist neural networks, decision-support intelligence, and reporting:
+The diagram below illustrates the end-to-end dataflow across sensing, automated routing, specialist neural networks, decision-support intelligence, and reporting, accommodating **two parallel input sources**:
 
 ```mermaid
 flowchart TD
-    subgraph HardwareLayer["Physical Hardware Data Acquisition"]
-        HW["ESP32-CAM (Camera / Image Acquisition)\n+\nSonar / Ultrasonic Sensor (Distance Data)"]
+    subgraph InputSources["Parallel Input Sources"]
+        direction TB
+        HW["Input 1: Physical Hardware Data Acquisition\n• ESP32-CAM (Camera / Image Acquisition)\n• Sonar / Ultrasonic Sensor (Distance Data)\n(Produces image + sensor distance data)"]
+        Survey["Input 2: Existing Sonar / Survey Image Data\n• Sonar waterfalls & survey imagery (.pbm, .bpm, .png, .jpg)\n• Acquired from AUV / ROV / Survey Vessels\n(Externally acquired or archived field imagery)"]
     end
 
     subgraph IngestionStage["1. Field Ingestion & Quality Preprocessing"]
-        HW --> Ingest["Image + Sonar Distance Data Ingestion\n(FastAPI Interface)"]
+        HW --> Ingest["Image + Sensor Data Ingestion\n(FastAPI REST Interface)"]
+        Survey --> Ingest
         Ingest --> Preprocess["Image Quality / Preprocessing Pipeline\n(10 Expandable Acoustic Substeps)"]
     end
 
-    subgraph RoutingStage["2. Visual Domain Routing"]
+    subgraph RoutingStage["2. Automatic Visual Domain Routing"]
         Preprocess --> Router["Automatic Domain Router\n(17 Visual Invariant Features + Degeneracy Gate)"]
         Router --> Gate{"Domain Classification\n(Confidence p >= 0.85?)"}
         Gate -- "Pipeline Domain" --> M1["Pipeline Specialist (YOLOv8n)"]
@@ -91,7 +94,12 @@ flowchart TD
     end
 ```
 
-Automatic model routing intelligently chooses the appropriate specialist model based on visual invariants, ensuring that raw pixels are evaluated only by the model trained on that specific domain.
+### Parallel Input Data Streams
+ORCA is designed to operate on two distinct input streams without forcing one specific acquisition source:
+1. **Physical Hardware Data Acquisition**: Real-time imagery captured via our edge **ESP32-CAM** unit paired with distance/sensing telemetry from a dedicated **Sonar / Ultrasonic Sensor**.
+2. **Existing Sonar / Survey Image Data**: Side-scan sonar waterfall frames (`.pbm`, `.bpm`) and optical underwater imagery collected from autonomous underwater vehicles (AUVs), remotely operated vehicles (ROVs), survey vessels, or historical subsea archives. This imagery can be analyzed directly by ORCA's trained specialist models without requiring connection to our physical hardware setup.
+
+Both streams converge into the unified **Field Ingestion & Quality Preprocessing** stage, after which automatic visual routing chooses the appropriate specialist model based on visual invariants, ensuring that raw pixels are evaluated only by the model trained on that specific domain.
 
 ---
 
