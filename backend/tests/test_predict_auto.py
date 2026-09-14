@@ -24,7 +24,7 @@ import hashlib
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-WORKSPACE_ROOT = Path("/home/cherry/Documents/workspace/mldashbordproject")
+WORKSPACE_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(WORKSPACE_ROOT) not in sys.path:
     sys.path.insert(0, str(WORKSPACE_ROOT))
 
@@ -40,16 +40,11 @@ from backend.app.router import TargetRouter
 
 client = TestClient(app)
 
-# Canonical file paths
-SUBPIPE_PBM_PATH = Path(
-    "/media/cherry/External Hardisk/ps 57/datasets/SubPipeMiniSSS/DATA/SSS_HF_images/Image/1693569383.780.pbm"
-)
-AQUASCAN_PNG_PATH = Path(
-    "/media/cherry/External Hardisk/ps 57/SIH26057/model2_experiments/datasets/aquascan_1k_clean/images/0002b00e-Screenshot_2025-08-10_23.00.36.png"
-)
-HARDWARE_JPG_PATH = Path(
-    "/media/cherry/External Hardisk/ps 57/SIH26057/model3_experiments/datasets/esp_hardware_clean/images/clip_009.jpg"
-)
+# Canonical repository-local sample file paths
+SAMPLE_DATA_DIR = WORKSPACE_ROOT / "frontend" / "sample_data"
+SUBPIPE_PBM_PATH = SAMPLE_DATA_DIR / "1693569383.780.pbm"
+AQUASCAN_PNG_PATH = SAMPLE_DATA_DIR / "0a2be3cd-Screenshot_2025-08-03_14.26.49.png"
+HARDWARE_JPG_PATH = SAMPLE_DATA_DIR / "cap_001.jpg"
 
 EXPECTED_SHA256 = {
     "Model 1 (Pipeline)": (

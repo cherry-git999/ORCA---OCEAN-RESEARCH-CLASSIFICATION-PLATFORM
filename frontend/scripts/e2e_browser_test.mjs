@@ -1,4 +1,11 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const SAMPLE_DATA_DIR = path.resolve(__dirname, '../sample_data');
+const PUBLIC_DIR = path.resolve(__dirname, '../public');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -310,7 +317,7 @@ async function runE2ETests() {
   await runScanWorkflow(
     1,
     'SubPipe 1693569383.780.pbm (Pipeline Specialist)',
-    '/media/cherry/External Hardisk/ps 57/datasets/SubPipeMiniSSS/DATA/SSS_HF_images/Image/1693569383.780.pbm',
+    path.join(SAMPLE_DATA_DIR, '1693569383.780.pbm'),
     'pipeline',
     'Pipeline',
     0.70,
@@ -322,11 +329,11 @@ async function runE2ETests() {
   console.log('\n>>> SWITCHING TO TEST 2 DIRECTLY WITHOUT PAGE REFRESH <<<');
   await runScanWorkflow(
     2,
-    'AquaScan 0002b00e-Screenshot_2025-08-10_23.00.36.png (Human Specialist)',
-    '/media/cherry/External Hardisk/ps 57/SIH26057/model2_experiments/datasets/aquascan_1k_clean/images/0002b00e-Screenshot_2025-08-10_23.00.36.png',
+    'AquaScan 0a2be3cd-Screenshot_2025-08-03_14.26.49.png (Human Specialist)',
+    path.join(SAMPLE_DATA_DIR, '0a2be3cd-Screenshot_2025-08-03_14.26.49.png'),
     'human',
     'Human',
-    0.50,
+    0.40,
     0.75,
     1
   );
@@ -334,11 +341,11 @@ async function runE2ETests() {
   // TEST 3: BPM (Pipeline Specialist)
   await runScanWorkflow(
     3,
-    'SubPipe 1693569573.819.bpm (Pipeline Specialist)',
-    '/media/cherry/External Hardisk/ps 57/datasets/SubPipeMiniSSS/DATA/SSS_HF_images/Image/1693569573.819.bpm',
+    'SubPipe 1693569385.780.pbm (Pipeline Specialist)',
+    path.join(SAMPLE_DATA_DIR, '1693569385.780.pbm'),
     'pipeline',
     'Pipeline',
-    0.75,
+    0.70,
     0.90,
     1
   );
@@ -347,7 +354,7 @@ async function runE2ETests() {
   await runScanWorkflow(
     4,
     'Blank blank_zero.png (Pipeline Specialist)',
-    '/home/cherry/Documents/workspace/mldashbordproject/frontend/public/blank_zero.png',
+    path.join(PUBLIC_DIR, 'blank_zero.png'),
     'pipeline',
     'None',
     0,

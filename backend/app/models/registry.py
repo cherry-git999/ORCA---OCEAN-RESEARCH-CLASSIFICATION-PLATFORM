@@ -8,6 +8,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List
 
+from backend.app.config import settings
+
 
 @dataclass(frozen=True)
 class ModelConfig:
@@ -50,9 +52,7 @@ MODEL_REGISTRY_MAP: Dict[str, ModelConfig] = {
         model_role="Pipeline Detection Model",
         specialist_role="pipeline",
         target="Pipeline",
-        checkpoint_path=Path(
-            "/media/cherry/External Hardisk/ps 57/SIH26057/training_runs/yolov8n_v1_full/weights/best.pt"
-        ),
+        checkpoint_path=settings.MODEL_1_PATH,
         expected_sha256="99470f62a4709848ec8a27b13f2925f09aaba292dccfaff440b7ec290cc011d3",
         semantic_class_map={0: "Pipeline"},
         frozen=True,
@@ -64,9 +64,7 @@ MODEL_REGISTRY_MAP: Dict[str, ModelConfig] = {
         model_role="Human Detection Model",
         specialist_role="human",
         target="Human",
-        checkpoint_path=Path(
-            "/media/cherry/External Hardisk/ps 57/SIH26057/model2_experiments/training_runs/aquascan_human_model2_v1/weights/best.pt"
-        ),
+        checkpoint_path=settings.MODEL_2_PATH,
         expected_sha256="53e2c3ac2013cb0f35dd0e276c650ffa419198ece762c5a1e2e79e39f5cfed35",
         semantic_class_map={0: "Human"},
         frozen=True,
@@ -78,9 +76,7 @@ MODEL_REGISTRY_MAP: Dict[str, ModelConfig] = {
         model_role="Hardware Detection Model",
         specialist_role="hardware",
         target="Hardware",
-        checkpoint_path=Path(
-            "/media/cherry/External Hardisk/ps 57/SIH26057/model3_experiments/training_runs/esp_hardware_model3_v1/weights/best.pt"
-        ),
+        checkpoint_path=settings.MODEL_3_PATH,
         expected_sha256="1cb3f14132c5c1eb9fc8917fa8358b9338bfca9f35102b9ff36eb18c8aaaf3cd",
         semantic_class_map={
             0: "cap",

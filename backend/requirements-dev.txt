@@ -1,0 +1,7 @@
+# Development and Testing Dependencies for ORCA Backend
+-r requirements.txt
+
+# Test Runners & HTTP Clients for API integration tests
+pytest>=8.0.0
+httpx>=0.27.0
+requests>=2.31.0

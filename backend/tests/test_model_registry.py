@@ -4,7 +4,13 @@ Verifies canonical model definitions, immutability, semantic class isolation,
 metadata retrieval APIs, and checkpoint SHA256 integrity.
 """
 
+import sys
 from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 from backend.app.models.loader import compute_sha256
 from backend.app.models.registry import CANONICAL_MODEL_KEYS, ModelConfig, ModelRegistry
 

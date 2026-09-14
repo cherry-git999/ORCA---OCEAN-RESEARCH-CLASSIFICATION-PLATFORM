@@ -1,4 +1,10 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const SAMPLE_DATA_DIR = path.resolve(__dirname, '../sample_data');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -71,7 +77,7 @@ async function checkNetworkPayload() {
     selector: '#sonar-file-input',
   });
   await sendCommand('DOM.setFileInputFiles', {
-    files: ['/media/cherry/External Hardisk/ps 57/datasets/SubPipeMiniSSS/DATA/SSS_HF_images/Image/1693569383.780.pbm'],
+    files: [path.join(SAMPLE_DATA_DIR, '1693569383.780.pbm')],
     nodeId: fileInput.nodeId,
   });
   await sleep(2500);

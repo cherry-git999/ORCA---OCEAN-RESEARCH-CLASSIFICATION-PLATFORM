@@ -1,4 +1,10 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const SAMPLE_DATA_DIR = path.resolve(__dirname, '../sample_data');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -98,7 +104,7 @@ async function forensicAudit() {
   // =========================================================================
   // TEST A: SubPipe 1693569383.780.pbm (Pipeline Specialist)
   // =========================================================================
-  const testAFile = '/media/cherry/External Hardisk/ps 57/datasets/SubPipeMiniSSS/DATA/SSS_HF_images/Image/1693569383.780.pbm';
+  const testAFile = path.join(SAMPLE_DATA_DIR, '1693569383.780.pbm');
   console.log('\n============================================================');
   console.log('FORENSIC TEST A: Ingesting SubPipe', testAFile);
   console.log('============================================================');

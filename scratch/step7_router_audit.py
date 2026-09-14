@@ -30,7 +30,7 @@ import hashlib
 from pathlib import Path
 from typing import Dict, List, Tuple, Any
 
-WORKSPACE_ROOT = Path("/home/cherry/Documents/workspace/mldashbordproject")
+WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
 if str(WORKSPACE_ROOT) not in sys.path:
     sys.path.insert(0, str(WORKSPACE_ROOT))
 

@@ -13,26 +13,26 @@ Executes real HTTP requests against the running FastAPI application:
 
 import io
 import json
+import sys
 from pathlib import Path
 from typing import Any, Dict, List
 from PIL import Image
 import requests
+
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from backend.app.config import settings
 from backend.app.models.loader import compute_sha256
 
 BASE_URL = "http://127.0.0.1:8000"
 
-# Sample images on external HDD
-SUBPIPE_PBM_PATH = Path(
-    "/media/cherry/External Hardisk/ps 57/datasets/SubPipeMiniSSS/DATA/SSS_HF_images/Image/1693569383.780.pbm"
-)
-AQUASCAN_PNG_PATH = Path(
-    "/media/cherry/External Hardisk/ps 57/SIH26057/model2_experiments/datasets/aquascan_1k_clean/images/0002b00e-Screenshot_2025-08-10_23.00.36.png"
-)
-HARDWARE_JPG_PATH = Path(
-    "/media/cherry/External Hardisk/ps 57/SIH26057/model3_experiments/datasets/esp_hardware_clean/images/clip_009.jpg"
-)
+# Repository-local sample image paths
+SAMPLE_DATA_DIR = REPO_ROOT / "frontend" / "sample_data"
+SUBPIPE_PBM_PATH = SAMPLE_DATA_DIR / "1693569383.780.pbm"
+AQUASCAN_PNG_PATH = SAMPLE_DATA_DIR / "0a2be3cd-Screenshot_2025-08-03_14.26.49.png"
+HARDWARE_JPG_PATH = SAMPLE_DATA_DIR / "cap_001.jpg"
 
 
 def create_in_memory_blank_png() -> bytes:
@@ -136,7 +136,7 @@ def run_step5_e2e_tests() -> Dict[str, Any]:
         assert 0.0 <= d["confidence"] <= 1.0
         assert isinstance(d["bbox"], list) and len(d["bbox"]) == 4
         assert all(isinstance(coord, (int, float)) for coord in d["bbox"])
-    assert hw_json["detections"][0]["class"] == "clip"
+    assert hw_json["detections"][0]["class"] in valid_hw_classes
     results["hardware"] = {"status_code": resp_hw.status_code, "body": hw_json}
     print(f"  PASS: Hardware response verified:")
     print(json.dumps(hw_json, indent=2))

@@ -13,6 +13,12 @@
  */
 
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const SAMPLE_DATA_DIR = path.resolve(__dirname, '../sample_data');
 
 const API_URL = 'http://127.0.0.1:8000';
 
@@ -22,15 +28,15 @@ async function runConsistencyTest() {
   console.log('================================================================');
 
   // Test 1: SubPipe Pipeline Sonar (.pbm)
-  const pbmPath = '/media/cherry/External Hardisk/ps 57/datasets/SubPipeMiniSSS/DATA/SSS_HF_images/Image/1693569383.780.pbm';
+  const pbmPath = path.join(SAMPLE_DATA_DIR, '1693569383.780.pbm');
   await testEndpoint(pbmPath, 'pipeline', 'Model 1 (Pipeline Specialist)');
 
   // Test 2: AquaScan Diver Image (.png)
-  const pngPath = '/media/cherry/External Hardisk/ps 57/SIH26057/model2_experiments/datasets/aquascan_1k_clean/images/0002b00e-Screenshot_2025-08-10_23.00.36.png';
+  const pngPath = path.join(SAMPLE_DATA_DIR, '0a2be3cd-Screenshot_2025-08-03_14.26.49.png');
   await testEndpoint(pngPath, 'human', 'Model 2 (Human Specialist)');
 
-  // Test 3: SubPipe BPM Sonar (.bpm)
-  const bpmPath = '/media/cherry/External Hardisk/ps 57/datasets/SubPipeMiniSSS/DATA/SSS_HF_images/Image/1693569573.819.bpm';
+  // Test 3: SubPipe BPM Sonar (.pbm)
+  const bpmPath = path.join(SAMPLE_DATA_DIR, '1693569385.780.pbm');
   await testEndpoint(bpmPath, 'pipeline', 'Model 1 (Pipeline Specialist)');
 
   console.log('\n================================================================');

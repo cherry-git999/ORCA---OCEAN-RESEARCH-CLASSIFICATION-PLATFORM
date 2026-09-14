@@ -1,10 +1,16 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const SAMPLE_DATA_DIR = path.resolve(__dirname, '../frontend/sample_data');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const SUBPIPE_PBM_PATH = '/media/cherry/External Hardisk/ps 57/datasets/SubPipeMiniSSS/DATA/SSS_HF_images/Image/1693569383.780.pbm';
-const HARDWARE_JPG_PATH = '/media/cherry/External Hardisk/ps 57/SIH26057/model3_experiments/datasets/esp_hardware_clean/images/clip_009.jpg';
-const HUMAN_PNG_PATH = '/media/cherry/External Hardisk/ps 57/SIH26057/model2_experiments/datasets/aquascan_1k_clean/images/0002b00e-Screenshot_2025-08-10_23.00.36.png';
+const SUBPIPE_PBM_PATH = path.join(SAMPLE_DATA_DIR, '1693569383.780.pbm');
+const HARDWARE_JPG_PATH = path.join(SAMPLE_DATA_DIR, 'cap_001.jpg');
+const HUMAN_PNG_PATH = path.join(SAMPLE_DATA_DIR, '0a2be3cd-Screenshot_2025-08-03_14.26.49.png');
 
 async function runOrcaE2E() {
   console.log('================================================================================');

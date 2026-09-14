@@ -5,7 +5,12 @@ and error handling for Model 1 (Pipeline), Model 2 (Human), and Model 3 (Hardwar
 """
 
 import json
+import sys
 from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from backend.app.config import settings
 from backend.app.models.loader import ModelLoader, compute_sha256
@@ -125,7 +130,7 @@ def run_tests():
     # TEST 6: Missing Checkpoint Handling
     # -------------------------------------------------------------------------
     print("\n[TEST 6] Testing Missing Checkpoint Error Handling...")
-    non_existent_path = Path("/media/cherry/External Hardisk/non_existent_model_checkpoint.pt")
+    non_existent_path = REPO_ROOT / "models" / "non_existent_model_checkpoint.pt"
     try:
         compute_sha256(non_existent_path)
         raise AssertionError("Expected FileNotFoundError for non-existent file!")

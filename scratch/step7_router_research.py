@@ -30,7 +30,7 @@ from sklearn.neighbors import NearestCentroid
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support, confusion_matrix
 
 # Add workspace to path
-WORKSPACE_ROOT = Path("/home/cherry/Documents/workspace/mldashbordproject")
+WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
 if str(WORKSPACE_ROOT) not in sys.path:
     sys.path.insert(0, str(WORKSPACE_ROOT))
 
